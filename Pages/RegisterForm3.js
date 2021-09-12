@@ -29,7 +29,6 @@ import { vh } from 'react-native-expo-viewport-units';
 
 export default function RegisterForm3(props) {
     //test arr
-    var footerY;
     const citrus = 
         [
         {title:'orange',kcal:48.1,gram:100,protein: 0.9,fats: 0.9 , description: "Protects your cells from damage"},
@@ -41,26 +40,17 @@ export default function RegisterForm3(props) {
 
 
     //useState
-    const [birthdate, setBirthdate] = useState("yyyy-mm-dd");
-    const [weight,setWeight] = useState(null);
-    const [height,setHeight] = useState(null);
-    const [goalWeight,setGoalWeight] = useState(null);
-    const [showCalcWeight,setShowCalcWeight] = useState(false);
+
 
     //use ref
-    const _scrollView = useRef();
+
 
     //get data
-    const [name,setName] = useState(null);
-    const [goal,setGoal] = useState(null);
-    const [showGoalInputText,setShowGoalInputText] = useState(true);
-    const [gender,setGender] = useState(null);
-    const [healthyWeight,setHealthyWeight] = useState(null);
+
 
 
     //date
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [dateState,setDate] = useState(null);
+
 
     //scroll to top
 
@@ -74,99 +64,41 @@ export default function RegisterForm3(props) {
 
     // functions
 
-    //header
-    const header = () => {
-        return <Button onPress={() => scrollToTop()} title="Go to top" />;
-      };
 
-      const scrollToTop = () => {
-        list.current.scrollToEnd({ animated: true });
-    };
 
     //get data 
-    const getData =async()=>{
-        const data = await AsyncStorage.getItem('registerData')
-        const lastData = JSON.parse(data)
-        console.log(lastData.firstName)
-        setName(lastData.firstName)
-        console.log(lastData.plan)
-        setGoal(lastData.plan)
-        setGender(lastData.gender)
-        if(lastData.plan === 'healthy'){
-            setShowGoalInputText(false)
-        }
-    }
+   const getData=async()=>{
+
+    console.log('page loaded')
+   }
  
     //useEffect
     useEffect( () => {
-        getData();
+            getData();
         }
     , [])
-    //loop on calc healthy weight
-    useEffect( () => {
-        if(height !== null && weight !== null){
-            setShowCalcWeight(true)
 
-            if(gender === 'male'){
-                setHealthyWeight(50 + (0.91 * (height - 152.4) ))
-                if(goal === 'healthy'){
-                    setGoalWeight(50 + (0.91 * (height - 152.4) ) )
-                }
-            }
-            
-            if(gender === 'female'){
-                setHealthyWeight(45.5 + (0.91 * (height - 152.4) ))
-                if(goal === 'healthy'){
-                    setGoalWeight(45.5 + (0.91 * (height - 152.4) ) )
-                }
-                }
-        }
-        }
-    , [weight,height])
+
 
     //save data
     const OnSelectSaveData =async ()=>{
         try {
-            if(birthdate === 'yyyy-mm-dd')
-               { 
-                console.log('ops wrong date')
-                return;
-            }
-                if(!isNaN(Number(weight)))   { 
-                    console.log('Weight not a number')
-                    return;
-                }
-                if(!isNaN(Number(height)))  { 
-                    console.log('Height not a number')
-                    return;
-                }
-                if(!isNaN(Number(goalWeight) ))  { 
-                    console.log('goal Weight not a number')
-                    return;
-                }
-                if(goal === 'Gain' && Number(weight) < Number(goalWeight) ){
-                    console.log('ops your goal in less than your weight your on gain goal')
-                }
-                if(goal === 'lose' && Number(weight) > Number(goalWeight) ){
-                    console.log('ops your goal in higher than your weight your on lose goal')
-                }
-                
-
-                    await AsyncStorage.mergeItem('registerData',JSON.stringify({
-                        birdthday:Date(birthdate),
-                        weight:Number(weight),
-                        height:Number(height),
-                        goalWeight:Number(goalWeight),
-                    })).then(async()=>{
-                        //go to next page
-                        const data = await AsyncStorage.getItem('registerData')
-                         console.log(data)
+           
+                    // await AsyncStorage.mergeItem('registerData',JSON.stringify({
+                    //     birdthday:Date(birthdate),
+                    //     weight:Number(weight),
+                    //     height:Number(height),
+                    //     goalWeight:Number(goalWeight),
+                    // })).then(async()=>{
+                    //     //go to next page
+                    //     const data = await AsyncStorage.getItem('registerData')
+                    //      console.log(data)
                          
-                    })
+                    // })
                   
     }
     catch(e) {
-        console.log('Error in line 29 => ',e)
+        // console.log('Error in line 145 => ',e)
     }
     }
 
@@ -189,10 +121,6 @@ export default function RegisterForm3(props) {
             iconSize={40}
             text="Fruits"
             />
-             <TouchableHighlight
-            onPress={() => { _scrollView.scrollTo(0) }}>
-            <Text>Scroll to Bottom</Text>
-          </TouchableHighlight>
 
         <Text style={{color:"#CCCCCC",fontSize:20,marginTop:15,textAlign:'left',alignSelf:'center'}}>tell us what you love</Text>
 
@@ -204,16 +132,14 @@ export default function RegisterForm3(props) {
                 //  onContentSizeChange={(contentWidth, contentHeight)=>{
                 //     console.log(contentHeight,contentWidth)
                 //     }}
-                ref={_scrollView}
                 >
                    
-                    <View>
-                    {
-                        citrus && citrus.map(e=>{
-                           return <BarOfFoodChoose title={e.title} description={e.description} grams={e.gram} calories={e.kcal} /> 
+                                  {
+                        citrus && citrus.map((e,index)=>{
+                           return <BarOfFoodChoose fullFruitObj={e} index={index} title={e.title} description={e.description} grams={e.gram} calories={e.kcal} /> 
                         })
                     }
-                    </View>
+
                  </ScrollView>
                 
 
@@ -227,11 +153,6 @@ export default function RegisterForm3(props) {
 
               <Text style={{color:'#D5DDDC',fontSize:13,textAlign:'center'}}>Confirm</Text>
           </TouchableOpacity>
-
-      
-
-
-
         </Animatable.View >
 
         </LinearGradient>

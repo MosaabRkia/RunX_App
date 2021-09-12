@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React,{useState} from 'react'
 import { View , Image,Text ,StyleSheet,CheckBox} from 'react-native'
 import { vw, vh/*, vmin, vmax */} from 'react-native-expo-viewport-units';
@@ -6,8 +7,48 @@ export default function BarOfFoodChoose(props) {
 
     const [isSelected, setSelection] = useState(false);
 
+
+
+    const addToList = async ()=>{
+        setSelection(!isSelected);
+        //check if already found
+        if(await AsyncStorage.getItem('fruits') === null){
+            await AsyncStorage.setItem('fruits',JSON.stringify(props.fullFruitObj))
+        }
+        // create data virable to check data
+        const data = await AsyncStorage.getItem('fruits')
+        const lastData = Array(JSON.parse(data))
+        console.log(lastData)
+
+        let checkIfFound = false;
+        let nameFruit = props.fullFruitObj.title;
+
+        lastData && lastData.forEach(e=>{
+            console.log(e)
+                    if(e.title === nameFruit){
+                        checkIfFound = true;
+                        console.log('found in the arr - 27')
+                    }
+ })
+
+                if(checkIfFound === false && isSelected){
+                    console.log('added')
+                    lastData.push(props.fullFruitObj)
+                    console.log(newData)
+                    await AsyncStorage.removeItem('fruits')
+                    await AsyncStorage.setItem('fruits',newData)
+                   
+                }
+//                 if(checkIfFound && !isSelected){
+//                     console.log('delete it')
+//                     // await AsyncStorage.mergeItem('fruits',JSON.stringify(props.fullFruitObj))
+//                 }
+               
+           
+    }
+
     return (
-    <View style={styles.container} key={props.title}>
+    <View style={styles.container} key={props.index}>
          <View style={{width:'25%',alignSelf:'flex-start', justifyContent: 'center',alignItems: 'center',position:'relative'}}>
             <Image 
             style={styles.photoCss}
@@ -23,7 +64,7 @@ export default function BarOfFoodChoose(props) {
         <View style={{width:'15%',justifyContent:'center', alignItems:'center'}}>
         <CheckBox
           value={isSelected}
-          onValueChange={setSelection}
+          onValueChange={addToList}
           style={{alignSelf: "center"}}
         />
         </View>
