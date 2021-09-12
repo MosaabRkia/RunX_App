@@ -1,12 +1,14 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useRef} from 'react'
 import { LinearGradient } from "expo-linear-gradient";
-import {  StyleSheet, Text, View ,Image ,TouchableOpacity ,TextInput,Pressable} from 'react-native';
+import {  StyleSheet, Text, View ,Image ,TouchableOpacity ,Button,TouchableHighlight, ScrollView} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as Animatable from 'react-native-animatable';
 import TittleBarAndArrow from '../components/TittleBarAndArrow';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import BarOfFoodChoose from '../components/BarOfFoodChoose';
+import { vh } from 'react-native-expo-viewport-units';
 
 /*
              plan:null,
@@ -26,13 +28,28 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 */
 
 export default function RegisterForm3(props) {
-    
+    //test arr
+    var footerY;
+    const citrus = 
+        [
+        {title:'orange',kcal:48.1,gram:100,protein: 0.9,fats: 0.9 , description: "Protects your cells from damage"},
+        {title:'grapefruit',kcal:42.1,gram:100,protein: 0.8,fats: 0.1, description: "Protects your cells from damage" },
+        {title:'mandarin',kcal:53.3,gram:100,protein: 0.8,fats: 0 , description: "Protects your cells from damage"},
+        {title:'lemon',kcal:27.9,gram:100,protein: 1.1,fats: 0.3, description: "Protects your cells from damage" },
+        {title:'lime',kcal:30.1,gram:100,protein: 0.8,fats: 0.2 , description: "Protects your cells from damage"},
+        ]
+
+
     //useState
     const [birthdate, setBirthdate] = useState("yyyy-mm-dd");
     const [weight,setWeight] = useState(null);
     const [height,setHeight] = useState(null);
     const [goalWeight,setGoalWeight] = useState(null);
     const [showCalcWeight,setShowCalcWeight] = useState(false);
+
+    //use ref
+    const _scrollView = useRef();
+
     //get data
     const [name,setName] = useState(null);
     const [goal,setGoal] = useState(null);
@@ -45,21 +62,9 @@ export default function RegisterForm3(props) {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [dateState,setDate] = useState(null);
 
+    //scroll to top
 
-    //function format date
-    function formatDate(date) {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-    
-        if (month.length < 2) 
-            month = '0' + month;
-        if (day.length < 2) 
-            day = '0' + day;
-    
-        return [year, month, day].join('-').toString();
-    }
+
 
 
 
@@ -68,40 +73,15 @@ export default function RegisterForm3(props) {
         
 
     // functions
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-      };
-    
-      const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-      };
-    
-      const handleConfirm = (date) => {
-        setDate(date);
-        setBirthdate(formatDate(date).toString())
-        hideDatePicker();
+
+    //header
+    const header = () => {
+        return <Button onPress={() => scrollToTop()} title="Go to top" />;
       };
 
-      //handle weight numberic
-      const handleWeightInputChange = (text) => {
-        if (/^\d+$/.test(text)) {
-         setWeight(text)
-        }
-      }
-      //handle height numberic
-      const handleHeightInputChange = (text) => {
-        if (/^\d+$/.test(text)) {
-         setHeight(text)
-        }
-      }
-      
-        //handle goal weight numberic
-    const handleGoalWeightInputChange = (text) => {
-         if (/^\d+$/.test(text)) {
-            setGoalWeight(text)
-        }
-    }
-
+      const scrollToTop = () => {
+        list.current.scrollToEnd({ animated: true });
+    };
 
     //get data 
     const getData =async()=>{
@@ -152,22 +132,22 @@ export default function RegisterForm3(props) {
                 console.log('ops wrong date')
                 return;
             }
-                if(!isNaN(weight))   { 
+                if(!isNaN(Number(weight)))   { 
                     console.log('Weight not a number')
                     return;
                 }
-                if(!isNaN(height))  { 
+                if(!isNaN(Number(height)))  { 
                     console.log('Height not a number')
                     return;
                 }
-                if(!isNaN(goalWeight))  { 
+                if(!isNaN(Number(goalWeight) ))  { 
                     console.log('goal Weight not a number')
                     return;
                 }
-                if(goal === 'Gain' && weight < goalWeight ){
+                if(goal === 'Gain' && Number(weight) < Number(goalWeight) ){
                     console.log('ops your goal in less than your weight your on gain goal')
                 }
-                if(goal === 'lose' && weight > goalWeight ){
+                if(goal === 'lose' && Number(weight) > Number(goalWeight) ){
                     console.log('ops your goal in higher than your weight your on lose goal')
                 }
                 
@@ -189,73 +169,55 @@ export default function RegisterForm3(props) {
         console.log('Error in line 29 => ',e)
     }
     }
+
+
     
 
 
     return (
         <LinearGradient style={styles.container} colors={['#92C6BC','#8D9A93', '#536976', '#273035', '#101011']}>
-                    <Image
+                  <View style={{width:'100%',alignContent:'center',alignItems:'center',marginTop:'10%'}}>
+                     <Image
             source={require('../assets/logoNBG.png')}
-            style={{width:140,height:75,alignSelf:'center',position:'absolute',top:50}}
-           />
+            style={{width:140,height:60}}
+           /> 
+                      </View> 
  <Animatable.View style={styles.viewShow} animation={'fadeInUp'} >
         <TittleBarAndArrow
             goBk={goBk}
             iconName="arrow-left"
             iconSize={40}
-            text="Your Info"
+            text="Fruits"
             />
-        <Text style={{color:"#CCCCCC",fontSize:25,alignSelf:'center'}}>Welcome {name}</Text>
-        <Text style={{color:"#CCCCCC",fontSize:20,marginTop:15,textAlign:'left',alignSelf:'center'}}>status of using</Text>
-        <KeyboardAwareScrollView>
-        <TextInput
-            style={styles.inputStyle}
-            placeholderTextColor='#364057'
-            onFocus={showDatePicker}
-            onChangeText={showDatePicker}
-            value={birthdate}
-            placeholder="Birthday"
-        />
-         <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-      />
+             <TouchableHighlight
+            onPress={() => { _scrollView.scrollTo(0) }}>
+            <Text>Scroll to Bottom</Text>
+          </TouchableHighlight>
 
-            <TextInput
-            style={styles.inputStyle}
-            placeholderTextColor='#364057'
-            onChangeText={handleWeightInputChange}
-            value={null}
-            keyboardType={"numeric"}
-            placeholder="Weight KG"
-            />
+        <Text style={{color:"#CCCCCC",fontSize:20,marginTop:15,textAlign:'left',alignSelf:'center'}}>tell us what you love</Text>
 
 
-            <TextInput
-            style={styles.inputStyle}
-            placeholderTextColor='#364057'
-            onChangeText={handleHeightInputChange}
-            value={null}
-            keyboardType={"numeric"}
-            placeholder="Height CM"
-            />
+<View >
 
-        {showGoalInputText?
-            <TextInput
-            style={styles.inputStyle}
-            placeholderTextColor='#364057'
-            onChangeText={handleGoalWeightInputChange}
-            value={null}
-            placeholder="Goal Weight KG"
-            keyboardType={"numeric"}
-            />:<View></View>}
+                 <ScrollView 
+                 style={{width:'97%',alignSelf:"center",height:'70%',marginTop:10,borderWidth:1,borderColor:'white',borderRadius:10,paddingBottom:5}}
+                //  onContentSizeChange={(contentWidth, contentHeight)=>{
+                //     console.log(contentHeight,contentWidth)
+                //     }}
+                ref={_scrollView}
+                >
+                   
+                    <View>
+                    {
+                        citrus && citrus.map(e=>{
+                           return <BarOfFoodChoose title={e.title} description={e.description} grams={e.gram} calories={e.kcal} /> 
+                        })
+                    }
+                    </View>
+                 </ScrollView>
+                
 
-            {showCalcWeight?
-        <Text style={{alignSelf:'center',fontSize:15,color:'#D5DDDC'}}>your healthy weight is {healthyWeight}</Text>
-        :<View></View>}
-
+</View>
         <TouchableOpacity 
           style={styles.ButtonStyle_Next}
           onPress={()=>{
@@ -266,7 +228,7 @@ export default function RegisterForm3(props) {
               <Text style={{color:'#D5DDDC',fontSize:13,textAlign:'center'}}>Confirm</Text>
           </TouchableOpacity>
 
-        </KeyboardAwareScrollView>
+      
 
 
 
@@ -280,9 +242,7 @@ export default function RegisterForm3(props) {
 // styles
 const styles = StyleSheet.create({
     container: {
-        flex:1,
-      alignItems: 'center',
-      justifyContent: 'center',
+        flex:1
     },
     inputStyle:{
     width:'80%',

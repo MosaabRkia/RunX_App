@@ -13,12 +13,13 @@ const Stack = createStackNavigator();
 const StackBeforeLogin = () => {
     return (
         <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="register4" component={RegisterForm3}/>
+ <Stack.Screen name="register4" component={RegisterForm3}/>
             <Stack.Screen name="splashScreen" component={SplashScreen}/>
             <Stack.Screen name="loginPage" component={MainPageBeforeLogin}/>
             <Stack.Screen name="register1" component={RegisterForm}/>
             <Stack.Screen name="register2" component={RegisterForm1}/>
             <Stack.Screen name="register3" component={RegisterForm2}/>
+           
             
         </Stack.Navigator>
     )

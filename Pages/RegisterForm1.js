@@ -24,7 +24,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
             bakery:[x,y,z]
 */
 
-export default function RegisterForm1(props) {
+export default function RegisterForm1({navigation}) {
     
     //useState
     const [firstName,setFirstName] = useState(null);
@@ -91,6 +91,7 @@ export default function RegisterForm1(props) {
                         //go to next page
                         const data = await AsyncStorage.getItem('registerData')
                          console.log(data)
+                         navigation.navigate('register3')
                          
                     })
                 

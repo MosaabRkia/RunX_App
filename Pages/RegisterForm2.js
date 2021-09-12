@@ -25,7 +25,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
             bakery:[x,y,z]
 */
 
-export default function RegisterForm2(props) {
+export default function RegisterForm2({navigation}) {
     
     //useState
     const [birthdate, setBirthdate] = useState("yyyy-mm-dd");
@@ -152,23 +152,26 @@ export default function RegisterForm2(props) {
                 console.log('ops wrong date')
                 return;
             }
-                if(!isNaN(weight))   { 
+            console.log(Number(weight))
+                if(isNaN(Number(weight)))   { 
                     console.log('Weight not a number')
                     return;
                 }
-                if(!isNaN(height))  { 
+                if(isNaN(Number(height)))  { 
                     console.log('Height not a number')
                     return;
                 }
-                if(!isNaN(goalWeight))  { 
+                if(isNaN(Number(goalWeight)))  { 
                     console.log('goal Weight not a number')
                     return;
                 }
-                if(goal === 'Gain' && weight < goalWeight ){
-                    console.log('ops your goal in less than your weight your on gain goal')
+                if(goal === 'Gain' && Number(weight)  > Number(goalWeight) ){
+                    console.log('ops your goal is less than your weight your on gain goal')
+                    return;
                 }
-                if(goal === 'lose' && weight > goalWeight ){
-                    console.log('ops your goal in higher than your weight your on lose goal')
+                if(goal === 'lose' && Number(weight) < Number(goalWeight) ){
+                    console.log('ops your goal is higher than your weight your on lose goal')
+                    return;
                 }
                 
 
@@ -180,6 +183,7 @@ export default function RegisterForm2(props) {
                     })).then(async()=>{
                         //go to next page
                         const data = await AsyncStorage.getItem('registerData')
+                        navigation.navigate('register4')
                          console.log(data)
                          
                     })
