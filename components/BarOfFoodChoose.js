@@ -37,6 +37,7 @@ export default function BarOfFoodChoose(props) {
                     console.log(newData)
                     await AsyncStorage.removeItem('fruits')
                     await AsyncStorage.setItem('fruits',newData)
+                    console.log('test')
                    
                 }
 //                 if(checkIfFound && !isSelected){
