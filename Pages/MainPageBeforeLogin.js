@@ -11,13 +11,13 @@ export default function MainPageBeforeLogin({navigation}) {
     const [loginPassword,setLoginPassword] = useState(null);
         
     // validation email
-    function validateEmail(emailAdress)
+    function validateEmail(emailAddress)
     {
-      if(emailAdress === null)
+      if(emailAddress === null)
       return false;
 
       let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      if (emailAdress.match(regexEmail)) {
+      if (emailAddress.match(regexEmail)) {
         return true; 
       } else {
         return false; 

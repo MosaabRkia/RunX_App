@@ -59,7 +59,7 @@ export default function RegisterForm3(props) {
 
 
     //goBack const
-    const goBk = ()=>navigation.navigate('loginPage');
+    const goBk = () => navigation.goBack();
         
 
     // functions
