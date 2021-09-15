@@ -136,7 +136,7 @@ export default function RegisterForm3(props) {
                    
                                   {
                         citrus && citrus.map((e,index)=>{
-                           return <BarOfFoodChoose fullFruitObj={e} index={index} title={e.title} description={e.description} grams={e.gram} calories={e.kcal} /> 
+                           return <View key={index + 11}><BarOfFoodChoose fullFruitObj={e} index={index}  /></View> 
                         })
                     }
 
