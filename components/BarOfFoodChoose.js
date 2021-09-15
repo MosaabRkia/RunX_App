@@ -14,54 +14,57 @@ export default function BarOfFoodChoose(props) {
     },[])
     
     const addToList = async ()=>{
-        let check = isSelected;
+        // let check = isSelected;
         //console.log('before ',isSelected)
         setSelection(!isSelected)
         //console.log('after ',isSelected)
       
     
         //check if already found
-        if(await AsyncStorage.getItem('fruits') === null){
-            await AsyncStorage.setItem('fruits',[])
-        }
+        // if(await AsyncStorage.getItem('fruits') === null){
+        //     await AsyncStorage.setItem('fruits',[])
+        // }
 
         // create data virable to check data
-        const data = await AsyncStorage.getItem('fruits')
+        // const data = await AsyncStorage.getItem('fruits')
 
-        let lastData = data && JSON.parse(data) || []
-        console.log(lastData)
-        let exists = false;
+        // let lastData = data && JSON.parse(data) || []
+        // console.log(lastData)
+        // let exists = false;
 
-        console.log('es', lastData)
-        lastData && lastData !== undefined && lastData.forEach(e=>{
-                    if(e.title === props.fullFruitObj.title){
-                        exists = true;
-                        console.log('found')
-                    }
- })
+//         console.log('es', lastData)
+//         lastData && lastData !== undefined && lastData.forEach(e=>{
+//                     if(e.title === props.fullFruitObj.title){
+//                         exists = true;
+//                         console.log('found')
+//                     }
+//  })
+
+//try
+        props.addList(props.fullFruitObj,isSelected)
+
  //3ks al isselected
-                if(!exists && !isSelected){
-                    console.log('45')
-                    let newData = lastData.push(props.fullFruitObj)
-                    await AsyncStorage.removeItem('fruits')
-                    await AsyncStorage.setItem('fruits',JSON.stringify(newData))
+                // if(!exists && isSelected){
+                //     console.log('45')
+                //     let newData = lastData.push(props.fullFruitObj)
+                //     await AsyncStorage.removeItem('fruits')
+                //     await AsyncStorage.setItem('fruits',JSON.stringify(newData))
 
-                    // lastData.push(props.fullFruitObj)
+                //     // lastData.push(props.fullFruitObj)
                     
-                    // await AsyncStorage.removeItem('fruits')
-                    // await AsyncStorage.setItem('fruits',newData)
-                    // console.log('test')
-                }
-                if(exists && isSelected){
-                     console.log('57')
-                    let newData = lastData.filter((e)=>e.title !== props.fullFruitObj.title)
-                    await AsyncStorage.removeItem('fruits')
-                    await AsyncStorage.setItem('fruits',JSON.stringify(newData))
+                //     // await AsyncStorage.removeItem('fruits')
+                //     // await AsyncStorage.setItem('fruits',newData)
+                //     // console.log('test')
+                // }
+                // if(exists && isSelected){
+                //      console.log('57')
+                //     let newData = lastData.filter((e)=>e.title !== props.fullFruitObj.title)
+                //     await AsyncStorage.removeItem('fruits')
+                //     await AsyncStorage.setItem('fruits',JSON.stringify(newData))
                    
                     // await AsyncStorage.mergeItem('fruits',JSON.stringify(props.fullFruitObj))
-                }
-               
-                   console.log('64',lastData)
+                // }
+
     }
 
     return (

@@ -125,14 +125,14 @@ export default function RegisterForm1({navigation}) {
             style={styles.inputStyle}
             placeholderTextColor='#364057'
             onChangeText={setFirstName}
-            value={null}
+            value={undefined}
             placeholder="First Name"
             />
                         <TextInput
             style={styles.inputStyle}
             placeholderTextColor='#364057'
             onChangeText={setEmail}
-            value={null}
+            value={undefined}
             placeholder="Email"
             />
 
@@ -141,7 +141,7 @@ export default function RegisterForm1({navigation}) {
             style={styles.inputStyle}
             placeholderTextColor='#364057'
             onChangeText={setPassword}
-            value={null}
+            value={undefined}
             placeholder="Password"
             secureTextEntry={showPassword?false:true}
             />
@@ -163,7 +163,7 @@ export default function RegisterForm1({navigation}) {
             style={styles.inputStyle}
             placeholderTextColor='#364057'
             onChangeText={setCurPassword}
-            value={null}
+            value={undefined}
             placeholder="Current Password"
             secureTextEntry={showCurPassword?false:true}
             />

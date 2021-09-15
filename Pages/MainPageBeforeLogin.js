@@ -38,7 +38,7 @@ export default function MainPageBeforeLogin({navigation}) {
         style={styles.inputStyle}
         placeholderTextColor='#364057'
         onChangeText={setLoginEmail}
-        value={null}
+        value={undefined}
         placeholder="Email Address"
         keyboardType="email-address"
       />
@@ -47,7 +47,7 @@ export default function MainPageBeforeLogin({navigation}) {
         style={styles.inputStyle}
         placeholderTextColor='#364057'
         onChangeText={setLoginPassword}
-        value={null}
+        value={undefined}
         placeholder="Password"
         secureTextEntry={true}
       />

@@ -120,6 +120,7 @@ export default function RegisterForm2({navigation}) {
     //useEffect
     useEffect( () => {
         getData();
+        setBirthdate('1999/02/15');
         }
     , [])
     //loop on calc healthy weight
@@ -231,7 +232,7 @@ export default function RegisterForm2({navigation}) {
             style={styles.inputStyle}
             placeholderTextColor='#364057'
             onChangeText={handleWeightInputChange}
-            value={null}
+            value={undefined}
             keyboardType={"numeric"}
             placeholder="Weight KG"
             />
@@ -241,7 +242,7 @@ export default function RegisterForm2({navigation}) {
             style={styles.inputStyle}
             placeholderTextColor='#364057'
             onChangeText={handleHeightInputChange}
-            value={null}
+            value={undefined}
             keyboardType={"numeric"}
             placeholder="Height CM"
             />
@@ -251,7 +252,7 @@ export default function RegisterForm2({navigation}) {
             style={styles.inputStyle}
             placeholderTextColor='#364057'
             onChangeText={handleGoalWeightInputChange}
-            value={null}
+            value={undefined}
             placeholder="Goal Weight KG"
             keyboardType={"numeric"}
             />:<View></View>}

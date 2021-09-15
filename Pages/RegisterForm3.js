@@ -39,23 +39,8 @@ export default function RegisterForm3(props) {
         ]
 
 
-    //useState
-
-
-    //use ref
-
-
-    //get data
-
-
-
-    //date
-
-
-    //scroll to top
-
-
-
+        //useState
+        const [arr,setArr] = useState([]);
 
 
     //goBack const
@@ -63,42 +48,49 @@ export default function RegisterForm3(props) {
         
 
     // functions
+        const addList =(e,isSelected)=>{
+            console.log(arr)
+           // this fix because of the not update fast so it always send the oposite
+            isSelected = !isSelected;
 
+            let exists = false;
 
+            arr && arr.forEach((x)=>{
+                if(e.title === x.title){
+                    exists = true;
+                    console.log('found')
+                }
+            })
 
-    //get data 
-   const getData=async()=>{
+            console.log(isSelected,exists)
 
-    console.log('page loaded')
-   }
- 
-    //useEffect
-    useEffect( () => {
-            getData();
+            if(isSelected && !exists){
+                console.log('added')
+                setArr([...arr,e])
+            }
+            if(!isSelected && exists){
+                console.log('deleted')
+                let newArr = arr.filter(fruit=> fruit.title !== e.title )
+                setArr(newArr)
+            }
         }
-    , [])
-
-
 
     //save data
     const OnSelectSaveData =async ()=>{
         try {
            
-                    // await AsyncStorage.mergeItem('registerData',JSON.stringify({
-                    //     birdthday:Date(birthdate),
-                    //     weight:Number(weight),
-                    //     height:Number(height),
-                    //     goalWeight:Number(goalWeight),
-                    // })).then(async()=>{
-                    //     //go to next page
-                    //     const data = await AsyncStorage.getItem('registerData')
-                    //      console.log(data)
+                    await AsyncStorage.mergeItem('registerData',JSON.stringify({
+                       fruits:arr
+                    })).then(async()=>{
+                        //go to next page
+                        const data = await AsyncStorage.getItem('registerData')
+                         console.log(data)
                          
-                    // })
+                    })
                   
     }
     catch(e) {
-        // console.log('Error in line 145 => ',e)
+        console.log('Error => ',e)
     }
     }
 
@@ -136,7 +128,7 @@ export default function RegisterForm3(props) {
                    
                                   {
                         citrus && citrus.map((e,index)=>{
-                           return <View key={index + 11}><BarOfFoodChoose fullFruitObj={e} index={index}  /></View> 
+                           return <View key={index + 11}><BarOfFoodChoose addList={(e,isSelected)=>addList(e,isSelected)} fullFruitObj={e} index={index}  /></View> 
                         })
                     }
 
