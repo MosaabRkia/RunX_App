@@ -64,7 +64,7 @@ export default function RegisterForm2({navigation}) {
 
 
     //goBack const
-    const goBk = ()=>navigation.navigate('loginPage');
+    const goBk = () => navigation.goBack();
         
 
     // functions
