@@ -20,7 +20,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
             meat:[x,y,z],
             snacks:[x,y,z],
             drinks:[x,y,z],
-            bakery:[x,y,z]
+            bakery:[x,y,z],
+            dairy:[x,y,z]
 
 */
 

@@ -21,7 +21,7 @@ import { vh } from 'react-native-expo-viewport-units';
             goalWeight:Number(null),
             fruits:[x,y,z],
             vegetables:[x,y,z],
-            meats:[x,y,z],
+            meat:[x,y,z],
             snacks:[x,y,z],
             drinks:[x,y,z],
             bakery:[x,y,z]
@@ -29,18 +29,39 @@ import { vh } from 'react-native-expo-viewport-units';
 
 export default function RegisterForm3(props) {
     //test arr
-    const citrus = 
+    const data = 
         [
-        {title:'orange',kcal:48.1,gram:100,protein: 0.9,fats: 0.9 , description: "Protects your cells from damage"},
-        {title:'grapefruit',kcal:42.1,gram:100,protein: 0.8,fats: 0.1, description: "Protects your cells from damage" },
-        {title:'mandarin',kcal:53.3,gram:100,protein: 0.8,fats: 0 , description: "Protects your cells from damage"},
-        {title:'lemon',kcal:27.9,gram:100,protein: 1.1,fats: 0.3, description: "Protects your cells from damage" },
-        {title:'lime',kcal:30.1,gram:100,protein: 0.8,fats: 0.2 , description: "Protects your cells from damage"},
-        ]
+        {title:'orange',kcal:48.1,gram:100,protein: 0.9,fats: 0.9 , description: "Protects your cells from damage",kind:'fruits'},
+        {title:'grapefruit',kcal:42.1,gram:100,protein: 0.8,fats: 0.1, description: "Protects your cells from damage",kind:'fruits' },
+        {title:'mandarin',kcal:53.3,gram:100,protein: 0.8,fats: 0 , description: "Protects your cells from damage",kind:'vegatables'},
+        {title:'lemon',kcal:27.9,gram:100,protein: 1.1,fats: 0.3, description: "Protects your cells from damage",kind:'vegatables' },
+        {title:'lime',kcal:30.1,gram:100,protein: 0.8,fats: 0.2 , description: "Protects your cells from damage",kind:'meat'},
+        {title:'orange',kcal:48.1,gram:100,protein: 0.9,fats: 0.9 , description: "Protects your cells from damage",kind:'meat'},
+        {title:'grapefruit',kcal:42.1,gram:100,protein: 0.8,fats: 0.1, description: "Protects your cells from damage",kind:'snacks' },
+        {title:'mandarin',kcal:53.3,gram:100,protein: 0.8,fats: 0 , description: "Protects your cells from damage",kind:'snacks'},
+        {title:'lemon',kcal:27.9,gram:100,protein: 1.1,fats: 0.3, description: "Protects your cells from damage",kind:'drinks' },
+        {title:'lime',kcal:30.1,gram:100,protein: 0.8,fats: 0.2 , description: "Protects your cells from damage",kind:'drinks'},
+        {title:'lemon',kcal:27.9,gram:100,protein: 1.1,fats: 0.3, description: "Protects your cells from damage",kind:'bakery' },
+        {title:'lime',kcal:30.1,gram:100,protein: 0.8,fats: 0.2 , description: "Protects your cells from damage",kind:'bakery'},
+        {title:'lemon',kcal:27.9,gram:100,protein: 1.1,fats: 0.3, description: "Protects your cells from damage",kind:'dairy' },
+        {title:'lime',kcal:30.1,gram:100,protein: 0.8,fats: 0.2 , description: "Protects your cells from damage",kind:'dairy'},]
 
+        const kinds = [
+            'fruits','vegatables','meat','snacks','drinks','bakery','dairy'
+        ]
 
         //useState
         const [arr,setArr] = useState([]);
+        const [placeKind,setPlaceKind] = useState(0);
+        const [dataToShow,setDataToShow] = useState([]);
+
+        //useEffect
+        useEffect(()=>{
+            console.log(placeKind)
+            let newData = data.filter(item=>item.kind === kinds[placeKind])
+            console.log(newData)
+            setDataToShow(newData)
+        },[placeKind])
 
 
     //goBack const
@@ -78,15 +99,18 @@ export default function RegisterForm3(props) {
     //save data
     const OnSelectSaveData =async ()=>{
         try {
-           
-                    await AsyncStorage.mergeItem('registerData',JSON.stringify({
-                       fruits:arr
+                    if(kinds.length -1 === placeKind){
+                     await AsyncStorage.mergeItem('registerData',JSON.stringify({
+                     food:arr
                     })).then(async()=>{
                         //go to next page
                         const data = await AsyncStorage.getItem('registerData')
                          console.log(data)
-                         
-                    })
+                    })}
+                    else{
+                        let upOne = placeKind + 1;
+                        setPlaceKind(upOne)
+                    }
                   
     }
     catch(e) {
@@ -111,7 +135,7 @@ export default function RegisterForm3(props) {
             goBk={goBk}
             iconName="arrow-left"
             iconSize={40}
-            text="Fruits"
+            text={kinds[placeKind]}
             />
 
         <Text style={{color:"#CCCCCC",fontSize:20,marginTop:15,textAlign:'left',alignSelf:'center'}}>tell us what you love</Text>
@@ -127,8 +151,8 @@ export default function RegisterForm3(props) {
                 >
                    
                                   {
-                        citrus && citrus.map((e,index)=>{
-                           return <View key={index + 11}><BarOfFoodChoose addList={(e,isSelected)=>addList(e,isSelected)} fullFruitObj={e} index={index}  /></View> 
+                        dataToShow && dataToShow.map((e,index)=>{
+                           return <View key={index + 11}><BarOfFoodChoose kindPlace={placeKind} addList={(e,isSelected)=>addList(e,isSelected)} fullFruitObj={e} index={index}  /></View> 
                         })
                     }
 
