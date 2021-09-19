@@ -22,7 +22,11 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
             meats:[x,y,z],
             snacks:[x,y,z],
             drinks:[x,y,z],
-            bakery:[x,y,z]
+            bakery:[x,y,z],
+            fish:[x,y,z],
+            dairy:[x,y,z],
+            seeds:[x,y,z]
+            add water calculator by weight
 */
 
 export default function RegisterForm2({navigation}) {
@@ -177,7 +181,7 @@ export default function RegisterForm2({navigation}) {
                 
 
                     await AsyncStorage.mergeItem('registerData',JSON.stringify({
-                        birdthday:Date(birthdate),
+                        birthdate:birthdate,
                         weight:Number(weight),
                         height:Number(height),
                         goalWeight:Number(goalWeight),

@@ -9,10 +9,9 @@ export default function BarOfFoodChoose(props) {
     const [page,setPage]=useState(0)
 
     //useEffect
-    // useEffect(() =>{
-    //     setPage(props.kindPlace)
-    //     setSelection(false)
-    // },[page])
+    useEffect(() =>{
+        setSelection(false)
+    },[props.kindPlace])
     
     const addToList = async ()=>{
         setSelection(!isSelected)
@@ -26,11 +25,11 @@ export default function BarOfFoodChoose(props) {
             key={props.index + 'img'}
             style={styles.photoCss}
             source={{
-          uri: 'https://thumbs-prod.si-cdn.com/GQWa1qJUrzp6l27gnhxhwMAtkpI=/fit-in/1600x0/https://public-media.si-cdn.com/filer/d5/24/d5243019-e0fc-4b3c-8cdb-48e22f38bff2/istock-183380744.jpg',
+          uri:`http://proj17.ruppin-tech.co.il/images/${/*props.fullFruitObj.id*/props.index}.jpg`,
         }}/>
         </View>
         <View key={props.index , 2} style={{width:'60%',marginLeft:10,padding:10,alignSelf:'flex-end'}}>
-            <Text style={{alignSelf:"flex-start",right:25,fontSize:20,fontWeight:'bold'}} >{props.fullFruitObj.title}</Text>
+            <Text style={{alignSelf:"flex-start",right:25,fontSize:20,fontWeight:'bold'}} >{props.fullFruitObj.name}</Text>
             <Text style={{alignSelf:"flex-start",right:25,fontSize:15}}>{props.fullFruitObj.description}</Text>
             <Text style={{alignSelf:"flex-end",right:25}} >{props.fullFruitObj.gram}g = {props.fullFruitObj.kcal} calories</Text>
         </View>

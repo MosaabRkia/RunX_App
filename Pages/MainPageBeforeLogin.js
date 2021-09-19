@@ -51,7 +51,9 @@ export default function MainPageBeforeLogin({navigation}) {
         placeholder="Password"
         secureTextEntry={true}
       />
-       <TouchableOpacity >
+       <TouchableOpacity
+       onPress={()=>{navigation.navigate('forgotPassword')}}
+        >
       <Text style={{color:"#CCCCCC",fontSize:10,alignSelf:'flex-end',marginRight:'10%',marginTop:1}}>
           i dont remember my password !
           </Text>

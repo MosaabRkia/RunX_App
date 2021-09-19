@@ -60,7 +60,7 @@ export default function RegisterForm1({navigation}) {
     //save data
     const OnSelectSaveData =async ()=>{
         try {
-            if(firstName === null || firstName.length < 3)
+            if(firstName === null || firstName.length < 3 && /^[a-zA-Z]+$/.test(firstName))
                { 
                 console.log('first name problem')
                 return;
