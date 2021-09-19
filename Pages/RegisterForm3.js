@@ -1,14 +1,11 @@
-import React,{useState,useEffect,useRef} from 'react'
+import React,{useState,useEffect} from 'react'
 import { LinearGradient } from "expo-linear-gradient";
-import {  StyleSheet, Text, View ,Image ,TouchableOpacity ,Button,TouchableHighlight, ScrollView} from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {  StyleSheet, Text, View ,Image ,TouchableOpacity , ScrollView} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import TittleBarAndArrow from '../components/TittleBarAndArrow';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import BarOfFoodChoose from '../components/BarOfFoodChoose';
-import { vh } from 'react-native-expo-viewport-units';
+
 
 /*
             //  plan:null,
