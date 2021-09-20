@@ -89,9 +89,10 @@ props.index % 2 == 0 ?
 const styles = StyleSheet.create({
   container: {
     justifyContent: "space-between",
-    padding: 10,
+    padding: 20,
     flexDirection: "row",
     backgroundColor: "#B1C7BD",
+    width: '100%'
   },
   circleProgress: {},
   containerParagraph: { maxWidth: "65%", margin: 5 },
