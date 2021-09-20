@@ -12,9 +12,9 @@ export default function ProgressBar(props) {
 
   return (
 props.index % 2 == 0 ?
-    <View>
+    <View key={props.index+"_ProgressBar"}>
         {/**first */}
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity onPress={()=>props.link()} style={styles.container}>
         <View style={styles.circleProgress}>
           <AnimatedCircularProgress
             size={115}
@@ -47,9 +47,10 @@ props.index % 2 == 0 ?
       </TouchableOpacity>
       </View>
         :
-        <View>
+        <View key={props.index+"_ProgressBar"}>
        {/**second */}
       <TouchableOpacity
+      onPress={()=>props.navigation.navigate(`${props.title}`)}
         style={[styles.container, { backgroundColor: "#2D3643" }]}
       >
         <View style={[styles.containerParagraph]}>

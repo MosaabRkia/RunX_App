@@ -4,8 +4,9 @@ import React,{useState} from 'react'
 import { StyleSheet, View,ScrollView, TouchableOpacity, Text } from 'react-native'
 import BarDashBoard from '../components/BarDashBoard'
 import ProgressBar from '../components/ProgressBar'
+import Icon from 'react-native-vector-icons/AntDesign';
 
-export default function DashBoard({navigation}) {
+export default function DashBoard(props) {
     const arr = [
         {title:'Drink',units:'Cups',value:36,
         description:"drinking water is essential for optimal health. Proper hydration prevents constipation, mood swings, kidney stones, and overheating "}
@@ -20,7 +21,7 @@ export default function DashBoard({navigation}) {
 
     return (
         <LinearGradient style={styles.container} colors={['#92C6BC', '#8D9A93', '#536976', '#273035', '#101011']}>
-           <BarDashBoard icon={'text'} openDrawer= {() => {navigation.openDrawer()}}/>
+           <BarDashBoard icon={'text'} funcCall= {() => {props.navigation.openDrawer()}}/>
            {/* <TouchableOpacity style={styles.icon} onPress={()=>navigation.toggleDrawer()}>
            <Text 
         style={{fontSize:200}} >
@@ -32,10 +33,18 @@ export default function DashBoard({navigation}) {
             <ScrollView> 
                 {
                     arr.map((item,index)=>{
-                        return  <ProgressBar item={item} index={index} /> 
+                        return  <ProgressBar link={()=>{props.navigation.navigate(item.title)}} item={item} index={index} /> 
                     })
                    
                 } 
+                <View style={{justifyContent:'space-between' , flexDirection: 'row'}}>
+                    <Text style={{color:'#8BA197' , marginTop: 20 , marginBottom: 20 , marginLeft: 10, fontSize:30,fontWeight:'bold' }}>Medicine</Text>
+                    <TouchableOpacity 
+                    style={{marginTop: 10  , marginRight: 10,}}
+                    onPress={()=>{}}>
+                       <Icon name={'pluscircleo'} size={65} color="#8BA197" />
+                       </TouchableOpacity>
+                </View>
             </ScrollView>
 
         </LinearGradient>

@@ -6,7 +6,7 @@ import { AnimatedCircularProgress } from "react-native-circular-progress";
 import DrawCups from "../components/DrawCups";
 import Icon from 'react-native-vector-icons/AntDesign';
 
-export default function Drink() {
+export default function Drink(props) {
 
     const [drank ,setDrank] = useState(10)
     const [total ,setTotal] = useState(20)
@@ -16,7 +16,7 @@ export default function Drink() {
       style={styles.container}
       colors={["#92C6BC", "#8D9A93", "#536976", "#273035", "#101011"]}
     >
-      <BarDashBoard icon={"arrow-left"} />
+      <BarDashBoard funcCall={()=>props.navigation.goBack()} icon={"arrow-left"} />
 
       <View style={styles.container}>
 
