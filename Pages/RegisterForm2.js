@@ -124,7 +124,6 @@ export default function RegisterForm2({navigation}) {
     //useEffect
     useEffect( () => {
         getData();
-        setBirthdate('1999/02/15');
         }
     , [])
     //loop on calc healthy weight

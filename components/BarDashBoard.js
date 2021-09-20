@@ -4,13 +4,13 @@ import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function BarDashBoard() {
+export default function BarDashBoard(props) {
     return (
       
            <SafeAreaView style={styles.container}>
            <TouchableOpacity style={styles.icon}>
            <Icon 
-           name="text" 
+           name={props.icon}
            size={60}
             color="black" />
            </TouchableOpacity>

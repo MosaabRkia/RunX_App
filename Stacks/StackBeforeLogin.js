@@ -9,6 +9,7 @@ import RegisterForm2 from '../Pages/RegisterForm2';
 import RegisterForm3 from '../Pages/RegisterForm3';
 import ForgotPassword from '../Pages/ForgotPassword';
 import DashBoard from '../Pages/DashBoard';
+import Drink from '../Pages/Drink';
 
 const Stack = createStackNavigator();
 
@@ -16,8 +17,8 @@ const StackBeforeLogin = () => {
     return (
         <Stack.Navigator screenOptions={{headerShown: false}}>     
          {/*temp*/}
+         <Stack.Screen name="Drink" component={Drink}/>
          <Stack.Screen name="DashBoard" component={DashBoard}/>
-
 
             <Stack.Screen name="splashScreen" component={SplashScreen}/>
             <Stack.Screen name="loginPage" component={MainPageBeforeLogin}/>
