@@ -10,12 +10,11 @@ export default function Drawer() {
     const Drawer = createDrawerNavigator();
 
     return (
-        <Drawer.Navigator initialRouteName="DashBoard" 
-            screenOptions = {{headerShown: false}}
-            openByDefault="open"
-        >
-            <Drawer.Screen name="DashBoard" component={DashBoard} />
-            <Drawer.Screen name="Drink" component={Drink} />
-        </Drawer.Navigator>
+        <Drawer.Navigator 
+        screenOptions = {{headerShown: false}}>
+        <Drawer.Screen name="DashBoard" component={DashBoard} />
+        <Drawer.Screen name="Drink" component={Drink} />
+      </Drawer.Navigator>  
     )
 }
+

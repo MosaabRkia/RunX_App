@@ -8,7 +8,7 @@ export default function BarDashBoard(props) {
     return (
       
            <SafeAreaView style={styles.container}>
-           <TouchableOpacity style={styles.icon} onPress={()=>props.openDrawer}>
+           <TouchableOpacity style={styles.icon} onPress={()=>props.openDrawer()}>
            <Icon 
            name={props.icon}
            size={60}

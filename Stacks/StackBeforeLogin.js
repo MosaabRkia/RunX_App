@@ -16,10 +16,6 @@ const Stack = createStackNavigator();
 const StackBeforeLogin = () => {
     return (
         <Stack.Navigator screenOptions={{headerShown: false}}>     
-         {/*temp*/}
-         <Stack.Screen name="Drink" component={Drink}/>
-         <Stack.Screen name="DashBoard" component={DashBoard}/>
-
             <Stack.Screen name="splashScreen" component={SplashScreen}/>
             <Stack.Screen name="loginPage" component={MainPageBeforeLogin}/>
             <Stack.Screen name="register1" component={RegisterForm}/>

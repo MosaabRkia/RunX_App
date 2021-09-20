@@ -1,9 +1,15 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Text,Dimensions  } from "react-native";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
+  
+
+//dimension of screen
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
+
 
 export default function ProgressBar(props) {
-    console.log('joined')
+
   return (
 props.index % 2 == 0 ?
     <View>
@@ -92,10 +98,10 @@ const styles = StyleSheet.create({
     padding: 20,
     flexDirection: "row",
     backgroundColor: "#B1C7BD",
-    width: '100%'
+    width: windowWidth
   },
   circleProgress: {},
-  containerParagraph: { maxWidth: "65%", margin: 5 },
+  containerParagraph: { maxWidth: "60%", margin: 5 },
   title: { fontWeight: "bold", fontSize: 20, marginBottom: 5 },
   text: { fontSize: 15 },
 });

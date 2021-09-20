@@ -40,15 +40,15 @@ export default function Drink() {
             </View>
                     <View style={{flexDirection:'row',alignSelf:'center',flexWrap:'wrap',margin:10,justifyContent:'center'}}>
                        {
-                          [...Array(drank)].map(() => ( 
-                            <DrawCups done='yes'/>
+                          [...Array(drank)].map((e,index) => ( 
+                            <View key={index+'_yes'}><DrawCups done='yes'/></View>
                             ) 
                         )
                        }
 
                          {
-                          [...Array(total-drank)].map(() => ( 
-                            <DrawCups done='no'/>
+                          [...Array(total-drank)].map((e,index) => ( 
+                            <View key={index+'_no'}><DrawCups done='no'/></View>
                             ) 
                         )
                        }
