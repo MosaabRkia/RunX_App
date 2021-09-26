@@ -11,8 +11,10 @@ export default function SplashScreen({navigation}) {
 
   //useEffect
   useEffect(() => {
+
     //create load unit load all data
     setTimeout(() => {navigation.navigate('loginPage')},3500)
+    
   },[])
 
 
