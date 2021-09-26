@@ -1,10 +1,11 @@
 import React from 'react'
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default function TittleBarAndArrow(props) {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
 
             <View style={styles.containerOfLogo}>
                 <TouchableOpacity onPress={props.goBk}>
@@ -20,7 +21,7 @@ export default function TittleBarAndArrow(props) {
 
     </View>
 
-        </View>
+        </SafeAreaView>
     )
 }
 
