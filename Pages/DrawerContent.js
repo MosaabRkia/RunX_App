@@ -2,6 +2,7 @@ import React from 'react'
 import {View ,StyleSheet, Image} from 'react-native'
 import { DrawerContentScrollView,DrawerItem } from '@react-navigation/drawer'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import {
     Avatar,
@@ -13,7 +14,7 @@ import {
     TouchableRipple,
     Switch
   } from 'react-native-paper'
-import { LinearGradient } from 'expo-linear-gradient';
+
 
 export  function DrawerContent(props) {
     return (
@@ -109,7 +110,7 @@ export  function DrawerContent(props) {
         )}
         label="Sign Out"
         onPress={() => {
-
+          props.navigation.navigate('SplashScreen')
         }}
       />
 
