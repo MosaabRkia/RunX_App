@@ -40,7 +40,7 @@ export default function SplashScreen({navigation}) {
              </Animatable.View>}    
         </View>
        
-      <StatusBar style="auto" />
+      
   </LinearGradient>
   );
 

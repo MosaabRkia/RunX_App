@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 export default function BarDashBoard(props) {
     return (
       
-           <SafeAreaView style={styles.container}>
+           <View style={styles.container}>
            <TouchableOpacity style={styles.icon} onPress={()=>props.funcCall()}>
            <Icon 
            name={props.icon}
@@ -21,7 +21,7 @@ export default function BarDashBoard(props) {
             style={{width:60,height:60}}
            />  
             </View>
-            </SafeAreaView>
+            </View>
     ) 
 }
 
@@ -30,7 +30,7 @@ export default function BarDashBoard(props) {
      container:{
         justifyContent:'space-between',
         flexDirection:'row',
-        marginLeft:5,marginRight:5,marginBottom:5,
+        marginLeft:5,marginRight:5,marginBottom:5
      },
     icon:{
        

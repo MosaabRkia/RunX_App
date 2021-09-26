@@ -22,13 +22,6 @@ export default function DashBoard(props) {
     return (
         <LinearGradient style={styles.container} colors={['#92C6BC', '#8D9A93', '#536976', '#273035', '#101011']}>
            <BarDashBoard icon={'text'} funcCall= {() => {props.navigation.openDrawer()}}/>
-           {/* <TouchableOpacity style={styles.icon} onPress={()=>navigation.toggleDrawer()}>
-           <Text 
-        style={{fontSize:200}} >
-                test
-            </Text>
-           </TouchableOpacity> */}
-
 
             <ScrollView> 
                 {
@@ -37,12 +30,12 @@ export default function DashBoard(props) {
                     })
                    
                 } 
-                <View style={{justifyContent:'space-between' , flexDirection: 'row'}}>
-                    <Text style={{color:'#8BA197' , marginTop: 20 , marginBottom: 20 , marginLeft: 10, fontSize:30,fontWeight:'bold' }}>Medicine</Text>
+                <View style={{justifyContent:'space-between' , flexDirection: 'row',backgroundColor:arr%2==0?'#2D3643':'#B4D1C4'}}>
+                    <Text style={{color:arr%2==0?'#B4D1C4':'#2D3643' , marginTop: 20 , marginBottom: 20 , marginLeft: 10, fontSize:30,fontWeight:'bold' }}>Medicine</Text>
                     <TouchableOpacity 
                     style={{marginTop: 10  , marginRight: 10,}}
-                    onPress={()=>{}}>
-                       <Icon name={'pluscircleo'} size={65} color="#8BA197" />
+                    onPress={()=>{props.navigation.navigate('Medicine')}}>
+                       <Icon name={'pluscircleo'} size={65} color={arr%2==0?'#B4D1C4':'#2D3643'} />
                        </TouchableOpacity>
                 </View>
             </ScrollView>

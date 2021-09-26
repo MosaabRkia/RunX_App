@@ -3,16 +3,16 @@ import StackBeforeLogin from './Stacks/StackBeforeLogin';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Drawer from './Drawer/Drawer';
+import { StatusBar } from 'react-native';
 
 
 export default function App() {
   return (
 
     <NavigationContainer>
-      <Drawer/>
+      <StatusBar hidden /> 
+      {/* <Drawer/> */}
+      <StackBeforeLogin />
     </NavigationContainer>
-    //   <NavigationContainer>
-    //     <StackBeforeLogin />
-    //  </NavigationContainer>
   );
 }

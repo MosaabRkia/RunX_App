@@ -1,11 +1,12 @@
 import React from 'react'
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity ,StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default function TittleBarAndArrow(props) {
+
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
 
             <View style={styles.containerOfLogo}>
                 <TouchableOpacity onPress={props.goBk}>
@@ -21,17 +22,14 @@ export default function TittleBarAndArrow(props) {
 
     </View>
 
-        </SafeAreaView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 10,
         flexDirection: 'row',
-        // justifyContent: 'space-around',
-        // alignItems: 'center'
-        //justifyContent:'center'
+        paddingTop: 8,paddingLeft:5
 
     }, text: {
         fontSize: 29,
