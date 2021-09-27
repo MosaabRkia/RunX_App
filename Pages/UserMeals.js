@@ -59,7 +59,6 @@ export default function userMeals(props) {
               <View style={{margin:5}}>
                 {
                   BreakFast && BreakFast.map((e,index)=>{
-                    console.log(e)
                     return  <MealBar index={index} kindMeal={title} items={e.items}/>
                   })
                 }

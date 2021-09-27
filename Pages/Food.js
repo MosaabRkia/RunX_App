@@ -38,7 +38,7 @@ export default function Food(props) {
          
           <View style={{justifyContent:'space-around',alignSelf:'center'}}>
               <View style={{margin:5}}>
-                  <AppButton onPress={{}} text={'Today'} color={true}/>
+                  <AppButton onPress={()=>{props.navigation.navigate('DailyListMenu')}} text={'Today'} color={true}/>
               </View>
           
               <View style={{margin:5}}>

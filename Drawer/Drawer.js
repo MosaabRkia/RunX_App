@@ -14,6 +14,8 @@ import SplashScreen from '../Pages/SplashScreen';
 import StackBeforeLogin from '../Stacks/StackBeforeLogin';
 import Food1 from '../Pages/Food1';
 import UserMeals from '../Pages/UserMeals';
+import DailyListMenu from '../Pages/DailyListMenu';
+import ShowDailyMeal from '../Pages/ShowDailyMeal';
 
 
 export default function Drawer(props) {
@@ -23,7 +25,7 @@ export default function Drawer(props) {
   return (
     <Drawer.Navigator screenOptions={{ headerShown: false }} drawerContent={props => <DrawerContent {...props} />}
     >
-       
+
       <Drawer.Screen name="DashBoard" component={DashBoard} />
       <Drawer.Screen name="Drink" component={Drink} />
       <Drawer.Screen name="Sport" component={Sport} />
@@ -33,7 +35,9 @@ export default function Drawer(props) {
       <Drawer.Screen name="Logout" component={SplashScreen} />
       <Drawer.Screen name="Medicine" component={Medicine} />
       <Drawer.Screen name="splash" component={StackBeforeLogin} />
-      <Drawer.Screen name="UserMeals" component={UserMeals} />
+      <Drawer.Screen name="UserMeals" component={UserMeals} />      
+      <Drawer.Screen name="ShowDailyMeal" component={ShowDailyMeal} />
+       <Drawer.Screen name="DailyListMenu" component={DailyListMenu} />
     </Drawer.Navigator>
   )
 }
