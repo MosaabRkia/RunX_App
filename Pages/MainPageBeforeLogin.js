@@ -59,7 +59,8 @@ export default function MainPageBeforeLogin({navigation}) {
           </Text>
       </TouchableOpacity> 
 
-          <TouchableOpacity style={styles.ButtonStyle} >
+          <TouchableOpacity style={styles.ButtonStyle}
+          onPress={()=>{navigation.navigate('HomeDrawer')}} >
               <Text style={{color:'#D5DDDC',fontSize:20}}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>{navigation.navigate('register1')}}>

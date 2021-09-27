@@ -29,7 +29,8 @@ export default function TittleBarAndArrow(props) {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        paddingTop: 8,paddingLeft:5
+        paddingTop: 8,
+        paddingLeft:5
 
     }, text: {
         fontSize: 29,

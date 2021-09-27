@@ -6,11 +6,11 @@ import { AnimatedCircularProgress } from "react-native-circular-progress";
 import Icon from 'react-native-vector-icons/AntDesign';
 import AppButton from "../components/AppButton";
 
-export default function Food(props) {
+export default function Food1(props) {
 
     const [eaten ,setEaten] = useState(550)
     const [total ,setTotal] = useState(2000)
-
+    const meals =['BreakFast','AfterNoon Stack','Lunch','Dinner']
     return (
         <LinearGradient style={styles.container} colors={['#92C6BC', '#8D9A93', '#536976', '#273035', '#101011']}>
             <BarDashBoard funcCall={()=>props.navigation.goBack()} icon={"arrow-left"} />
@@ -37,13 +37,18 @@ export default function Food(props) {
   </View>
          
           <View style={{justifyContent:'space-around',alignSelf:'center'}}>
-              <View style={{margin:5}}>
-                  <AppButton onPress={{}} text={'Today'} color={true}/>
+              {
+                meals && meals.map(e=>{
+                 return <View key={e} style={{margin:5}}>
+                  <AppButton onPress={()=>{
+                     props.navigation.navigate('UserMeals', {
+                      title:e,
+                    });
+                  }} text={e} color={true}/>
               </View>
-          
-              <View style={{margin:5}}>
-          <AppButton onPress={()=>{props.navigation.navigate('Food1')}} text={'Edit Favor Foods'} color={false}/>
-          </View>
+                })
+              }
+        
 
            </View>
 </View>

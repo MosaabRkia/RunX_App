@@ -297,7 +297,7 @@ export default function RegisterForm3({navigation}) {
         useEffect(()=>{
             getData()
             let newData = data.filter(item=>item.kind === kinds[placeKind])
-            setDataToShow(data)
+            setDataToShow(newData)
         },[placeKind])
 
 

@@ -26,7 +26,7 @@ export default function DashBoard(props) {
             <ScrollView> 
                 {
                     arr.map((item,index)=>{
-                        return  <ProgressBar link={()=>{props.navigation.navigate(item.title)}} item={item} index={index} /> 
+                        return  <ProgressBar key={index} link={()=>{props.navigation.navigate(item.title)}} item={item} index={index} /> 
                     })
                    
                 } 

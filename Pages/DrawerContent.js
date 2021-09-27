@@ -79,7 +79,9 @@ export  function DrawerContent(props) {
           />
         )}
         label="Sleep"
-        onPress={() => {}}
+        onPress={() => {
+          props.navigation.navigate('Sleep')
+        }}
       /> 
          {/* sleep */}
          <DrawerItem
@@ -93,7 +95,9 @@ export  function DrawerContent(props) {
           />
         )}
         label="Sport"
-        onPress={() => {}}
+        onPress={() => {
+          props.navigation.navigate('Sport')
+        }}
       /> 
               </Drawer.Section>
              </View>
@@ -110,7 +114,7 @@ export  function DrawerContent(props) {
         )}
         label="Sign Out"
         onPress={() => {
-          props.navigation.navigate('SplashScreen')
+          props.navigation.navigate('splash')
         }}
       />
 

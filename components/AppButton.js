@@ -8,7 +8,6 @@ export default function AppButton(props) {
 
     
 
-
     return (
     //    <View >
             <View style={styles.container}>

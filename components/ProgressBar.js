@@ -50,7 +50,7 @@ props.index % 2 == 0 ?
         <View key={props.index}>
        {/**second */}
       <TouchableOpacity
-      onPress={()=>props.navigation.navigate(`${props.title}`)}
+      onPress={()=>props.link()}
         style={[styles.container, { backgroundColor: "#2D3643" }]}
       >
         <View style={[styles.containerParagraph]}>

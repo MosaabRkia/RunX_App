@@ -8,8 +8,8 @@ import RegisterForm1 from '../Pages/RegisterForm1';
 import RegisterForm2 from '../Pages/RegisterForm2';
 import RegisterForm3 from '../Pages/RegisterForm3';
 import ForgotPassword from '../Pages/ForgotPassword';
-import DashBoard from '../Pages/DashBoard';
-import Drink from '../Pages/Drink';
+import Drawer from '../Drawer/Drawer';
+
 
 const Stack = createStackNavigator();
 
@@ -23,6 +23,7 @@ const StackBeforeLogin = () => {
             <Stack.Screen name="register3" component={RegisterForm2}/>
             <Stack.Screen name="register4" component={RegisterForm3}/>
             <Stack.Screen name="forgotPassword" component={ForgotPassword}/>
+            <Stack.Screen name="HomeDrawer" component={Drawer}/>
         </Stack.Navigator>
     )
 }

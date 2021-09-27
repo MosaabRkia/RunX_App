@@ -63,7 +63,7 @@ export default function RegisterForm({ navigation }) {
 
     return (
         <LinearGradient style={styles.container} colors={['#92C6BC', '#8D9A93', '#536976', '#273035', '#101011']}>
-
+            
             <Image
                 source={require('../assets/logoNBG.png')}
                 style={{ width: 280, height: 150, alignSelf: 'center', position: 'absolute', top: 80 }}
@@ -116,7 +116,6 @@ export default function RegisterForm({ navigation }) {
             </Animatable.View >
 
         </LinearGradient>
-
     )
 }
 

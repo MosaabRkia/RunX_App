@@ -128,7 +128,7 @@ export default function RegisterForm2({navigation}) {
     , [])
     //loop on calc healthy weight
     useEffect( () => {
-        if(height !== null && weight !== null){
+        if(height !== null && weight !== null && (50 + (0.91 * (height - 152.4) )) > 0 && (45.5 + (0.91 * (height - 152.4) )) >0 ){
             setShowCalcWeight(true)
 
             if(gender === 'male'){

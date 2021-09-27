@@ -10,7 +10,7 @@ import AppButton from "../components/AppButton";
 export default function Sport(props) {
     
     const windowWidth = Dimensions.get('window').width;
-    const [walked ,setWalked] = useState(5378)
+    const [walked ,setWalked] = useState(5500)
     const [total ,setTotal] = useState(10350)
    // 1 km = 3280.84 ft
   return (

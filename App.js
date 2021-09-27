@@ -10,7 +10,7 @@ export default function App() {
   return (
 
     <NavigationContainer>
-      <StatusBar hidden /> 
+      <StatusBar style="light" animated /> 
       {/* <Drawer/> */}
       <StackBeforeLogin />
     </NavigationContainer>
