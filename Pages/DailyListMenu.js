@@ -29,7 +29,7 @@ export default function DailyListMenu(props) {
      <Text style={styles.text}>Click The Circle To Swap Eaten / UnEaten</Text>
      {
          meals && meals.map((e,index)=>{
-             return <BarDailyList key={index} title={e} />
+             return <BarDailyList key={index} title={e} navTo={()=>props.navigation.navigate('ShowDailyMeal',{title:e})} />
          })
      }
      

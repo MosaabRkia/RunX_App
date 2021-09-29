@@ -1,10 +1,11 @@
 import { LinearGradient } from 'expo-linear-gradient'
 import React, { useState } from 'react'
-import { ScrollView,View } from 'react-native'
+import { ScrollView,Text } from 'react-native'
 import FoodBar from '../components/FoodBar'
 import TittleBarAndArrow from '../components/TittleBarAndArrow'
 
 export default function ShowDailyMeal(props) {
+    const { title } = props.route.params;
     const [data,setData] = useState([{name:'whey', kind:'dairy', kcal:26 , gram:100 , protein: 0.9 ,fats: 0.4  ,description: "gain muscle mass and strength"},
     
     {name:'casein', kind:'dairy', kcal:365 , gram:100 , protein:77  ,fats: 1.9  ,description: "boost muscle growth and aid recovery after exercise"},
@@ -20,7 +21,7 @@ export default function ShowDailyMeal(props) {
             goBk={()=>{props.navigation.goBack()}}
             iconName="arrow-left"
             iconSize={40}
-            text={`DailyList ${props.kind}`}
+            text={`DailyList Of ${title}`}
             />
             <ScrollView>
                 {data && data.map((e,index)=>{

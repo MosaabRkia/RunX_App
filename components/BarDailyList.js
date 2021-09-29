@@ -21,7 +21,7 @@ export default function BarDailyList(props) {
            />
            {/* fix onpress send data and go to page */}
                     <Icon
-                    // onPress={()=>props.navigation.navigate('ShowDailyMeal',{title:props.title})}
+                    onPress={()=>props.navTo()}
             style={[styles.icon,{backgroundColor:'black'}]}
            name={'exclamationcircle'}
            color={'white'}
