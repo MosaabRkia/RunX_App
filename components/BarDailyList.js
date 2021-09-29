@@ -8,7 +8,7 @@ const windowHeight = Dimensions.get('window').height
 export default function BarDailyList(props) {
 
     const [check,setCheck] = useState(false)
-    console.log(props.title)
+  
     return (
        <View style={styles.text}>
            <Text style={{alignSelf:'center',fontSize:20,fontWeight:'bold'}}>{props.title}</Text>

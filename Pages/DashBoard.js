@@ -30,14 +30,14 @@ export default function DashBoard(props) {
                     })
                    
                 } 
-                <View style={{justifyContent:'space-between' , flexDirection: 'row',backgroundColor:arr%2==0?'#2D3643':'#B4D1C4'}}>
+                <TouchableOpacity onPress={()=>props.navigation.navigate('MedicineList')} style={{justifyContent:'space-between' , flexDirection: 'row',backgroundColor:arr%2==0?'#2D3643':'#B4D1C4'}}>
                     <Text style={{color:arr%2==0?'#B4D1C4':'#2D3643' , marginTop: 20 , marginBottom: 20 , marginLeft: 10, fontSize:30,fontWeight:'bold' }}>Medicine</Text>
                     <TouchableOpacity 
                     style={{marginTop: 10  , marginRight: 10,}}
-                    onPress={()=>{props.navigation.navigate('Medicine')}}>
+                    onPress={()=>{props.navigation.navigate('AddMedicine',{mode:'view',item:null})}}>
                        <Icon name={'pluscircleo'} size={65} color={arr%2==0?'#B4D1C4':'#2D3643'} />
                        </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
             </ScrollView>
 
         </LinearGradient>
