@@ -36,12 +36,13 @@ export default function Drawer(props) {
       <Drawer.Screen name="Sleep" component={Sleep} />
       <Drawer.Screen name="Logout" component={SplashScreen} />
       <Drawer.Screen name="AddMedicine" component={Medicine} />
-      <Drawer.Screen name="splash" component={StackBeforeLogin} />
+      {/* <Drawer.Screen name="splash" component={StackBeforeLogin} /> */}
       <Drawer.Screen name="UserMeals" component={UserMeals} />      
       <Drawer.Screen name="ShowDailyMeal" component={ShowDailyMeal} />
        <Drawer.Screen name="DailyListMenu" component={DailyListMenu} />
        <Drawer.Screen name="MedicineList" component={MedicineList} />
        <Drawer.Screen name="EditMedicine" component={EditMedicine} />
+       {/* <Drawer.Screen name="SplashScreen" component={SplashScreen}/> */}
 
     </Drawer.Navigator>
   )

@@ -38,9 +38,9 @@ export default function Food1(props) {
          
           <View style={{justifyContent:'space-around',alignSelf:'center'}}>
               {
-                meals && meals.map(e=>{
+                meals && meals.map((e,index)=>{
                  return <View key={e} style={{margin:5}}>
-                  <AppButton onPress={()=>{
+                  <AppButton key={index} onPress={()=>{
                      props.navigation.navigate('UserMeals', {
                       title:e,
                     });

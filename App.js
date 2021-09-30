@@ -11,8 +11,8 @@ export default function App() {
 
     <NavigationContainer>
       <StatusBar style="light" animated /> 
-      <Drawer/>
-      {/* <StackBeforeLogin /> */}
+      {/* <Drawer/> */}
+      <StackBeforeLogin />
     </NavigationContainer>
   );
 }

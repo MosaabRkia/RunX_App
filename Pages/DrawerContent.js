@@ -114,7 +114,7 @@ export  function DrawerContent(props) {
         )}
         label="Sign Out"
         onPress={() => {
-          props.navigation.navigate('splash')
+          props.navigation.navigate('loginPage')
         }}
       />
 

@@ -20,7 +20,7 @@ export default function MedicineList(props) {
             />
           <ScrollView style={{alignSelf:'center',marginTop:10}}>
           {data && data.map((e,index)=>{
-              return <BarMedicine goEditPageMedic={()=>props.navigation.navigate('EditMedicine',{mode:'edit',item:e})} key={index} item={e}/>
+              return <BarMedicine  key={index} goEditPageMedic={()=>props.navigation.navigate('EditMedicine',{mode:'edit',item:e})} key={index} item={e}/>
           })}
           </ScrollView>
       </LinearGradient>
