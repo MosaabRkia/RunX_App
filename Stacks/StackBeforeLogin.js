@@ -24,7 +24,7 @@ const StackBeforeLogin = () => {
             <Stack.Screen name="register3" component={RegisterForm2}/>
             <Stack.Screen name="register4" component={RegisterForm3}/>
             <Stack.Screen name="forgotPassword" component={ForgotPassword}/>
-            <Stack.Screen name="HomeDrawer" component={DashBoard}/>
+            <Stack.Screen name="HomeDrawer" component={Drawer}/>
         </Stack.Navigator>
     )
 }

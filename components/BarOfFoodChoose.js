@@ -25,7 +25,7 @@ export default function BarOfFoodChoose(props) {
             key={props.index + 'img'}
             style={styles.photoCss}
             source={{
-          uri:`http://proj17.ruppin-tech.co.il/images/${/*props.fullFruitObj.id*/props.index}.jpg`,
+          uri:`http://proj17.ruppin-tech.co.il/images/${/*props.fullFruitObj.id*/props.index+2}.jpg`,
         }}/>
         </View>
         <View key={props.index , 2} style={{width:'60%',marginLeft:10,padding:10,alignSelf:'flex-end'}}>

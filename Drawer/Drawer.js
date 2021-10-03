@@ -19,6 +19,7 @@ import ShowDailyMeal from '../Pages/ShowDailyMeal';
 import MedicineList from '../Pages/MedicineList';
 import BarMedicine from '../components/BarMedicine';
 import EditMedicine from '../Pages/EditMedicine';
+import Pedometter1 from '../components/Pedometter1';
 
 
 export default function Drawer(props) {
@@ -28,6 +29,7 @@ export default function Drawer(props) {
   return (
     <Drawer.Navigator screenOptions={{ headerShown: false }} drawerContent={props => <DrawerContent {...props} />}
     >
+      <Drawer.Screen name="PedoMetter1" component={Pedometter1} />
       <Drawer.Screen name="DashBoard" component={DashBoard} />
       <Drawer.Screen name="Drink" component={Drink} />
       <Drawer.Screen name="Sport" component={Sport} />
