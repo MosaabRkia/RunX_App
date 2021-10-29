@@ -9,7 +9,7 @@ import TittleBarAndArrow from '../components/TittleBarAndArrow'
 
 const windowWidth = Dimensions.get('window').width;
 
-const meals =['BreakFast','AfterNoon Stack','Lunch','Dinner']
+const meals =['BreakFast','Brunch','Lunch','Dinner']
 
 export default function DailyListMenu(props) {
 

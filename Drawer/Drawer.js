@@ -29,7 +29,7 @@ export default function Drawer(props) {
   return (
     <Drawer.Navigator screenOptions={{ headerShown: false }} drawerContent={props => <DrawerContent {...props} />}
     >
-      <Drawer.Screen name="PedoMetter1" component={Pedometter1} />
+      {/* <Drawer.Screen name="PedoMetter1" component={Pedometter1} /> */}
       <Drawer.Screen name="DashBoard" component={DashBoard} />
       <Drawer.Screen name="Drink" component={Drink} />
       <Drawer.Screen name="Sport" component={Sport} />

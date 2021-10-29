@@ -10,7 +10,7 @@ export default function Food1(props) {
 
     const [eaten ,setEaten] = useState(550)
     const [total ,setTotal] = useState(2000)
-    const meals =['BreakFast','AfterNoon Stack','Lunch','Dinner']
+    const meals =['BreakFast','Brunch','Lunch','Dinner']
     return (
         <LinearGradient style={styles.container} colors={['#92C6BC', '#8D9A93', '#536976', '#273035', '#101011']}>
             <BarDashBoard funcCall={()=>props.navigation.goBack()} icon={"arrow-left"} />

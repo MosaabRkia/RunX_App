@@ -19,6 +19,7 @@ export default function Sleep(props) {
 
     useEffect(() => { onStart() },[])
 
+
   return (
     <LinearGradient
       style={styles.container}
