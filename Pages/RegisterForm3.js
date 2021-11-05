@@ -73,7 +73,6 @@ export default function RegisterForm3({ route, navigation }) {
         console.log("done");
         setLoading(false);
       });
-    return null;
   }, []);
 
   //goBack const

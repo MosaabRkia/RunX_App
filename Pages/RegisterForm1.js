@@ -95,15 +95,6 @@ export default function RegisterForm1({ route, navigation }) {
         console.log("Gender problem");
         return;
       }
-
-      // await AsyncStorage.mergeItem('registerData',JSON.stringify({
-      //     FirstName:data.FirstName,
-      //     Email:data.Email,
-      //     Password:data.Password,
-      //     Gender:data.Gender
-      // })).then(async()=>{
-      //go to next page
-      // const data = await AsyncStorage.getItem('registerData')
       console.log(data);
       navigation.navigate("register3", { data: { ...data, Goal: Goal } });
 

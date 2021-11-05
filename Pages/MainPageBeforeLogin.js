@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   StyleSheet,
@@ -10,8 +10,7 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Animatable from "react-native-animatable";
-import foodArray from "../ArraysData/foodArray";
-import JustForAddIdPhoto from "../components/JustForAddIdPhoto";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function MainPageBeforeLogin({ navigation }) {
   //useState
@@ -19,6 +18,8 @@ export default function MainPageBeforeLogin({ navigation }) {
     loginPassword: null,
     loginEmail: null,
   });
+  const [messege, setMessege] = useState(null);
+  const [loginLoading, setLoginLoading] = useState(false);
 
   // validation email
   function validateEmail(emailAddress) {
@@ -31,6 +32,54 @@ export default function MainPageBeforeLogin({ navigation }) {
       return false;
     }
   }
+
+  const alertError = (text) => {
+    setMessege(text);
+    setLoginLoading(false);
+    setTimeout(() => {
+      setMessege(null);
+    }, 5 * 1000);
+  };
+
+  const checkLogin = () => {
+    setLoginLoading(true);
+    if (!validateEmail(loginData.loginEmail)) {
+      alertError("Email Format isn't correct");
+      return;
+    }
+    if (
+      (loginData.loginPassword && loginData.loginPassword.length === 0) ||
+      loginData.loginPassword === null
+    ) {
+      alertError("Please Fill Password Input");
+      return;
+    }
+
+    try {
+      fetch("https://localhost:44324/api/token/Authenticate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Email: loginData.loginEmail,
+          Password: loginData.loginPassword,
+        }),
+      })
+        .then((r) => r.text())
+        .then((token) => {
+          if (token === "false") {
+            alertError("Email Or Password Isn't Correct");
+            return;
+          } else {
+            AsyncStorage.setItem("token", token);
+            navigation.navigate("HomeDrawer");
+          }
+        });
+    } catch (e) {
+      console.log("error => " + e);
+    }
+  };
 
   return (
     <LinearGradient
@@ -51,13 +100,13 @@ export default function MainPageBeforeLogin({ navigation }) {
         <Text
           style={{
             color: "#CCCCCC",
-            fontSize: 50,
+            fontSize: messege !== null ? 20 : 50,
             marginBottom: 35,
             marginTop: 50,
             alignSelf: "center",
           }}
         >
-          Login
+          {messege !== null ? messege : "Login"}
         </Text>
         <KeyboardAwareScrollView>
           <TextInput
@@ -96,15 +145,30 @@ export default function MainPageBeforeLogin({ navigation }) {
               i dont remember my password !
             </Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.ButtonStyle}
-            onPress={() => {
-              navigation.navigate("HomeDrawer");
-            }}
-          >
-            <Text style={{ color: "#D5DDDC", fontSize: 20 }}>Login</Text>
-          </TouchableOpacity>
+          {loginLoading ? (
+            <Animatable.View
+              style={{ alignSelf: "center", height: 55 }}
+              animation="rubberBand"
+              iterationCount={"infinite"}
+            >
+              <Image
+                source={require("../assets/logoOnlyR.png")}
+                style={{
+                  width: 55,
+                  height: 55,
+                  alignSelf: "center",
+                  margin: 5,
+                }}
+              />
+            </Animatable.View>
+          ) : (
+            <TouchableOpacity
+              style={styles.ButtonStyle}
+              onPress={() => checkLogin()}
+            >
+              <Text style={{ color: "#D5DDDC", fontSize: 20 }}>Login</Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("register1");

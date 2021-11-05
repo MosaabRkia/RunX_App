@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SplashScreen({ navigation }) {
   //states
@@ -11,9 +12,12 @@ export default function SplashScreen({ navigation }) {
   //useEffect
   useEffect(() => {
     //create load unit load all data
-    setTimeout(() => {
-      navigation.navigate("loginPage");
-    }, 3500);
+    AsyncStorage.getItem("token").then((data) => {
+      console.log(data);
+      setTimeout(() => {
+        navigation.navigate(data === null ? "loginPage" : "HomeDrawer");
+      }, 3500);
+    });
   }, []);
 
   return (
