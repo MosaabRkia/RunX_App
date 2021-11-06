@@ -64,6 +64,7 @@ export default function RegisterForm3({ route, navigation }) {
 
   //useEffect
   useEffect(() => {
+    console.log(data);
     fetch("https://localhost:44324/api/Items")
       .then((r) => r.json())
       .then((data) => {
@@ -173,14 +174,40 @@ export default function RegisterForm3({ route, navigation }) {
           })
             .then((r) => r.json())
             .then((data) => {
-              console.log(data);
-              if (data === true) {
+              console.log(data === "added", "=>", data);
+              if (data === "added") {
                 //go to dashboard and add auto login for user
-                navigation.navigate("HomeDrawer");
+                //lastData
+                try {
+                  fetch("https://localhost:44324/api/token/Authenticate", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      Email: lastData.Email,
+                      Password: lastData.Password,
+                    }),
+                  })
+                    .then((r) => r.text())
+                    .then((token) => {
+                      console.log(token);
+                      if (token === "false") {
+                        navigation.navigate("loginPage");
+                      } else {
+                        AsyncStorage.setItem("token", token);
+                        navigation.navigate("HomeDrawer");
+                      }
+                    });
+                } catch (e) {
+                  console.log("error => " + e);
+                  navigation.navigate("loginPage");
+                }
               }
             });
         } catch (error) {
           console.log("error fetch : " + error);
+          navigation.navigate("loginPage");
         }
         // console.log(lastData);
       } else {

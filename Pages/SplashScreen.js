@@ -12,11 +12,15 @@ export default function SplashScreen({ navigation }) {
   //useEffect
   useEffect(() => {
     //create load unit load all data
+    //AsyncStorage.removeItem("token");
     AsyncStorage.getItem("token").then((data) => {
       console.log(data);
-      setTimeout(() => {
-        navigation.navigate(data === null ? "loginPage" : "HomeDrawer");
-      }, 3500);
+      setTimeout(
+        () => {
+          navigation.navigate(data === null ? "loginPage" : "HomeDrawer");
+        },
+        data === null ? 3500 : 0
+      );
     });
   }, []);
 

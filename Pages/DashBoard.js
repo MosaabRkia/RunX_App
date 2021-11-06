@@ -12,9 +12,20 @@ import BarDashBoard from "../components/BarDashBoard";
 import ProgressBar from "../components/ProgressBar";
 import Icon from "react-native-vector-icons/AntDesign";
 import { UserData } from "../Drawer/Drawer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DashBoard(props) {
   const fetchData = useContext(UserData);
+
+  useEffect(() => {
+    if (
+      fetchData.dataFetch[0] === undefined ||
+      fetchData.dataFetch[0] === null
+    ) {
+      AsyncStorage.removeItem("token");
+      props.navigation.navigate("loginPage");
+    }
+  }, []);
 
   const arr = [
     {

@@ -78,6 +78,7 @@ export default function MainPageBeforeLogin({ navigation }) {
         });
     } catch (e) {
       console.log("error => " + e);
+      navigation.navigate("loginPage");
     }
   };
 

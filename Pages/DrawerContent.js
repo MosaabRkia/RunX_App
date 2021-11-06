@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -15,8 +15,11 @@ import {
   Switch,
 } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserData } from "../Drawer/Drawer";
 
 export function DrawerContent(props) {
+  const fetchData = useContext(UserData);
+
   return (
     <LinearGradient
       style={{ flex: 1 }}
@@ -30,11 +33,11 @@ export function DrawerContent(props) {
               style={{ width: 75, height: 75, marginRight: 20 }}
             />
             <View style={styles.title}>
-              <Text style={{ fontSize: 25, fontWeight: "bold" }}>
-                Hello name
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Hello {props.firstName}
               </Text>
               <Caption style={[styles.caption, { fontWeight: "bold" }]}>
-                25 KiloGram
+                {props.currentWeight} KiloGram
               </Caption>
             </View>
           </View>

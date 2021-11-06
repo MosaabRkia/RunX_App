@@ -32,6 +32,10 @@ export const UserData = React.createContext();
 export default function Drawer({ navigation }) {
   const Drawer = createDrawerNavigator();
   const [dataFetch, setDataFetch] = useState({});
+  const [drawerData, setDrawerData] = useState({
+    firstName: "Unknown",
+    weight: 0,
+  });
 
   useEffect(() => {
     console.log("worked");
@@ -50,9 +54,14 @@ export default function Drawer({ navigation }) {
             if (data === false) navigation.navigate("loginPage");
 
             setDataFetch(data);
+            setDrawerData({
+              firstName: data[0].firstName,
+              weight: data[0].weights[data[0].weights.length - 1].currentWeight,
+            });
           });
       } catch (e) {
         console.log("error => " + e);
+        navigation.navigate("loginPage");
       }
     });
   }, []);
@@ -61,7 +70,13 @@ export default function Drawer({ navigation }) {
     <UserData.Provider value={{ dataFetch }}>
       <Drawer.Navigator
         screenOptions={{ headerShown: false }}
-        drawerContent={(props) => <DrawerContent {...props} />}
+        drawerContent={(props) => (
+          <DrawerContent
+            {...props}
+            firstName={drawerData.firstName && drawerData.firstName}
+            currentWeight={drawerData.weight && drawerData.weight}
+          />
+        )}
       >
         {/* <Drawer.Screen name="PedoMetter1" component={Pedometter1} /> */}
         <Drawer.Screen
@@ -77,6 +92,7 @@ export default function Drawer({ navigation }) {
         <Drawer.Screen name="Logout" component={SplashScreen} />
         <Drawer.Screen name="AddMedicine" component={Medicine} />
         {/* <Drawer.Screen name="splash" component={StackBeforeLogin} /> */}
+        <Drawer.Screen name="drawerContent" component={DrawerContent} />
         <Drawer.Screen name="UserMeals" component={UserMeals} />
         <Drawer.Screen name="ShowDailyMeal" component={ShowDailyMeal} />
         <Drawer.Screen name="DailyListMenu" component={DailyListMenu} />
