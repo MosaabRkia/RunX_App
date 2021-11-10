@@ -13,7 +13,7 @@ export default function BarOfFoodChoose(props) {
 
   const addToList = async () => {
     setSelection(!isSelected);
-    props.addList(props.fullFruitObj.id, isSelected);
+    props.addList(props.fullFruitObj.id);
   };
 
   return (
@@ -68,7 +68,7 @@ export default function BarOfFoodChoose(props) {
       >
         <CheckBox
           key={(props.index, 4)}
-          value={isSelected}
+          value={props.fullFruitObj.selected}
           onValueChange={addToList}
           style={{ alignSelf: "center" }}
         />

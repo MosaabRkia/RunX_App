@@ -10,12 +10,14 @@ import RegisterForm3 from "../Pages/RegisterForm3";
 import ForgotPassword from "../Pages/ForgotPassword";
 import Drawer from "../Drawer/Drawer";
 import DashBoard from "../Pages/DashBoard";
+import testBG from "../Pages/testBG";
 
 const Stack = createStackNavigator();
 
 const StackBeforeLogin = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {/* <Stack.Screen name="splashScreen1" component={testBG} /> */}
       <Stack.Screen name="splashScreen" component={SplashScreen} />
       <Stack.Screen name="loginPage" component={MainPageBeforeLogin} />
       <Stack.Screen name="register1" component={RegisterForm} />

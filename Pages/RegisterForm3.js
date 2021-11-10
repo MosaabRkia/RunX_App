@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import BarOfFoodChoose from "../components/BarOfFoodChoose";
 import foodArray from "../ArraysData/foodArray";
 import CirclesRegister from "../components/CirclesRegister";
+import { useScrollToTop } from "@react-navigation/native";
 
 /*
             //  plan:null,
@@ -37,12 +38,10 @@ import CirclesRegister from "../components/CirclesRegister";
 */
 
 export default function RegisterForm3({ route, navigation }) {
-  //test arr
-
   const { data } = route.params;
 
   //useRef
-  const scrollRef = useRef();
+  const scroll_Ref = useRef(null);
 
   const kinds = [
     "meat",
@@ -56,7 +55,6 @@ export default function RegisterForm3({ route, navigation }) {
   ];
 
   //useState
-  const [arr, setArr] = useState([]);
   const [placeKind, setPlaceKind] = useState(0);
   const [mainData, setMainData] = useState([]);
   const [ButtonText, setButtonText] = useState("Next");
@@ -64,17 +62,22 @@ export default function RegisterForm3({ route, navigation }) {
 
   //useEffect
   useEffect(() => {
-    console.log(data);
+    //console.log(data);
     fetch("https://localhost:44324/api/Items")
       .then((r) => r.json())
       .then((data) => {
-        setMainData(data);
+        var d = data.map((e) => (e = { ...e, selected: false }));
+        setMainData(d);
       })
       .then(() => {
         console.log("done");
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    scroll_Ref.current?.scrollTo({ x: 0, y: 0, animated: true });
+  }, [placeKind]);
 
   //goBack const
   const goBk = () => {
@@ -85,28 +88,213 @@ export default function RegisterForm3({ route, navigation }) {
   };
 
   // functions
+  const getAllSelected = () => {
+    var newData = mainData.filter((e) => e.selected === true).map((e) => e.id);
+    return newData;
+  };
   //get data
 
-  const addList = (e, isSelected) => {
-    // this fix because of the not update fast so it always send the oposite
-    isSelected = !isSelected;
+  const addList = (id) => {
+    const elementsIndex = mainData.findIndex((e) => e.id === id);
+    let newArray = [...mainData];
+    newArray[elementsIndex] = {
+      ...newArray[elementsIndex],
+      selected: !newArray[elementsIndex].selected,
+    };
+    setMainData(newArray);
+  };
 
-    let exists = false;
+  const createMeals = () => {
+    let currentYear = new Date();
+    let ageCalc = currentYear.getFullYear() - +data.DateOfBirth.substr(0, 4);
+    var mealsArr = [];
+    var proteins = +data.Weights[0].CurrentWeight * 2.1 * 0.25;
+    let calories =
+      data.Gender === "male"
+        ? +66 +
+          6.2 * +data.Weights[0].CurrentWeight +
+          12.7 * +data.Heights[0].CurrentHeight -
+          6.76 * ageCalc
+        : +655.1 +
+          4.35 * +data.Weights[0].CurrentWeight +
+          4.7 * +data.Heights[0].CurrentHeight -
+          4.7 * ageCalc;
 
-    arr &&
-      arr.forEach((x) => {
-        if (e === x.id) {
-          exists = true;
+    switch (data.Goal) {
+      case "lose":
+        calories = calories * 0.71;
+        var fats = 0.7 * +data.Weights[0].CurrentWeight * 0.25;
+        mealsArr.push({
+          breakfast: createMealsList(0, 0.17 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          brunch: createMealsList(1, 0.14 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          lunch: createMealsList(2, 0.2 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          dinner: createMealsList(3, 0.2 * calories, proteins, fats),
+        });
+        /*
+         * breakfast 0.17 - 8:00 -- mealId - 0
+         * brunch 0.14 - 13:00 -- mealId - 1
+         * lunch 0.20 - 16:00 -- mealId - 2
+         * dinner 0.20 - 19:00 -- mealId - 3
+         */
+        break;
+
+      case "gain":
+        calories = calories * 1.2;
+        var fats = 1 * +data.Weights[0].CurrentWeight * 0.25;
+        mealsArr.push({
+          breakfast: createMealsList(0, 0.27 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          brunch: createMealsList(1, 0.2 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          lunch: createMealsList(2, 0.19 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          dinner: createMealsList(3, 0.3 * calories, proteins, fats),
+        });
+        /*
+         * breakfast 0.27 - 8:00
+         * brunch 0.20 - 13:00
+         * lunch 0.19 - 16:00
+         * dinner 0.30 - 19:00
+         */
+        break;
+
+      case "healthy":
+        calories = calories * 1;
+        var fats = 0.85 * +data.Weights[0].CurrentWeight * 0.25;
+        mealsArr.push({
+          breakfast: createMealsList(0, 0.28 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          brunch: createMealsList(1, 0.2 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          lunch: createMealsList(2, 0.29 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          dinner: createMealsList(3, 0.23 * calories, proteins, fats),
+        });
+        /*
+         * breakfast 0.28 - 8:00
+         * brunch 0.20 - 13:00
+         * lunch 0.29 - 16:00
+         * dinner 0.23 - 19:00
+         */
+        break;
+      default:
+        calories = calories * 1;
+        var fats = 0.85 * +data.Weights[0].CurrentWeight * 0.25;
+        mealsArr.push({
+          breakfast: createMealsList(0, 0.28 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          brunch: createMealsList(1, 0.2 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          lunch: createMealsList(2, 0.29 * calories, proteins, fats),
+        });
+        mealsArr.push({
+          dinner: createMealsList(3, 0.23 * calories, proteins, fats),
+        });
+        break;
+    }
+    return mealsArr;
+  };
+
+  const createMealsList = (mealId, cal, proteins, fats) => {
+    //[5,1,5,8,6]
+    //[{items}]
+    var newMeal = [];
+    var done = false;
+    var flag = false;
+    var flagLoop = false;
+    var numbersRnd = [];
+    var totalCal = 0;
+    var totalProtein = 0;
+    var totalFats = 0;
+    var selectedItemsArr = getAllSelected();
+    var rnd = Math.floor(Math.random() * selectedItemsArr.length);
+    numbersRnd.push(rnd);
+    console.log("226 numberRnds => ", numbersRnd);
+    do {
+      mainData.forEach((mainItem) => {
+        //stop the loop faster
+        if (flagLoop) return;
+        // stop all loop
+        if (
+          totalCal + 10 >= cal ||
+          totalProtein + 1 >= proteins ||
+          totalFats + 1 >= fats
+        ) {
+          flagLoop = true;
+          done = true;
+          return;
+        }
+
+        //reset the flag
+        flag = false;
+
+        //תנאי עצירה 1
+        if (+mainItem.id === +selectedItemsArr[rnd]) {
+          mainItem.mealTimes.forEach((e) => {
+            if (+e.mealId === +mealId) {
+              flag = true;
+              return;
+            }
+          });
+        } else {
+          flag = false;
+        }
+
+        if (flag === false) return;
+        //תנאי עצירה 2
+        /*if (
+          totalCal + mainItem.kCal > cal ||
+          totalProtein + mainItem.protein > proteins ||
+          totalFats + mainItem.fats > fats
+        ) {
+          done = true;
+          return;
+        }*/
+        //added
+        if (
+          totalCal + mainItem.kCal <= cal &&
+          totalProtein + mainItem.protein <= proteins &&
+          totalFats + mainItem.fats <= fats
+        ) {
+          totalCal += mainItem.kCal;
+          totalProtein += mainItem.protein;
+          totalFats += mainItem.fats;
+          newMeal.push(mainItem.id);
+          flagLoop = true;
         }
       });
 
-    if (isSelected && !exists) {
-      setArr([...arr, { foodId: e }]);
-    }
-    if (!isSelected && exists) {
-      let newArr = arr.filter((fruit) => fruit.foodId !== e);
-      setArr(newArr);
-    }
+      flagLoop = false;
+      if (numbersRnd.length === selectedItemsArr.length) {
+        done = true;
+      }
+
+      // undefined or number
+      // we didnt arrived to all numbers
+      if (!done)
+        while (
+          numbersRnd.includes(rnd) || // if the numbersRnd array includes the random number
+          newMeal.includes(selectedItemsArr[rnd].id) // new meal include the selecteditemsarr in place rnd
+        )
+          rnd = Math.floor(Math.random() * selectedItemsArr.length);
+
+      numbersRnd.push(rnd);
+    } while (!done);
+    return newMeal;
   };
 
   //save data
@@ -125,7 +313,7 @@ export default function RegisterForm3({ route, navigation }) {
         let ageCalc =
           currentYear.getFullYear() - +data.DateOfBirth.substr(0, 4);
         let calcInfo = {
-          ChoosenFood: arr,
+          ChoosenFood: getAllSelected(),
           Meds: [],
           DailyWaterCups: [
             {
@@ -159,10 +347,10 @@ export default function RegisterForm3({ route, navigation }) {
           ],
           DailySteps: [{ Goal: steps, Done: 0, Date: currentYear }],
           Sleeps: [{ Goal: 8, Done: 0, Date: currentYear }],
-          Meals: [],
+          Meals: [{ Date: Date(), ItemsList: createMeals() }],
         };
         let lastData = { ...data, ...calcInfo };
-        console.log(lastData);
+        console.log(lastData.Meals[0].ItemsList);
         try {
           fetch("https://localhost:44324/api/user/create", {
             method: "POST",
@@ -185,7 +373,7 @@ export default function RegisterForm3({ route, navigation }) {
                       "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                      Email: lastData.Email,
+                      Email: lastData.Email.toLowerCase(),
                       Password: lastData.Password,
                     }),
                   })
@@ -211,11 +399,6 @@ export default function RegisterForm3({ route, navigation }) {
         }
         // console.log(lastData);
       } else {
-        scrollRef.current.scrollTo({
-          y: 0,
-          animated: true,
-        });
-
         let upOne = placeKind + 1;
         if (upOne === kinds.length - 1) setButtonText("Confirm");
         setPlaceKind(upOne);
@@ -276,7 +459,7 @@ export default function RegisterForm3({ route, navigation }) {
 
         <View>
           <ScrollView
-            ref={scrollRef}
+            ref={scroll_Ref}
             style={{
               width: "97%",
               alignSelf: "center",

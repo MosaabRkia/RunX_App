@@ -62,7 +62,7 @@ export default function MainPageBeforeLogin({ navigation }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          Email: loginData.loginEmail,
+          Email: loginData.loginEmail.toLowerCase(),
           Password: loginData.loginPassword,
         }),
       })

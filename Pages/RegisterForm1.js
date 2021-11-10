@@ -160,14 +160,16 @@ export default function RegisterForm1({ route, navigation }) {
           <TextInput
             style={styles.inputStyle}
             placeholderTextColor="#364057"
-            onChangeText={(e) => setData({ ...data, FirstName: e })}
+            onChangeText={(e) =>
+              setData({ ...data, FirstName: e.toLowerCase() })
+            }
             value={undefined}
             placeholder="First Name"
           />
           <TextInput
             style={styles.inputStyle}
             placeholderTextColor="#364057"
-            onChangeText={(e) => setData({ ...data, Email: e })}
+            onChangeText={(e) => setData({ ...data, Email: e.toLowerCase() })}
             value={undefined}
             placeholder="Email"
           />

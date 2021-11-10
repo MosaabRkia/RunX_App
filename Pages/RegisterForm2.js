@@ -132,24 +132,32 @@ export default function RegisterForm2({ route, navigation }) {
       setShowCalcWeight(true);
 
       if (data.Gender === "male") {
-        setHealthyWeight(50 + 0.91 * (info.Heights[0].CurrentHeight - 152.4));
+        setHealthyWeight(
+          (50 + 0.91 * (info.Heights[0].CurrentHeight - 152.4)).toFixed(2)
+        );
         if (data.Goal === "healthy") {
           setInfo({
-            info,
-            GoalWeight: 50 + 0.91 * (info.Heights[0].CurrentHeight - 152.4),
+            ...info,
+            GoalWeight:
+              50 + 0.91 * (info.Heights[0].CurrentHeight - 152.4).toFixed(2),
           });
         }
       }
 
       if (data.Gender === "female") {
-        setHealthyWeight(45.5 + 0.91 * (info.Heights[0].CurrentHeight - 152.4));
+        setHealthyWeight(
+          45.5 + 0.91 * (info.Heights[0].CurrentHeight - 152.4).toFixed(2)
+        );
         if (data.Goal === "healthy") {
           setInfo({
-            info,
-            GoalWeight: 45.5 + 0.91 * (info.Heights[0].CurrentHeight - 152.4),
+            ...info,
+            GoalWeight:
+              45.5 + 0.91 * (info.Heights[0].CurrentHeight - 152.4).toFixed(2),
           });
         }
       }
+    } else {
+      setShowCalcWeight(false);
     }
   }, [info.Heights[0].CurrentHeight, info.Weights[0].CurrentWeight]);
 
@@ -215,7 +223,7 @@ export default function RegisterForm2({ route, navigation }) {
       }
 
       let allData = { ...data, ...info };
-      console.log(allData);
+
       navigation.navigate("register4", { data: allData });
     } catch (e) {
       console.log("Error in line 29 => ", e);
