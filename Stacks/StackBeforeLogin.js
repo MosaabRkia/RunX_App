@@ -11,6 +11,7 @@ import ForgotPassword from "../Pages/ForgotPassword";
 import Drawer from "../Drawer/Drawer";
 import DashBoard from "../Pages/DashBoard";
 import testBG from "../Pages/testBG";
+import { Provider } from "react-redux";
 
 const Stack = createStackNavigator();
 

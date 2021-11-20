@@ -1,34 +1,46 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useReducer } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import BarDashBoard from "../components/BarDashBoard";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import DrawCups from "../components/DrawCups";
 import Icon from "react-native-vector-icons/AntDesign";
-import { UserData } from "../Drawer/Drawer";
+import { UserData } from "../ContextData/MainContextData";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector, useDispatch } from "react-redux";
+import { drinksUpdateUser } from "../redux/User/UserActions";
+
+// const reducer = (state, action) => {
+//   switch (action.type) {
+//     case "plus":
+//       fetch(
+//         `https://localhost:44324/api/UpdateData/updateCupsWater/${action.type}/${action.id}`
+//       )
+//         .then((r) => r.text())
+//         .then((data) => {
+//           console.log(data);
+//         });
+//       return { ...state, drank: state.drank + 1 };
+//       break;
+
+//     case "minus":
+//       fetch(
+//         `https://localhost:44324/api/updateData/updateCupsWater/${action.type}/${action.id}`
+//       )
+//         .then((r) => r.text())
+//         .then((data) => {
+//           console.log(data);
+//         });
+//       return { ...state, drank: state.drank - 1 };
+//       break;
+//     default:
+//       return state;
+//   }
+// };
 
 export default function Drink(props) {
-  const fetchData = useContext(UserData);
-
-  const [drank, setDrank] = useState(0);
-  const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    setDrank(
-      parseInt(
-        fetchData.dataFetch[0].dailyWaterCups[
-          fetchData.dataFetch[0].dailyWaterCups.length - 1
-        ].done
-      )
-    );
-    setTotal(
-      parseInt(
-        fetchData.dataFetch[0].dailyWaterCups[
-          fetchData.dataFetch[0].dailyWaterCups.length - 1
-        ].goal
-      )
-    );
-  }, []);
+  let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
+  const dispatch = useDispatch();
 
   return (
     <LinearGradient
@@ -44,15 +56,15 @@ export default function Drink(props) {
         <AnimatedCircularProgress
           size={250}
           width={25}
-          fill={drank * (100 / total)}
+          fill={user.drinks.done * (100 / user.drinks.goal)}
           tintColor="#FC7203"
           lineCap="round"
           style={{ margin: 25, alignSelf: "center" }}
           backgroundColor="#404E62"
         >
-          {(fill) => (
+          {() => (
             <Text style={{ fontWeight: "bold", fontSize: 30 }}>
-              {drank}/{total} {"\n"} Cups
+              {user.drinks.done}/{user.drinks.goal} {"\n"} Cups
             </Text>
           )}
         </AnimatedCircularProgress>
@@ -77,13 +89,13 @@ export default function Drink(props) {
             justifyContent: "center",
           }}
         >
-          {[...Array(drank)].map((e, index) => (
+          {[...Array(user.drinks.done)].map((e, index) => (
             <View key={index + "_yes"}>
               <DrawCups done="yes" />
             </View>
           ))}
 
-          {[...Array(total - drank)].map((e, index) => (
+          {[...Array(user.drinks.goal - user.drinks.done)].map((e, index) => (
             <View key={index + "_no"}>
               <DrawCups done="no" />
             </View>
@@ -99,9 +111,12 @@ export default function Drink(props) {
           <TouchableOpacity
             style={{ alignSelf: "center" }}
             onPress={() => {
-              if (total > drank) {
-                let dranks = drank + 1;
-                setDrank(dranks);
+              if (user.drinks.goal > user.drinks.done) {
+                let data = {
+                  type: "plus",
+                  id: user.drinks.id,
+                };
+                dispatch(drinksUpdateUser(data));
               }
             }}
           >
@@ -111,9 +126,12 @@ export default function Drink(props) {
           <TouchableOpacity
             style={{ alignSelf: "center" }}
             onPress={() => {
-              if (0 < drank) {
-                let dranks = drank - 1;
-                setDrank(dranks);
+              if (0 < user.drinks.done) {
+                let data = {
+                  type: "minus",
+                  id: user.drinks.id,
+                };
+                dispatch(drinksUpdateUser(data));
               }
             }}
           >

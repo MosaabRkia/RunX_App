@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   StyleSheet,
@@ -10,9 +10,15 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Animatable from "react-native-animatable";
+import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { userLogin } from "../redux/User/UserActions";
+import { getData } from "../redux/UserData/UserDataActions";
 export default function MainPageBeforeLogin({ navigation }) {
+  //redux
+  const dispatch = useDispatch();
+  let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
+
   //useState
   const [loginData, setLoginData] = useState({
     loginPassword: null,
@@ -32,6 +38,14 @@ export default function MainPageBeforeLogin({ navigation }) {
       return false;
     }
   }
+  useEffect(() => {
+    console.log(user);
+    if (user.login.token !== null) {
+      // dispatch(getData(user.token));
+      setLoginLoading(false);
+      navigation.navigate("HomeDrawer");
+    } else setLoginLoading(false);
+  }, [user]);
 
   const alertError = (text) => {
     setMessege(text);
@@ -55,31 +69,7 @@ export default function MainPageBeforeLogin({ navigation }) {
       return;
     }
 
-    try {
-      fetch("https://localhost:44324/api/token/Authenticate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          Email: loginData.loginEmail.toLowerCase(),
-          Password: loginData.loginPassword,
-        }),
-      })
-        .then((r) => r.text())
-        .then((token) => {
-          if (token === "false") {
-            alertError("Email Or Password Isn't Correct");
-            return;
-          } else {
-            AsyncStorage.setItem("token", token);
-            navigation.navigate("HomeDrawer");
-          }
-        });
-    } catch (e) {
-      console.log("error => " + e);
-      navigation.navigate("loginPage");
-    }
+    dispatch(userLogin(loginData));
   };
 
   return (
@@ -125,7 +115,7 @@ export default function MainPageBeforeLogin({ navigation }) {
             onChangeText={(e) =>
               setLoginData({ ...loginData, loginPassword: e })
             }
-            value={undefined}
+            value={(loginData.loginPassword && loginData.loginPassword) || ""}
             placeholder="Password"
             secureTextEntry={true}
           />

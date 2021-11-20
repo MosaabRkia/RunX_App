@@ -7,12 +7,15 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  TextInput,
+  Platform,
+  StatusBar,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import TittleBarAndArrow from "../components/TittleBarAndArrow";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BarOfFoodChoose from "../components/BarOfFoodChoose";
-import foodArray from "../ArraysData/foodArray";
+import Icon from "react-native-vector-icons/Ionicons";
 import CirclesRegister from "../components/CirclesRegister";
 import { useScrollToTop } from "@react-navigation/native";
 
@@ -59,24 +62,41 @@ export default function RegisterForm3({ route, navigation }) {
   const [mainData, setMainData] = useState([]);
   const [ButtonText, setButtonText] = useState("Next");
   const [loading, setLoading] = useState(true);
-
+  const [foodData, setFoodData] = useState([]);
+  const [text, setText] = useState("");
   //useEffect
   useEffect(() => {
-    //console.log(data);
-    fetch("https://localhost:44324/api/Items")
+    fetch(
+      "http://proj17.ruppin-tech.co.il/api/Items" /*"http://proj17.ruppin-tech.co.il/api/Items"*/
+    )
       .then((r) => r.json())
       .then((data) => {
         var d = data.map((e) => (e = { ...e, selected: false }));
         setMainData(d);
       })
       .then(() => {
-        console.log("done");
         setLoading(false);
       });
   }, []);
 
   useEffect(() => {
+    search();
+  }, [text]);
+
+  useEffect(() => {
+    let arr = [];
+    mainData
+      .filter((item) => item.kind === kinds[placeKind])
+      .map((e) => {
+        arr.push(e);
+      });
+    setFoodData(arr);
+    search();
+  }, [mainData]);
+
+  useEffect(() => {
     scroll_Ref.current?.scrollTo({ x: 0, y: 0, animated: true });
+    search();
   }, [placeKind]);
 
   //goBack const
@@ -88,9 +108,28 @@ export default function RegisterForm3({ route, navigation }) {
   };
 
   // functions
+  const formatDateToday = () => {
+    var d = new Date(),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-").toString() + "T16:53:06.750";
+  };
+
   const getAllSelected = () => {
     var newData = mainData.filter((e) => e.selected === true).map((e) => e.id);
     return newData;
+  };
+  const getAllSelectedIds = () => {
+    let arrIds = [];
+    getAllSelected().forEach((e) => {
+      arrIds.push({ foodId: e });
+    });
+    return arrIds;
   };
   //get data
 
@@ -104,9 +143,22 @@ export default function RegisterForm3({ route, navigation }) {
     setMainData(newArray);
   };
 
+  const search = () => {
+    let arr = [];
+    mainData
+      .filter((item) => item.kind === kinds[placeKind])
+      .forEach((e) => {
+        if (e.name.toLowerCase().includes(text && text.toLowerCase())) {
+          arr.push(e);
+        }
+      });
+    setFoodData(arr);
+  };
+
   const createMeals = () => {
     let currentYear = new Date();
-    let ageCalc = currentYear.getFullYear() - +data.DateOfBirth.substr(0, 4);
+    let ageCalc =
+      currentYear.getFullYear() - String(data.DateOfBirth).substr(0, 4);
     var mealsArr = [];
     var proteins = +data.Weights[0].CurrentWeight * 2.1 * 0.25;
     let calories =
@@ -119,22 +171,66 @@ export default function RegisterForm3({ route, navigation }) {
           4.35 * +data.Weights[0].CurrentWeight +
           4.7 * +data.Heights[0].CurrentHeight -
           4.7 * ageCalc;
-
+    /**
+ * "meat",
+    "fruits",
+    "vegatables" ,,'snacks',
+    "drinks",
+    "sea food",
+    "bakery",
+    "seeds",
+    "dairy",
+ */
     switch (data.Goal) {
       case "lose":
         calories = calories * 0.71;
         var fats = 0.7 * +data.Weights[0].CurrentWeight * 0.25;
         mealsArr.push({
-          breakfast: createMealsList(0, 0.17 * calories, proteins, fats),
+          mealName: "breakfast",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(0, 0.17 * calories, proteins, fats, {
+            dairy: 2,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 1,
+            seeds: 1,
+          }),
         });
         mealsArr.push({
-          brunch: createMealsList(1, 0.14 * calories, proteins, fats),
+          mealName: "brunch",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(1, 0.14 * calories, proteins, fats, {
+            dairy: 1,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 2,
+            seeds: 1,
+          }),
         });
         mealsArr.push({
-          lunch: createMealsList(2, 0.2 * calories, proteins, fats),
+          mealName: "lunch",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(2, 0.2 * calories, proteins, fats, {
+            meat: 1,
+            drinks: 1,
+            vegatables: 3,
+            bakery: 1,
+            seeds: 3,
+          }),
         });
         mealsArr.push({
-          dinner: createMealsList(3, 0.2 * calories, proteins, fats),
+          mealName: "dinner",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(3, 0.2 * calories, proteins, fats, {
+            meat: 1,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 1,
+            seeds: 1,
+          }),
         });
         /*
          * breakfast 0.17 - 8:00 -- mealId - 0
@@ -148,16 +244,51 @@ export default function RegisterForm3({ route, navigation }) {
         calories = calories * 1.2;
         var fats = 1 * +data.Weights[0].CurrentWeight * 0.25;
         mealsArr.push({
-          breakfast: createMealsList(0, 0.27 * calories, proteins, fats),
+          mealName: "breakfast",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(0, 0.27 * calories, proteins, fats, {
+            dairy: 2,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 1,
+            seeds: 1,
+          }),
         });
         mealsArr.push({
-          brunch: createMealsList(1, 0.2 * calories, proteins, fats),
+          mealName: "brunch",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(1, 0.2 * calories, proteins, fats, {
+            dairy: 1,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 2,
+            seeds: 1,
+          }),
         });
         mealsArr.push({
-          lunch: createMealsList(2, 0.19 * calories, proteins, fats),
+          mealName: "lunch",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(2, 0.19 * calories, proteins, fats, {
+            meat: 1,
+            drinks: 1,
+            vegatables: 3,
+            bakery: 1,
+            seeds: 3,
+          }),
         });
         mealsArr.push({
-          dinner: createMealsList(3, 0.3 * calories, proteins, fats),
+          mealName: "dinner",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(3, 0.3 * calories, proteins, fats, {
+            meat: 1,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 1,
+            seeds: 1,
+          }),
         });
         /*
          * breakfast 0.27 - 8:00
@@ -171,16 +302,51 @@ export default function RegisterForm3({ route, navigation }) {
         calories = calories * 1;
         var fats = 0.85 * +data.Weights[0].CurrentWeight * 0.25;
         mealsArr.push({
-          breakfast: createMealsList(0, 0.28 * calories, proteins, fats),
+          mealName: "breakfast",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(0, 0.28 * calories, proteins, fats, {
+            dairy: 2,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 1,
+            seeds: 1,
+          }),
         });
         mealsArr.push({
-          brunch: createMealsList(1, 0.2 * calories, proteins, fats),
+          mealName: "brunch",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(1, 0.2 * calories, proteins, fats, {
+            dairy: 1,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 2,
+            seeds: 1,
+          }),
         });
         mealsArr.push({
-          lunch: createMealsList(2, 0.29 * calories, proteins, fats),
+          mealName: "lunch",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(2, 0.29 * calories, proteins, fats, {
+            meat: 1,
+            drinks: 1,
+            vegatables: 3,
+            bakery: 1,
+            seeds: 3,
+          }),
         });
         mealsArr.push({
-          dinner: createMealsList(3, 0.23 * calories, proteins, fats),
+          mealName: "dinner",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(3, 0.23 * calories, proteins, fats, {
+            meat: 1,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 1,
+            seeds: 1,
+          }),
         });
         /*
          * breakfast 0.28 - 8:00
@@ -193,25 +359,70 @@ export default function RegisterForm3({ route, navigation }) {
         calories = calories * 1;
         var fats = 0.85 * +data.Weights[0].CurrentWeight * 0.25;
         mealsArr.push({
-          breakfast: createMealsList(0, 0.28 * calories, proteins, fats),
+          mealName: "breakfast",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(0, 0.28 * calories, proteins, fats, {
+            dairy: 2,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 1,
+            seeds: 1,
+          }),
         });
         mealsArr.push({
-          brunch: createMealsList(1, 0.2 * calories, proteins, fats),
+          mealName: "brunch",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(1, 0.2 * calories, proteins, fats, {
+            dairy: 1,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 2,
+            seeds: 1,
+          }),
         });
         mealsArr.push({
-          lunch: createMealsList(2, 0.29 * calories, proteins, fats),
+          mealName: "lunch",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(2, 0.29 * calories, proteins, fats, {
+            meat: 1,
+            drinks: 1,
+            vegatables: 3,
+            bakery: 1,
+            seeds: 3,
+          }),
         });
         mealsArr.push({
-          dinner: createMealsList(3, 0.23 * calories, proteins, fats),
+          mealName: "dinner",
+          Date: formatDateToday(),
+          ItemsList: createMealsList(3, 0.23 * calories, proteins, fats, {
+            meat: 1,
+            drinks: 1,
+            fruits: 1,
+            vegatables: 2,
+            bakery: 1,
+            seeds: 1,
+          }),
         });
         break;
     }
     return mealsArr;
   };
 
-  const createMealsList = (mealId, cal, proteins, fats) => {
+  const createMealsList = (mealId, cal, proteins, fats, kindsAmount) => {
     //[5,1,5,8,6]
     //[{items}]
+    let thisKindsAmounts = {
+      meat: 0,
+      fruits: 0,
+      vegatables: 0,
+      drinks: 0,
+      "sea food": 0,
+      bakery: 0,
+      seeds: 0,
+      dairy: 0,
+    };
     var newMeal = [];
     var done = false;
     var flag = false;
@@ -223,7 +434,7 @@ export default function RegisterForm3({ route, navigation }) {
     var selectedItemsArr = getAllSelected();
     var rnd = Math.floor(Math.random() * selectedItemsArr.length);
     numbersRnd.push(rnd);
-    console.log("226 numberRnds => ", numbersRnd);
+
     do {
       mainData.forEach((mainItem) => {
         //stop the loop faster
@@ -254,27 +465,24 @@ export default function RegisterForm3({ route, navigation }) {
           flag = false;
         }
 
+        /*if () {
+          thisKindsAmounts[mainItem.kind] += 1;
+        } else flag = false;*/
+
         if (flag === false) return;
         //תנאי עצירה 2
-        /*if (
-          totalCal + mainItem.kCal > cal ||
-          totalProtein + mainItem.protein > proteins ||
-          totalFats + mainItem.fats > fats
-        ) {
-          done = true;
-          return;
-        }*/
-        //added
         if (
           totalCal + mainItem.kCal <= cal &&
           totalProtein + mainItem.protein <= proteins &&
-          totalFats + mainItem.fats <= fats
+          totalFats + mainItem.fats <= fats &&
+          thisKindsAmounts[mainItem.kind] + 1 <= kindsAmount[mainItem.kind]
         ) {
           totalCal += mainItem.kCal;
           totalProtein += mainItem.protein;
           totalFats += mainItem.fats;
-          newMeal.push(mainItem.id);
+          newMeal.push({ foodId: mainItem.id });
           flagLoop = true;
+          thisKindsAmounts[mainItem.kind] += 1;
         }
       });
 
@@ -311,22 +519,22 @@ export default function RegisterForm3({ route, navigation }) {
       if (kinds.length - 1 === placeKind) {
         let currentYear = new Date();
         let ageCalc =
-          currentYear.getFullYear() - +data.DateOfBirth.substr(0, 4);
+          currentYear.getFullYear() - String(data.DateOfBirth).substr(0, 4);
         let calcInfo = {
-          ChoosenFood: getAllSelected(),
+          ChoosenFood: getAllSelectedIds(),
           Meds: [],
           DailyWaterCups: [
             {
               Goal: parseInt(data.Weights[0].CurrentWeight * 0.2061538461538),
               Done: 0,
-              Date: currentYear,
+              Date: formatDateToday(),
             },
           ],
           DailyProtein: [
             {
               Goal: +data.Weights[0].CurrentWeight * 2.1,
               Done: 0,
-              Date: currentYear,
+              Date: formatDateToday(),
             },
           ],
           KCalDaily: [
@@ -342,44 +550,51 @@ export default function RegisterForm3({ route, navigation }) {
                     4.7 * +data.Heights[0].CurrentHeight -
                     4.7 * ageCalc,
               Done: 0,
-              Date: currentYear,
+              Date: formatDateToday(),
             },
           ],
-          DailySteps: [{ Goal: steps, Done: 0, Date: currentYear }],
-          Sleeps: [{ Goal: 8, Done: 0, Date: currentYear }],
-          Meals: [{ Date: Date(), ItemsList: createMeals() }],
+          DailySteps: [{ Goal: steps, Done: 0, Date: formatDateToday() }],
+          Sleeps: [{ Goal: 8, Done: 0, Date: formatDateToday() }],
+          Meals: createMeals(),
         };
         let lastData = { ...data, ...calcInfo };
-        console.log(lastData.Meals[0].ItemsList);
+
         try {
-          fetch("https://localhost:44324/api/user/create", {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(lastData),
-          })
-            .then((r) => r.json())
+          fetch(
+            /*"http://proj17.ruppin-tech.co.il*/ "http://proj17.ruppin-tech.co.il/api/user/create",
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(lastData),
+            }
+          )
+            .then((r) => {
+              r.json();
+            })
             .then((data) => {
-              console.log(data === "added", "=>", data);
-              if (data === "added") {
+              if (data === undefined) navigation.navigate("loginPage");
+              if (data === true) {
                 //go to dashboard and add auto login for user
                 //lastData
                 try {
-                  fetch("https://localhost:44324/api/token/Authenticate", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      Email: lastData.Email.toLowerCase(),
-                      Password: lastData.Password,
-                    }),
-                  })
+                  fetch(
+                    "http://proj17.ruppin-tech.co.il/api/token/Authenticate",
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        Email: lastData.Email.toLowerCase(),
+                        Password: lastData.Password,
+                      }),
+                    }
+                  )
                     .then((r) => r.text())
                     .then((token) => {
-                      console.log(token);
                       if (token === "false") {
                         navigation.navigate("loginPage");
                       } else {
@@ -397,10 +612,10 @@ export default function RegisterForm3({ route, navigation }) {
           console.log("error fetch : " + error);
           navigation.navigate("loginPage");
         }
-        // console.log(lastData);
       } else {
         let upOne = placeKind + 1;
         if (upOne === kinds.length - 1) setButtonText("Confirm");
+        setText("");
         setPlaceKind(upOne);
       }
     } catch (e) {
@@ -416,9 +631,8 @@ export default function RegisterForm3({ route, navigation }) {
       <View
         style={{
           width: "100%",
-          alignContent: "center",
-          alignItems: "center",
-          marginTop: "10%",
+          alignItems: Platform.OS === "ios" ? "center" : "flex-start",
+          marginTop: Platform.OS === "ios" ? 25 : 0,
         }}
       >
         <Image
@@ -428,10 +642,10 @@ export default function RegisterForm3({ route, navigation }) {
       </View>
       <Animatable.View style={styles.viewShow} animation={"fadeInUp"}>
         <TittleBarAndArrow
-          goBk={goBk}
+          goBk={() => navigation.goBack()}
           iconName="arrow-left"
           iconSize={40}
-          text={kinds[placeKind]}
+          text={"Choose Your Food"}
         />
         <>
           <CirclesRegister
@@ -445,16 +659,67 @@ export default function RegisterForm3({ route, navigation }) {
             ]}
           />
         </>
+        <View>
+          {/* ios-search-sharp */}
+
+          <View style={{ position: "relative" }}>
+            {placeKind > 0 ? (
+              <TouchableOpacity
+                style={[styles.ButtonStyle_Next, { left: 8, top: 55 }]}
+                disabled={loading}
+                onPress={() => {
+                  //save data go next page
+                  goBk();
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#D5DDDC",
+                    fontSize: 13,
+                    textAlign: "center",
+                  }}
+                >
+                  Prev
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <View></View>
+            )}
+            <TouchableOpacity
+              style={[styles.ButtonStyle_Next, { right: 8, top: 55 }]}
+              disabled={loading}
+              onPress={() => {
+                //save data go next page
+                OnSelectSaveData();
+              }}
+            >
+              <Text
+                style={{ color: "#D5DDDC", fontSize: 13, textAlign: "center" }}
+              >
+                Next
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <TextInput
+            style={styles.inputStyle}
+            placeholderTextColor="#364057"
+            onChangeText={setText}
+            value={text}
+            placeholder="Search..."
+          />
+        </View>
         <Text
           style={{
             color: "#CCCCCC",
             fontSize: 20,
-            marginTop: 15,
+            marginTop: 8,
             textAlign: "left",
             alignSelf: "center",
+            fontWeight: "bold",
           }}
         >
-          tell us what you love
+          {kinds[placeKind]}
         </Text>
 
         <View>
@@ -463,16 +728,13 @@ export default function RegisterForm3({ route, navigation }) {
             style={{
               width: "97%",
               alignSelf: "center",
-              height: "70%",
+              height: "67%",
               marginTop: 10,
               borderWidth: 1,
               borderColor: "white",
               borderRadius: 10,
               paddingBottom: 5,
             }}
-            //  onContentSizeChange={(contentWidth, contentHeight)=>{
-            //     console.log(contentHeight,contentWidth)
-            //     }}
           >
             {loading ? (
               <Animatable.View
@@ -486,37 +748,40 @@ export default function RegisterForm3({ route, navigation }) {
                   style={{ width: 85, height: 85, alignSelf: "center" }}
                 />
               </Animatable.View>
+            ) : foodData.length > 0 ? (
+              foodData &&
+              foodData.map((e, index) => {
+                return (
+                  <View key={index + 11}>
+                    <BarOfFoodChoose
+                      kindPlace={placeKind}
+                      addList={(e, isSelected) => addList(e, isSelected)}
+                      fullFruitObj={e}
+                      index={index}
+                    />
+                  </View>
+                );
+              })
             ) : (
-              mainData.filter((item) => item.kind === kinds[placeKind]) &&
-              mainData
-                .filter((item) => item.kind === kinds[placeKind])
-                .map((e, index) => {
-                  return (
-                    <View key={index + 11}>
-                      <BarOfFoodChoose
-                        kindPlace={placeKind}
-                        addList={(e, isSelected) => addList(e, isSelected)}
-                        fullFruitObj={e}
-                        index={index}
-                      />
-                    </View>
-                  );
-                })
+              <View>
+                <Image
+                  source={require("../assets/notFoundX.gif")}
+                  style={{ width: 85, height: 85, alignSelf: "center" }}
+                />
+                <Text
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    fontSize: 17,
+                    alignSelf: "center",
+                  }}
+                >
+                  Unfortunately The Item Was Not Found
+                </Text>
+              </View>
             )}
           </ScrollView>
         </View>
-        <TouchableOpacity
-          style={styles.ButtonStyle_Next}
-          disabled={loading}
-          onPress={() => {
-            //save data go next page
-            OnSelectSaveData();
-          }}
-        >
-          <Text style={{ color: "#D5DDDC", fontSize: 13, textAlign: "center" }}>
-            {ButtonText}
-          </Text>
-        </TouchableOpacity>
       </Animatable.View>
     </LinearGradient>
   );
@@ -529,8 +794,7 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     width: "80%",
-    height: 55,
-    marginBottom: 5,
+    height: 45,
     marginTop: 5,
     backgroundColor: "#D5DDDC",
     alignSelf: "center",
@@ -541,8 +805,8 @@ const styles = StyleSheet.create({
   },
   viewShow: {
     width: "100%",
-    height: "85%",
-    position: "absolute",
+    height: "93%",
+    position: "relative",
     bottom: 0,
     backgroundColor: "#344148",
     borderTopStartRadius: 15,
@@ -563,14 +827,14 @@ const styles = StyleSheet.create({
   },
   ButtonStyle_Next: {
     alignItems: "center",
-    padding: 15,
+    padding: 5,
     justifyContent: "center",
-    width: "60%",
+    width: "13%",
     backgroundColor: "#344148",
-    marginTop: 20,
     alignSelf: "center",
-    borderRadius: 15,
+    borderRadius: 10,
     borderColor: "white",
     borderWidth: 1,
+    position: "absolute",
   },
 });

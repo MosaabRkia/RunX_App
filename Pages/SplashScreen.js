@@ -12,7 +12,7 @@ export default function SplashScreen({ navigation }) {
   //useEffect
   useEffect(() => {
     //create load unit load all data
-    //AsyncStorage.removeItem("token");
+    AsyncStorage.removeItem("token");
     AsyncStorage.getItem("token").then((data) => {
       console.log(data);
       setTimeout(

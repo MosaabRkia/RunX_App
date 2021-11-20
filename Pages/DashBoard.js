@@ -11,63 +11,49 @@ import {
 import BarDashBoard from "../components/BarDashBoard";
 import ProgressBar from "../components/ProgressBar";
 import Icon from "react-native-vector-icons/AntDesign";
-import { UserData } from "../Drawer/Drawer";
+// import { UserData } from "../ContextData/MainContextData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector, useDispatch } from "react-redux";
+import { updateDrinkData } from "../redux/UpdateUserData/UpdateUserDataActions";
 
 export default function DashBoard(props) {
-  const fetchData = useContext(UserData);
+  let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
 
   useEffect(() => {
-    if (
-      fetchData.dataFetch[0] === undefined ||
-      fetchData.dataFetch[0] === null
-    ) {
-      AsyncStorage.removeItem("token");
-      props.navigation.navigate("loginPage");
-    }
+    console.log(user);
   }, []);
 
   const arr = [
     {
       title: "Drink",
       units: "Cups",
-      value: parseInt(
-        fetchData.dataFetch[0].dailyWaterCups[
-          fetchData.dataFetch[0].dailyWaterCups.length - 1
-        ].done
-      ),
+      value: user.drinks.done,
+      data: user.drinks,
       description:
         "drinking water is essential for optimal health. Proper hydration prevents constipation, mood swings, kidney stones, and overheating ",
     },
     {
       title: "Food",
       units: "Cal",
-      value: parseInt(
-        fetchData.dataFetch[0].kCalDaily[
-          fetchData.dataFetch[0].kCalDaily.length - 1
-        ].done
-      ),
+      data: user.kCal,
+      value: user.kCal.done,
+
       description:
         "A  healthy diet rich in fruits, vegetables, whole grains and low-fat dairy can help to reduce your risk of heart disease by maintaining blood pressure and cholesterol levels",
     },
     {
       title: "Sleep",
       units: "Hrs",
-      value: parseInt(
-        fetchData.dataFetch[0].sleeps[fetchData.dataFetch[0].sleeps.length - 1]
-          .done
-      ),
+      data: user.sleeps,
+      value: user.sleeps.done,
       description:
         "Most adults need 7 or more hours of good-quality sleep on a regular schedule each night. Getting enough sleep isnt only about total hours of sleep.",
     },
     {
       title: "Sport",
       units: "ft",
-      value: parseInt(
-        fetchData.dataFetch[0].dailySteps[
-          fetchData.dataFetch[0].dailySteps.length - 1
-        ].done
-      ),
+      value: user.Steps.done,
+      data: user.Steps,
       description:
         "Keeping active through physical activity and sport has many benefits for the body. Some of these benefits include increased cardiovascular fitness, bone health, decreased risk of obesity...",
     },
@@ -91,6 +77,7 @@ export default function DashBoard(props) {
           return (
             <ProgressBar
               key={index}
+              data={item.data}
               link={() => {
                 props.navigation.navigate(item.title);
               }}

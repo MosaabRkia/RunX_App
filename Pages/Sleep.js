@@ -5,7 +5,7 @@ import BarDashBoard from "../components/BarDashBoard";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import Icon from "react-native-vector-icons/AntDesign";
 import AppButton from "../components/AppButton";
-import { UserData } from "../Drawer/Drawer";
+import { UserData } from "../ContextData/MainContextData";
 
 export default function Sleep(props) {
   const [slept, setSleep] = useState(0);

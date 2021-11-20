@@ -71,7 +71,7 @@ export default function RegisterForm({ navigation }) {
           height: 150,
           alignSelf: "center",
           position: "absolute",
-          top: 80,
+          top: 60,
         }}
       />
 
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   },
   viewShow: {
     width: "100%",
-    height: "70%",
+    height: "75%",
     position: "absolute",
     bottom: 0,
     backgroundColor: "#344148",

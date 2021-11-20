@@ -45,6 +45,7 @@ export default function RegisterForm1({ route, navigation }) {
     showPassword: true,
     showCurPassword: true,
   });
+  const [message, setMessage] = useState(null);
 
   const { Goal } = route.params;
   //useEffect
@@ -56,7 +57,12 @@ export default function RegisterForm1({ route, navigation }) {
   const goBk = () => navigation.goBack();
 
   // functions
-
+  const setMsg = (msg) => {
+    setMessage(msg);
+    setTimeout(() => {
+      setMessage(null);
+    }, 5000);
+  };
   //valid Email check
   function validateEmail(EmailAdress) {
     if (EmailAdress === null) return false;
@@ -76,23 +82,23 @@ export default function RegisterForm1({ route, navigation }) {
         data.FirstName === null ||
         (data.FirstName.length < 3 && /^[a-zA-Z]+$/.test(data.FirstName))
       ) {
-        console.log("first name problem");
+        setMsg("first name problem");
         return;
       }
       if (!validateEmail(data.Email)) {
-        console.log("Email problem");
+        setMsg("Email problem");
         return;
       }
       if (data.Password === null || data.Password.length < 6) {
-        console.log("Password problem");
+        setMsg("Password problem");
         return;
       }
       if (data.Password !== currentPassword) {
-        console.log("cur Password problem");
+        setMsg("cur Password problem");
         return;
       }
       if (data.Gender === null) {
-        console.log("Gender problem");
+        setMsg("Gender problem");
         return;
       }
       console.log(data);
@@ -133,7 +139,7 @@ export default function RegisterForm1({ route, navigation }) {
             alignSelf: "center",
           }}
         >
-          HELLO!
+          {message ? message : "HELLO!"}
         </Text>
         <CirclesRegister
           width={45}

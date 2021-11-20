@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
-import { View, Image, Text, StyleSheet, CheckBox } from "react-native";
+import { View, Image, Text, StyleSheet } from "react-native";
+import CheckBox from "react-native-check-box";
 import { vw, vh /*, vmin, vmax */ } from "react-native-expo-viewport-units";
 
 export default function BarOfFoodChoose(props) {
@@ -59,18 +60,24 @@ export default function BarOfFoodChoose(props) {
           {props.fullFruitObj.description}
         </Text>
         <Text style={{ alignSelf: "flex-end", right: 25 }}>
-          {props.fullFruitObj.gram}g = {props.fullFruitObj.kcal} calories
+          {props.fullFruitObj.gram}g = {props.fullFruitObj.kCal} calories
         </Text>
       </View>
       <View
         key={(props.index, 3)}
         style={{ width: "15%", justifyContent: "center", alignItems: "center" }}
       >
-        <CheckBox
+        {/* <CheckBox
           key={(props.index, 4)}
           value={props.fullFruitObj.selected}
           onValueChange={addToList}
           style={{ alignSelf: "center" }}
+        /> */}
+
+        <CheckBox
+          onClick={() => addToList()}
+          isChecked={props.fullFruitObj.selected}
+          style={{ padding: 10, alignSelf: "center" }}
         />
       </View>
     </View>

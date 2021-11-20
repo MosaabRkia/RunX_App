@@ -41,7 +41,7 @@ import CirclesRegister from "../components/CirclesRegister";
 export default function RegisterForm2({ route, navigation }) {
   //useState
   const [info, setInfo] = useState({
-    DateOfBirth: "1999-02-15T16:53:06.750Z", //yyyy-mm-dd
+    DateOfBirth: "1999-02-15T16:53:06.750", //yyyy-mm-dd
     Weights: [{ CurrentWeight: null, Date: null }],
     Heights: [{ CurrentHeight: null, Date: null }],
     GoalWeight: null,
@@ -52,8 +52,18 @@ export default function RegisterForm2({ route, navigation }) {
   const [showGoalInputText, setShowGoalInputText] = useState(true);
   const [message, setMessage] = useState(null);
 
-  // data
-  let date = new Date();
+  // date
+  const formatDateToday = () => {
+    var d = new Date(),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-").toString() + "T16:53:06.750";
+  };
 
   //date
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -95,13 +105,19 @@ export default function RegisterForm2({ route, navigation }) {
   //handle weight numberic
   const handleWeightInputChange = (text) => {
     if (/^\d+$/.test(text)) {
-      setInfo({ ...info, Weights: [{ CurrentWeight: +text, Date: date }] });
+      setInfo({
+        ...info,
+        Weights: [{ CurrentWeight: +text, Date: formatDateToday() }],
+      });
     }
   };
   //handle height numberic
   const handleHeightInputChange = (text) => {
     if (/^\d+$/.test(text)) {
-      setInfo({ ...info, Heights: [{ CurrentHeight: +text, Date: date }] });
+      setInfo({
+        ...info,
+        Heights: [{ CurrentHeight: +text, Date: formatDateToday() }],
+      });
     }
   };
 
@@ -174,7 +190,6 @@ export default function RegisterForm2({ route, navigation }) {
     try {
       if (info.DateOfBirth === "yyyy-mm-dd") {
         setMsg("ops wrong date");
-
         return;
       }
 
