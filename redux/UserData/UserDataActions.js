@@ -28,19 +28,20 @@ export function getData(token) {
   console.log(token);
   return (dispatch) => {
     try {
-      fetch("https://localhost:44324/api/token/decode", {
+      fetch("http://proj17.ruppin-tech.co.il/api/token/decode", {
         method: "POST",
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(token),
+        body: JSON.stringify({ token: token }),
       })
         .then((r) => r.json())
         .then((data) => {
-          console.log(data);
           if (data === false) dispatch(getDataFailure("error"));
           else {
+            console.log(data);
             dispatch(getDataSuccess(data));
           }
         })

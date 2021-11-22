@@ -213,21 +213,20 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "lunch",
           Date: formatDateToday(),
           ItemsList: createMealsList(2, 0.2 * calories, proteins, fats, {
-            meat: 1,
+            meat: 2,
             drinks: 1,
-            vegatables: 3,
+            vegatables: 2,
             bakery: 1,
-            seeds: 3,
+            seeds: 1,
           }),
         });
         mealsArr.push({
           mealName: "dinner",
           Date: formatDateToday(),
           ItemsList: createMealsList(3, 0.2 * calories, proteins, fats, {
-            meat: 1,
+            meat: 2,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            vegatables: 1,
             bakery: 1,
             seeds: 1,
           }),
@@ -271,11 +270,12 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "lunch",
           Date: formatDateToday(),
           ItemsList: createMealsList(2, 0.19 * calories, proteins, fats, {
-            meat: 1,
+            meat: 2,
             drinks: 1,
-            vegatables: 3,
-            bakery: 1,
-            seeds: 3,
+            vegatables: 2,
+            "sea food": 1,
+            bakery: 2,
+            seeds: 1,
           }),
         });
         mealsArr.push({
@@ -286,6 +286,7 @@ export default function RegisterForm3({ route, navigation }) {
             drinks: 1,
             fruits: 1,
             vegatables: 2,
+            "sea food": 1,
             bakery: 1,
             seeds: 1,
           }),
@@ -331,9 +332,10 @@ export default function RegisterForm3({ route, navigation }) {
           ItemsList: createMealsList(2, 0.29 * calories, proteins, fats, {
             meat: 1,
             drinks: 1,
-            vegatables: 3,
+            vegatables: 2,
+            "sea food": 1,
             bakery: 1,
-            seeds: 3,
+            seeds: 1,
           }),
         });
         mealsArr.push({
@@ -344,6 +346,7 @@ export default function RegisterForm3({ route, navigation }) {
             drinks: 1,
             fruits: 1,
             vegatables: 2,
+            "sea food": 1,
             bakery: 1,
             seeds: 1,
           }),
@@ -386,20 +389,22 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "lunch",
           Date: formatDateToday(),
           ItemsList: createMealsList(2, 0.29 * calories, proteins, fats, {
-            meat: 1,
+            meat: 2,
             drinks: 1,
-            vegatables: 3,
+            vegatables: 2,
+            "sea food": 1,
             bakery: 1,
-            seeds: 3,
+            seeds: 1,
           }),
         });
         mealsArr.push({
           mealName: "dinner",
           Date: formatDateToday(),
           ItemsList: createMealsList(3, 0.23 * calories, proteins, fats, {
-            meat: 1,
+            meat: 2,
             drinks: 1,
             fruits: 1,
+            "sea food": 1,
             vegatables: 2,
             bakery: 1,
             seeds: 1,
@@ -502,7 +507,7 @@ export default function RegisterForm3({ route, navigation }) {
 
       numbersRnd.push(rnd);
     } while (!done);
-    return newMeal;
+    return { ...newMeal, eaten: false };
   };
 
   //save data
@@ -558,10 +563,10 @@ export default function RegisterForm3({ route, navigation }) {
           Meals: createMeals(),
         };
         let lastData = { ...data, ...calcInfo };
-
+        console.log(lastData);
         try {
           fetch(
-            /*"http://proj17.ruppin-tech.co.il*/ "http://proj17.ruppin-tech.co.il/api/user/create",
+            /*"http://proj17.ruppin-tech.co.il*/ "https://localhost:44324/api/user/create",
             {
               method: "POST",
               headers: {
@@ -575,6 +580,8 @@ export default function RegisterForm3({ route, navigation }) {
               r.json();
             })
             .then((data) => {
+              console.log("538", data);
+
               if (data === undefined) navigation.navigate("loginPage");
               if (data === true) {
                 //go to dashboard and add auto login for user

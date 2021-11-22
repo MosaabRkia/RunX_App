@@ -12,7 +12,9 @@ import {
   USER_SIGNUP_FAILURE,
   USER_UP_DRINKS,
   USER_DOWN_DRINKS,
+  USER_ERROR_DRINKS,
 } from "../actionsTypes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //USER Actions
 
@@ -46,6 +48,11 @@ export const userDownDrinks = () => ({
   payload: {},
 });
 
+export const userErrorDrinks = (content) => ({
+  type: USER_ERROR_DRINKS,
+  payload: { error: content },
+});
+
 //register
 export const userSignupRequest = () => ({
   type: USER_SIGNUP_REQUEST,
@@ -70,10 +77,17 @@ export const userSignupFailure = (error) => ({
   },
 });
 
-export function userLogin(content) {
+export const autoLogin = (token) => {
+  return (dispatch) => {
+    dispatch(userLoginSuccess(token));
+    dispatch(getData(token));
+  };
+};
+
+export const userLogin = (content) => {
   console.log(content);
   return (dispatch) => {
-    fetch("https://localhost:44324/api/token/Authenticate", {
+    fetch("http://proj17.ruppin-tech.co.il/api/token/Authenticate", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -86,12 +100,12 @@ export function userLogin(content) {
     })
       .then((r) => r.json())
       .then((token) => {
-        console.log(token);
+        console.log("103", token);
         if (token === "false") {
           dispatch(userLoginFailure("loginError"));
           return;
         } else {
-          console.log(token);
+          AsyncStorage.setItem("token", token);
           dispatch(userLoginSuccess(token));
         }
         dispatch(getData(token));
@@ -104,19 +118,21 @@ export function userLogin(content) {
         dispatch(userLoginFailure(error.message));
       }); //commit 2
   };
-}
+};
 
 export const drinksUpdateUser = (content) => {
   return (dispatch) => {
     axios
       .get(
-        `https://localhost:44324/api/UpdateData/updateCupsWater/${content.type}/${content.id}`
+        `http://proj17.ruppin-tech.co.il/api/UpdateData/updateCupsWater/${content.type}/${content.id}`
       )
       .then((res) => {
+        if (res.data === true)
+          content.type === "plus"
+            ? dispatch(userUpDrinks())
+            : dispatch(userDownDrinks());
+        else dispatch(userErrorDrinks("Error in Fetch"));
         console.log(res.data);
-        content.type === "plus"
-          ? dispatch(userUpDrinks())
-          : dispatch(userDownDrinks());
       });
   };
 };

@@ -4,20 +4,29 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { autoLogin } from "../redux/User/UserActions";
+import { useDispatch } from "react-redux";
 
 export default function SplashScreen({ navigation }) {
   //states
   const [smallLogo, setSmallLogo] = useState(true);
-
+  const dispatch = useDispatch();
   //useEffect
   useEffect(() => {
     //create load unit load all data
-    AsyncStorage.removeItem("token");
+    // AsyncStorage.removeItem("token");
     AsyncStorage.getItem("token").then((data) => {
       console.log(data);
+
       setTimeout(
         () => {
-          navigation.navigate(data === null ? "loginPage" : "HomeDrawer");
+          console.log(data);
+          if (data !== null) {
+            dispatch(autoLogin(data));
+            navigation.navigate("HomeDrawer");
+          } else {
+            navigation.navigate("loginPage");
+          }
         },
         data === null ? 3500 : 0
       );

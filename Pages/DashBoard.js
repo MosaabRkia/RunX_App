@@ -21,7 +21,7 @@ export default function DashBoard(props) {
 
   useEffect(() => {
     console.log(user);
-  }, []);
+  }, [user]);
 
   const arr = [
     {

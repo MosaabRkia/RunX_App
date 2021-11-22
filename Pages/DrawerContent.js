@@ -16,10 +16,13 @@ import {
 } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserData } from "../ContextData/MainContextData";
+import { useSelector } from "react-redux";
 
 export function DrawerContent(props) {
   const fetchData = useContext(UserData);
-
+  useEffect(() => {
+    console.log(props.firstName);
+  }, []);
   return (
     <LinearGradient
       style={{ flex: 1 }}
@@ -99,8 +102,9 @@ export function DrawerContent(props) {
           )}
           label="Sign Out"
           onPress={() => {
-            AsyncStorage.removeItem("token");
-            props.navigation.navigate("loginPage");
+            AsyncStorage.removeItem("token").then(() => {
+              props.navigation.navigate("loginPage");
+            });
           }}
         />
       </Drawer.Section>

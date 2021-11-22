@@ -1,33 +1,28 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import BarDashBoard from "../components/BarDashBoard";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import Icon from "react-native-vector-icons/AntDesign";
 import AppButton from "../components/AppButton";
 import { UserData } from "../ContextData/MainContextData";
+import { useSelector } from "react-redux";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function Sleep(props) {
-  const [slept, setSleep] = useState(0);
-  const [total, setTotal] = useState(0);
   const [started, setStarted] = useState(false);
   const [seconds, setSeconds] = useState(0);
 
-  const fetchData = useContext(UserData);
-  useEffect(() => {
-    setSleep(
-      parseInt(
-        fetchData.dataFetch[0].sleeps[fetchData.dataFetch[0].sleeps.length - 1]
-          .done
-      )
-    );
-    setTotal(
-      parseInt(
-        fetchData.dataFetch[0].sleeps[fetchData.dataFetch[0].sleeps.length - 1]
-          .goal
-      )
-    );
-  }, []);
+  let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
 
   const onStart = () =>
     setInterval(() => {
@@ -52,7 +47,7 @@ export default function Sleep(props) {
         <AnimatedCircularProgress
           size={250}
           width={25}
-          fill={slept * (100 / total)}
+          fill={user.sleeps.done * (100 / user.sleeps.goal)}
           tintColor="#FC7203"
           lineCap="round"
           style={{ margin: 25, alignSelf: "center" }}
@@ -62,7 +57,7 @@ export default function Sleep(props) {
             <Text
               style={{ fontWeight: "bold", fontSize: 30, textAlign: "center" }}
             >
-              {slept}/{total} {"\n"} Hrs
+              {user.sleeps.done}/{user.sleeps.goal} {"\n"} Hrs
             </Text>
           )}
         </AnimatedCircularProgress>
@@ -99,9 +94,15 @@ export default function Sleep(props) {
             text={started ? "Stop Sleep Timer" : "Start Sleep Timer"}
             color={1}
           />
-          {/* <Text>{seconds}</Text>            */}
         </View>
       </View>
+      <Image
+        key={"imgGif"}
+        style={styles.photoCss}
+        source={{
+          uri: "https://c.tenor.com/ppJgYaFs_ysAAAAi/nkf-nkfmy.gif",
+        }}
+      />
     </LinearGradient>
   );
 }
@@ -109,5 +110,10 @@ export default function Sleep(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  photoCss: {
+    alignSelf: "center",
+    width: 0.61 * windowWidth,
+    height: 0.315 * windowHeight,
   },
 });

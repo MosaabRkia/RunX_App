@@ -27,21 +27,25 @@ import Pedometter1 from "../components/Pedometter1";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoadingPageBetween from "../components/LoadingPageBetween";
 import MainContextData from "../ContextData/MainContextData";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import testBG from "../Pages/testBG";
+import MainPageBeforeLogin from "../Pages/MainPageBeforeLogin";
 
 export default function Drawer({ navigation }) {
   const Drawer = createDrawerNavigator();
 
-  const [drawerData, setDrawerData] = useState({
-    firstName: "Unknown",
-    weight: 0,
-  });
+  let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
 
   return (
     <Drawer.Navigator
       screenOptions={{ headerShown: false }}
-      drawerContent={(props) => <DrawerContent {...props} />}
+      drawerContent={(props) => (
+        <DrawerContent
+          {...props}
+          firstName={user.login.firstName}
+          currentWeight={user.login.weight}
+        />
+      )}
     >
       {/* <Drawer.Screen name="PedoMetter1" component={Pedometter1} /> */}
       <Drawer.Screen name="LoadingPageBetween" component={LoadingPageBetween} />
@@ -61,6 +65,7 @@ export default function Drawer({ navigation }) {
       <Drawer.Screen name="DailyListMenu" component={DailyListMenu} />
       <Drawer.Screen name="MedicineList" component={MedicineList} />
       <Drawer.Screen name="EditMedicine" component={EditMedicine} />
+      <Drawer.Screen name="loginPage" component={MainPageBeforeLogin} />
       {/* <Drawer.Screen name="SplashScreen" component={SplashScreen}/> */}
     </Drawer.Navigator>
   );

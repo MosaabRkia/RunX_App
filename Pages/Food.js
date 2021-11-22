@@ -1,34 +1,25 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import BarDashBoard from "../components/BarDashBoard";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import Icon from "react-native-vector-icons/AntDesign";
 import AppButton from "../components/AppButton";
 import { UserData } from "../ContextData/MainContextData";
+import { useSelector } from "react-redux";
 
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 export default function Food(props) {
-  const fetchData = useContext(UserData);
+  let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
 
-  const [eaten, setEaten] = useState(0);
-  const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    setEaten(
-      parseInt(
-        fetchData.dataFetch[0].kCalDaily[
-          fetchData.dataFetch[0].kCalDaily.length - 1
-        ].done
-      )
-    );
-    setTotal(
-      parseInt(
-        fetchData.dataFetch[0].kCalDaily[
-          fetchData.dataFetch[0].kCalDaily.length - 1
-        ].goal
-      )
-    );
-  }, []);
   return (
     <LinearGradient
       style={styles.container}
@@ -42,7 +33,7 @@ export default function Food(props) {
         <AnimatedCircularProgress
           size={250}
           width={25}
-          fill={eaten * (100 / total)}
+          fill={parseInt(user.kCal.done) * (100 / parseInt(user.kCal.goal))}
           tintColor="#FC7203"
           lineCap="round"
           style={{ margin: 25, alignSelf: "center" }}
@@ -52,7 +43,8 @@ export default function Food(props) {
             <Text
               style={{ fontWeight: "bold", fontSize: 30, textAlign: "center" }}
             >
-              {eaten}/{total} {"\n"} calories
+              {parseInt(user.kCal.done)}/{parseInt(user.kCal.goal)} {"\n"}{" "}
+              calories
             </Text>
           )}
         </AnimatedCircularProgress>
@@ -81,7 +73,7 @@ export default function Food(props) {
             />
           </View>
 
-          <View style={{ margin: 5 }}>
+          {/* <View style={{ margin: 5 }}>
             <AppButton
               onPress={() => {
                 props.navigation.navigate("Food1");
@@ -89,7 +81,15 @@ export default function Food(props) {
               text={"Edit Favor Foods"}
               color={false}
             />
-          </View>
+          </View> */}
+
+          <Image
+            key={"imgGif"}
+            style={styles.photoCss}
+            source={{
+              uri: "https://c.tenor.com/93WSxm8D44gAAAAi/nkf-nkfmy.gif",
+            }}
+          />
         </View>
       </View>
     </LinearGradient>
@@ -99,5 +99,10 @@ export default function Food(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  photoCss: {
+    alignSelf: "center",
+    width: 0.6305 * windowWidth,
+    height: 0.305 * windowHeight,
   },
 });

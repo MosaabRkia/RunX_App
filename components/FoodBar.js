@@ -9,7 +9,7 @@ export default function FoodBar(props) {
           key={props.index + "img"}
           style={styles.photoCss}
           source={{
-            uri: `https://media.istockphoto.com/photos/banana-picture-id1184345169?k=20&m=1184345169&s=612x612&w=0&h=EKwCw7Zx20N3l8G_rQI6KcitWTQ5ahkgmEBr2QA1FMk=`,
+            uri: `http://proj17.ruppin-tech.co.il/images/${props.item.photoId}.jpg`,
           }}
         />
       </View>
@@ -17,7 +17,8 @@ export default function FoodBar(props) {
       <View style={{ alignSelf: "center", marginRight: 35, width: "70%" }}>
         <Text style={{ fontSize: 20 }}>{props.item.name}</Text>
         <Text style={{ fontSize: 15 }}>
-          {props.item.gram} g = {props.item.kcal} KCal - {props.item.kind}
+          {props.item.gram} g = {props.item.kCal} KCal - {props.item.fats} Fats
+          - {props.item.kind}
         </Text>
       </View>
     </View>

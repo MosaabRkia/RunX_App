@@ -10,22 +10,25 @@ import {
   USER_UP_DRINKS,
   LOAD_DRINKS_DATA,
   USER_DOWN_DRINKS,
+  USER_ERROR_DRINKS,
+  USER_MEAL_PLUS,
+  USER_MEAL_MINUS,
+  USER_MEDICINE_ADD,
 } from "../actionsTypes";
 import initialState from "../initialState";
 
 const UserReducer = (state = initialState, action) => {
-  console.log(action.payload);
   //login actions
   switch (action.type) {
     case USER_LOGIN_SUCCESS:
       return {
         ...state,
-        login: { token: action.payload.token, error: "", data: null },
+        login: { ...state.login, token: action.payload.token },
       };
     case USER_LOGIN_FAILURE:
       return {
         ...state,
-        login: { error: action.payload.error, data: null, token: null },
+        login: { ...state.login, error: action.payload.error },
       };
     case USER_LOGOUT:
       return {
@@ -33,9 +36,18 @@ const UserReducer = (state = initialState, action) => {
         login: { error: "", data: null, token: null },
       };
     case FETCH_DATA_SUCCESS:
+      let arrMeals = { breakfast: {}, brunch: {}, lunch: {}, dinner: {} };
+      action.payload.data[0].meals.forEach((e) => {
+        arrMeals = { ...arrMeals, [e.mealName]: e };
+      });
       return {
         ...state,
-        login: { data: action.payload.data[0] },
+        login: {
+          ...state.login,
+          weight: action.payload.data[0].weights[0].currentWeight,
+          firstName: action.payload.data[0].firstName,
+          data: action.payload.data[0],
+        },
         drinks: {
           done: action.payload.data[0].dailyWaterCups[
             action.payload.data[0].dailyWaterCups.length - 1
@@ -80,13 +92,40 @@ const UserReducer = (state = initialState, action) => {
             action.payload.data[0].dailySteps.length - 1
           ].id,
         },
+        meals: {
+          breakfast: arrMeals.breakfast,
+          brunch: arrMeals.brunch,
+          lunch: arrMeals.lunch,
+          dinner: arrMeals.dinner,
+        },
+        meds: {
+          list: action.payload.data[0].meds,
+        },
       };
     case FETCH_DATA_FAILURE:
       return {
         ...state,
         login: { error: action.payload.error },
       };
+    //medicine
+    case USER_MEDICINE_ADD:
+      console.log(action.payload.MedicineObj);
+      return {
+        ...state,
+        meds: {
+          list: [
+            ...state.meds.list,
+            {
+              id: 0,
+              name: action.payload.MedicineObj.Name,
+              amount: action.payload.MedicineObj.Amount,
+              times: action.payload.MedicineObj.Times,
+            },
+          ],
+        },
+      };
 
+    //drinks
     case USER_UP_DRINKS:
       return {
         ...state,
@@ -97,6 +136,37 @@ const UserReducer = (state = initialState, action) => {
         ...state,
         drinks: { ...state.drinks, done: state.drinks.done - 1 },
       };
+    case USER_ERROR_DRINKS:
+      return {
+        ...state,
+        drinks: { ...state.drinks, error: action.payload.error },
+      };
+    //meals
+    case USER_MEAL_MINUS:
+      return {
+        ...state,
+        meals: {
+          ...state.meals,
+          [action.payload.mealName]: {
+            ...state.meals[action.payload.mealName],
+            eaten: false,
+          },
+        },
+        kCal: { ...state.kCal, done: state.kCal.done - action.payload.kCal },
+      };
+    case USER_MEAL_PLUS:
+      return {
+        ...state,
+        meals: {
+          ...state.meals,
+          [action.payload.mealName]: {
+            ...state.meals[action.payload.mealName],
+            eaten: true,
+          },
+        },
+        kCal: { ...state.kCal, done: state.kCal.done + action.payload.kCal },
+      };
+
     // case USER_SIGNUP_REQUEST:
     //   return {
     //     ...state,

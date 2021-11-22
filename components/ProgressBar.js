@@ -13,7 +13,6 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function ProgressBar(props) {
-  console.log(props.data);
   return props.index % 2 == 0 ? (
     <View key={props.index}>
       {/**first */}
@@ -22,7 +21,7 @@ export default function ProgressBar(props) {
           <AnimatedCircularProgress
             size={115}
             width={15}
-            fill={props.data.done * (100 / props.data.goal)}
+            fill={parseInt(props.data.done * (100 / props.data.goal))}
             tintColor="#323B53"
             lineCap="round"
             style={{ margin: 10 }}
@@ -31,7 +30,7 @@ export default function ProgressBar(props) {
           >
             {() => (
               <Text style={{ fontWeight: "bold", fontSize: 20 }}>
-                {props.data.done} {props.item.units}
+                {parseInt(props.data.done)} {props.item.units}
               </Text>
             )}
           </AnimatedCircularProgress>
@@ -70,7 +69,7 @@ export default function ProgressBar(props) {
           <AnimatedCircularProgress
             size={120}
             width={15}
-            fill={props.data.done * (100 / props.data.goal)}
+            fill={parseInt(props.data.done * (100 / props.data.goal))}
             tintColor="#B1C7BD"
             lineCap="round"
             style={{ margin: 10 }}
@@ -81,7 +80,7 @@ export default function ProgressBar(props) {
               <Text
                 style={{ fontWeight: "bold", fontSize: 20, color: "#B4D1C4" }}
               >
-                {props.data.done} {props.item.units}
+                {parseInt(props.data.done)} {props.item.units}
               </Text>
             )}
           </AnimatedCircularProgress>

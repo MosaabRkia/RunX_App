@@ -1,35 +1,19 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, Dimensions, View } from "react-native";
+import { StyleSheet, Text, Dimensions, View, Image } from "react-native";
 import BarDashBoard from "../components/BarDashBoard";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import AppButton from "../components/AppButton";
 import { UserData } from "../ContextData/MainContextData";
+import { useSelector } from "react-redux";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function Sport(props) {
-  const fetchData = useContext(UserData);
+  let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
 
-  const windowWidth = Dimensions.get("window").width;
-  const [walked, setWalked] = useState(0);
-  const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    setWalked(
-      parseInt(
-        fetchData.dataFetch[0].dailySteps[
-          fetchData.dataFetch[0].dailySteps.length - 1
-        ].done
-      )
-    );
-    setTotal(
-      parseInt(
-        fetchData.dataFetch[0].dailySteps[
-          fetchData.dataFetch[0].dailySteps.length - 1
-        ].goal
-      )
-    );
-  }, []);
   // 1 km = 3280.84 ft
   return (
     <LinearGradient
@@ -45,7 +29,7 @@ export default function Sport(props) {
         <AnimatedCircularProgress
           size={250}
           width={25}
-          fill={walked * (100 / total)}
+          fill={user.Steps.done * (100 / user.Steps.goal)}
           tintColor="#FC7203"
           lineCap="round"
           style={{ margin: 25, alignSelf: "center" }}
@@ -55,7 +39,7 @@ export default function Sport(props) {
             <Text
               style={{ fontWeight: "bold", fontSize: 30, textAlign: "center" }}
             >
-              {walked}/{total} {"\n"} Steps
+              {user.Steps.done}/{user.Steps.goal} {"\n"} Steps
             </Text>
           )}
         </AnimatedCircularProgress>
@@ -65,10 +49,10 @@ export default function Sport(props) {
               fontSize: 60,
               fontWeight: "bold",
               alignSelf: "center",
-              color: "#1C2023",
+              color: "white", //#1C2023
             }}
           >
-            Walk
+            Walk Steps
           </Text>
         </View>
 
@@ -79,15 +63,26 @@ export default function Sport(props) {
             margin: 10,
             borderBottomWidth: 1,
             width: 0.8 * windowWidth,
+            borderBottomColor: "#FC7203",
           }}
         >
-          <View style={{ marginLeft: `${walked * (100 / total) - 5}%` }}>
+          <View
+            style={{
+              marginLeft: `${user.Steps.done * (100 / user.Steps.goal) - 5}%`,
+            }}
+          >
             <Text
-              style={{ position: "absolute", top: 30, left: -5, width: 100 }}
+              style={{
+                position: "absolute",
+                top: 30,
+                left: 5,
+                width: 100,
+                color: "white",
+              }}
             >
-              {walked}
+              {user.Steps.done}
             </Text>
-            <Icon name="walking" color={"black"} size={25} />
+            <Icon name="walking" color={"white"} size={25} />
           </View>
         </View>
         <View
@@ -98,10 +93,17 @@ export default function Sport(props) {
             justifyContent: "space-between",
           }}
         >
-          <Text>0</Text>
-          <Text>{total}</Text>
+          <Text style={{ color: "#FC7203" }}>0</Text>
+          <Text style={{ color: "#FC7203" }}>{user.Steps.goal}</Text>
         </View>
       </View>
+      <Image
+        key={"imgGif"}
+        style={styles.photoCss}
+        source={{
+          uri: "https://c.tenor.com/xyjrFBYQyjcAAAAi/nkf-nkfmy.gif",
+        }}
+      />
     </LinearGradient>
   );
 }
@@ -109,5 +111,10 @@ export default function Sport(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  photoCss: {
+    alignSelf: "center",
+    width: 0.61 * windowWidth,
+    height: 0.315 * windowHeight,
   },
 });

@@ -39,12 +39,18 @@ export default function MainPageBeforeLogin({ navigation }) {
     }
   }
   useEffect(() => {
-    console.log(user);
-    if (user.login.token !== null) {
-      // dispatch(getData(user.token));
+    console.log(user.login.token);
+    if (
+      user.login.token !== null &&
+      user.login.token !== false &&
+      user.login.token !== undefined
+    ) {
       setLoginLoading(false);
       navigation.navigate("HomeDrawer");
-    } else setLoginLoading(false);
+    } else {
+      setLoginLoading(false);
+      // alertError("Incorrect Email or Password");
+    }
   }, [user]);
 
   const alertError = (text) => {

@@ -13,7 +13,17 @@ export const FETCH_DATA_SUCCESS = "FETCH_DATA_SUCCESS";
 export const FETCH_DATA_FAILURE = "FETCH_DATA_FAILURE";
 
 //Update Data
+
 //Water Cups
 export const USER_UP_DRINKS = "USER_UP_DRINKS";
 export const USER_DOWN_DRINKS = "USER_DOWN_DRINKS";
 export const LOAD_DRINKS_DATA = "LOAD_DRINKS_DATA";
+export const USER_ERROR_DRINKS = "USER_ERROR_DRINKS";
+
+//Meals
+export const USER_MEAL_PLUS = "USER_MEAL_PLUS";
+export const USER_MEAL_MINUS = "USER_MEAL_MINUS";
+
+//Medicine
+export const USER_MEDICINE_ADD = "USER_MEDICINE_ADD";
+export const USER_MEDICINE_REMOVE = "USER_MEDICINE_REMOVE";

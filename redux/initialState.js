@@ -9,6 +9,8 @@ const initialState = {
     token: null,
     error: "",
     data: null,
+    firstName: "",
+    weight: 0,
   },
   sleeps: {
     done: 0,
@@ -27,6 +29,17 @@ const initialState = {
     error: "",
     goal: 0,
     id: "",
+  },
+  meals: {
+    error: "",
+    dinner: [],
+    breakfast: [],
+    brunch: [],
+    launch: [],
+  },
+  meds: {
+    error: "",
+    list: [],
   },
 };
 
