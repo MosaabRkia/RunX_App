@@ -23,17 +23,57 @@ const UserReducer = (state = initialState, action) => {
     case USER_LOGIN_SUCCESS:
       return {
         ...state,
-        login: { ...state.login, token: action.payload.token },
+        login: { ...state.login, token: action.payload.token, error: "" },
       };
     case USER_LOGIN_FAILURE:
       return {
         ...state,
-        login: { ...state.login, error: action.payload.error },
+        login: { ...state.login, error: "not correct data" },
       };
     case USER_LOGOUT:
       return {
-        ...state,
-        login: { error: "", data: null, token: null },
+        drinks: {
+          done: 0,
+          error: "",
+          goal: 0,
+          id: "",
+        },
+        login: {
+          token: null,
+          error: "",
+          data: null,
+          firstName: "",
+          weight: 0,
+        },
+        sleeps: {
+          done: 0,
+          error: "",
+          goal: 0,
+          id: "",
+        },
+        kCal: {
+          done: 0,
+          error: "",
+          goal: 0,
+          id: "",
+        },
+        Steps: {
+          done: 0,
+          error: "",
+          goal: 0,
+          id: "",
+        },
+        meals: {
+          error: "",
+          dinner: [],
+          breakfast: [],
+          brunch: [],
+          launch: [],
+        },
+        meds: {
+          error: "",
+          list: [],
+        },
       };
     case FETCH_DATA_SUCCESS:
       let arrMeals = { breakfast: {}, brunch: {}, lunch: {}, dinner: {} };
@@ -47,6 +87,7 @@ const UserReducer = (state = initialState, action) => {
           weight: action.payload.data[0].weights[0].currentWeight,
           firstName: action.payload.data[0].firstName,
           data: action.payload.data[0],
+          error: "",
         },
         drinks: {
           done: action.payload.data[0].dailyWaterCups[

@@ -38,17 +38,22 @@ export default function MainPageBeforeLogin({ navigation }) {
       return false;
     }
   }
+
   useEffect(() => {
-    console.log(user.login.token);
+    console.log(user);
+    console.log(user.login.error || "nothing here");
     if (
       user.login.token !== null &&
       user.login.token !== false &&
-      user.login.token !== undefined
+      user.login.token !== undefined &&
+      user.login.error !== "not correct data"
     ) {
       setLoginLoading(false);
       navigation.navigate("HomeDrawer");
     } else {
       setLoginLoading(false);
+      if (user.login.error === "not correct data")
+        alertError("Incorrect Email or Password");
       // alertError("Incorrect Email or Password");
     }
   }, [user]);
@@ -76,6 +81,7 @@ export default function MainPageBeforeLogin({ navigation }) {
     }
 
     dispatch(userLogin(loginData));
+    console.log(dispatch(userLogin(loginData)));
   };
 
   return (

@@ -33,28 +33,23 @@ import MainPageBeforeLogin from "../Pages/MainPageBeforeLogin";
 
 export default function Drawer({ navigation }) {
   const Drawer = createDrawerNavigator();
-
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
 
   return (
     <Drawer.Navigator
       screenOptions={{ headerShown: false }}
       drawerContent={(props) => (
-        <DrawerContent
-          {...props}
-          firstName={user.login.firstName}
-          currentWeight={user.login.weight}
-        />
+        <DrawerContent {...props} data={user.login} meds={user.meds} />
       )}
     >
       {/* <Drawer.Screen name="PedoMetter1" component={Pedometter1} /> */}
       <Drawer.Screen name="LoadingPageBetween" component={LoadingPageBetween} />
-      <Drawer.Screen name="testBg" component={testBG} />
+      {/* <Drawer.Screen name="testBg" component={testBG} /> */}
       <Drawer.Screen name="DashBoard" component={DashBoard} />
       <Drawer.Screen name="Drink" component={Drink} />
       <Drawer.Screen name="Sport" component={Sport} />
       <Drawer.Screen name="Food" component={Food} />
-      <Drawer.Screen name="Food1" component={Food1} />
+      {/* <Drawer.Screen name="Food1" component={Food1} /> */}
       <Drawer.Screen name="Sleep" component={Sleep} />
       <Drawer.Screen name="Logout" component={SplashScreen} />
       <Drawer.Screen name="AddMedicine" component={Medicine} />
@@ -64,8 +59,8 @@ export default function Drawer({ navigation }) {
       <Drawer.Screen name="ShowDailyMeal" component={ShowDailyMeal} />
       <Drawer.Screen name="DailyListMenu" component={DailyListMenu} />
       <Drawer.Screen name="MedicineList" component={MedicineList} />
-      <Drawer.Screen name="EditMedicine" component={EditMedicine} />
-      <Drawer.Screen name="loginPage" component={MainPageBeforeLogin} />
+      {/* <Drawer.Screen name="EditMedicine" component={EditMedicine} /> */}
+      {/* <Drawer.Screen name="loginPage" component={MainPageBeforeLogin} /> */}
       {/* <Drawer.Screen name="SplashScreen" component={SplashScreen}/> */}
     </Drawer.Navigator>
   );

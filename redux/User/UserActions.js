@@ -30,11 +30,9 @@ export const userLoginSuccess = (content) => ({
   },
 });
 
-export const userLoginFailure = (error) => ({
+export const userLoginFailure = () => ({
   type: USER_LOGIN_FAILURE,
-  payload: {
-    error,
-  },
+  payload: {},
 });
 
 //drinks update
@@ -85,7 +83,6 @@ export const autoLogin = (token) => {
 };
 
 export const userLogin = (content) => {
-  console.log(content);
   return (dispatch) => {
     fetch("http://proj17.ruppin-tech.co.il/api/token/Authenticate", {
       method: "POST",
@@ -100,9 +97,8 @@ export const userLogin = (content) => {
     })
       .then((r) => r.json())
       .then((token) => {
-        console.log("103", token);
-        if (token === "false") {
-          dispatch(userLoginFailure("loginError"));
+        if (token === false) {
+          dispatch(userLoginFailure());
           return;
         } else {
           AsyncStorage.setItem("token", token);
@@ -115,7 +111,7 @@ export const userLogin = (content) => {
       })
       .catch((error) => {
         console.log(error.message);
-        dispatch(userLoginFailure(error.message));
+        dispatch(userLoginFailure());
       }); //commit 2
   };
 };
@@ -132,7 +128,6 @@ export const drinksUpdateUser = (content) => {
             ? dispatch(userUpDrinks())
             : dispatch(userDownDrinks());
         else dispatch(userErrorDrinks("Error in Fetch"));
-        console.log(res.data);
       });
   };
 };

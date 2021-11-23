@@ -43,6 +43,7 @@ export function getData(token) {
           else {
             console.log(data);
             dispatch(getDataSuccess(data));
+            return true;
           }
         })
         .catch((error) => {

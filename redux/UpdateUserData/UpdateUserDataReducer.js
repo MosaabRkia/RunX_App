@@ -8,7 +8,6 @@ import {
 import initalState from "../initialState";
 
 const UserDataReducer = (state = initalState, action) => {
-  console.log("here ", state);
   //login actions
   switch (action.type) {
     case LOAD_DRINKS_DATA:

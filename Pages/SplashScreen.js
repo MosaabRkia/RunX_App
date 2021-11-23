@@ -13,14 +13,10 @@ export default function SplashScreen({ navigation }) {
   const dispatch = useDispatch();
   //useEffect
   useEffect(() => {
-    //create load unit load all data
     // AsyncStorage.removeItem("token");
     AsyncStorage.getItem("token").then((data) => {
-      console.log(data);
-
       setTimeout(
         () => {
-          console.log(data);
           if (data !== null) {
             dispatch(autoLogin(data));
             navigation.navigate("HomeDrawer");

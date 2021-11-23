@@ -16,12 +16,13 @@ import {
 } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserData } from "../ContextData/MainContextData";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { sendLogOutUserAction } from "../redux/User/UserActions";
 
 export function DrawerContent(props) {
-  const fetchData = useContext(UserData);
+  const dispatch = useDispatch();
   useEffect(() => {
-    console.log(props.firstName);
+    console.log(props.data);
   }, []);
   return (
     <LinearGradient
@@ -37,10 +38,10 @@ export function DrawerContent(props) {
             />
             <View style={styles.title}>
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                Hello {props.firstName}
+                Hello {props.data.firstName}
               </Text>
               <Caption style={[styles.caption, { fontWeight: "bold" }]}>
-                {props.currentWeight} KiloGram
+                {props.data.weight} KiloGram
               </Caption>
             </View>
           </View>
@@ -91,6 +92,20 @@ export function DrawerContent(props) {
                 props.navigation.navigate("Sport");
               }}
             />
+            {props.meds.list.length > 0 ? (
+              <DrawerItem
+                labelStyle={{ fontWeight: "bold" }}
+                icon={({ color, size }) => (
+                  <Icon name="medical-bag" color={color} size={size} />
+                )}
+                label="Medicine"
+                onPress={() => {
+                  props.navigation.navigate("MedicineList");
+                }}
+              />
+            ) : (
+              <View />
+            )}
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>
@@ -102,8 +117,9 @@ export function DrawerContent(props) {
           )}
           label="Sign Out"
           onPress={() => {
-            AsyncStorage.removeItem("token").then(() => {
-              props.navigation.navigate("loginPage");
+            AsyncStorage.removeItem("token").then(async () => {
+              await props.navigation.navigate("loginPage");
+              dispatch(sendLogOutUserAction());
             });
           }}
         />

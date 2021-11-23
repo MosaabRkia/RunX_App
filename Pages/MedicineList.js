@@ -26,7 +26,7 @@ export default function MedicineList(props) {
   ];*/
   return (
     <LinearGradient
-      style={{ flex: 1 }}
+      style={styles.container}
       colors={["#92C6BC", "#8D9A93", "#536976", "#273035", "#101011"]}
     >
       <TittleBarAndArrow
@@ -35,19 +35,26 @@ export default function MedicineList(props) {
         iconSize={40}
         text="Your Medics List"
       />
-      <ScrollView style={{ alignSelf: "center", marginTop: 10 }}>
+      <ScrollView
+        style={{
+          alignSelf: "center",
+          marginTop: 10,
+          // borderRadius: 10,
+          // borderWidth: 1,
+        }}
+      >
         {user.meds.list &&
           user.meds.list.map((e, index) => {
             return <BarMedicine key={index} key={index} item={e} />;
           })}
       </ScrollView>
-      <Image
+      {/* <Image
         key={"imgGif"}
         style={styles.photoCss}
         source={{
           uri: "https://c.tenor.com/wjWgNzw3uw0AAAAi/nkf-nkfmy.gif",
         }}
-      />
+      /> */}
     </LinearGradient>
   );
 }
@@ -60,7 +67,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: 0.73 * windowWidth,
     height: 0.345 * windowHeight,
-    position: "absolute",
+    position: "relative",
     bottom: 0,
   },
 });
