@@ -1,7 +1,5 @@
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../UserData/UserDataActions";
-import { updateDrinkData } from "../UpdateUserData/UpdateUserDataActions";
 import {
   //USER
   USER_LOGIN_SUCCESS,
@@ -52,27 +50,14 @@ export const userErrorDrinks = (content) => ({
 });
 
 //register
-export const userSignupRequest = () => ({
-  type: USER_SIGNUP_REQUEST,
-});
-
-export const userSignupSuccess = (content) => ({
+export const userRegisterSuccess = () => ({
   type: USER_SIGNUP_SUCCESS,
-  payload: {
-    _id: content._id,
-    firstName: content.firstName,
-    lastName: content.lastName,
-    email: content.email,
-    password: content.password,
-    status: content.status,
-  },
+  payload: {},
 });
 
-export const userSignupFailure = (error) => ({
+export const userRegisterFailure = () => ({
   type: USER_SIGNUP_FAILURE,
-  payload: {
-    error,
-  },
+  payload: {},
 });
 
 export const autoLogin = (token) => {
@@ -84,35 +69,38 @@ export const autoLogin = (token) => {
 
 export const userLogin = (content) => {
   return (dispatch) => {
-    fetch("http://proj17.ruppin-tech.co.il/api/token/Authenticate", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    axios
+      .post("https://localhost:44324/api/token/Authenticate", {
         Email: content.loginEmail.toLowerCase(),
         Password: content.loginPassword,
-      }),
-    })
-      .then((r) => r.json())
-      .then((token) => {
-        if (token === false) {
+      })
+      .then((res) => {
+        if (res.data === false) {
           dispatch(userLoginFailure());
           return;
         } else {
-          AsyncStorage.setItem("token", token);
-          dispatch(userLoginSuccess(token));
+          AsyncStorage.setItem("token", res.data);
+          dispatch(userLoginSuccess(res.data));
         }
-        dispatch(getData(token));
+        dispatch(getData(res.data));
       })
-      .then(() => {
-        dispatch(updateDrinkData());
-      })
+      // .then((token) => {
+      //   console.log("2");
+      //   console.log(token);
+      //   console.log("3");
+      //   if (token === false) {
+      //     dispatch(userLoginFailure());
+      //     return;
+      //   } else {
+      //     AsyncStorage.setItem("token", token);
+      //     dispatch(userLoginSuccess(token));
+      //   }
+      //   dispatch(getData(token));
+      // })
       .catch((error) => {
         console.log(error.message);
         dispatch(userLoginFailure());
-      }); //commit 2
+      });
   };
 };
 
@@ -120,7 +108,7 @@ export const drinksUpdateUser = (content) => {
   return (dispatch) => {
     axios
       .get(
-        `http://proj17.ruppin-tech.co.il/api/UpdateData/updateCupsWater/${content.type}/${content.id}`
+        `https://localhost:44324/api/UpdateData/updateCupsWater/${content.type}/${content.id}`
       )
       .then((res) => {
         if (res.data === true)
@@ -131,59 +119,27 @@ export const drinksUpdateUser = (content) => {
       });
   };
 };
-/**try {
-      fetch("http://proj17.ruppin-tech.co.il/api/token/Authenticate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          Email: loginData.loginEmail.toLowerCase(),
-          Password: loginData.loginPassword,
-        }),
-      })
-        .then((r) => r.text())
-        .then((token) => {
-          if (token === "false") {
-            alertError("Email Or Password Isn't Correct");
-            return;
-          } else {
-            AsyncStorage.setItem("token", token);
-            navigation.navigate("HomeDrawer");
-            setLoginLoading(false);
-            setLoginData({ ...loginData, loginPassword: null });
-          }
-        });
-    } catch (e) {
-      console.log("error => " + e);
-      navigation.navigate("loginPage");
-    } */
 
-export function sendSignUpUser(userData, votes, fundName, chanel) {
+export function sendRegisterUser(content) {
+  console.log(content);
   return (dispatch) => {
     axios
-      .post("/new-user/add-user", {
-        votes,
-        fundName,
-        chanel,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        phone: userData.phone,
-        password: userData.password, //need to be added in page 13
-        // fundName: userfundName, //need to be updated in the page 4
-        // userchanel: userchanel, //need to be updated in the page 4
-        // votes: Votes,
-        // newArticle: Article[0],
-      })
+      .post("https://localhost:44324/api/user/create", content)
       .then((res) => {
         console.log(res.data);
-        //dispatch(userSignupSuccess(res.data)); //the server team is
+        if (res.data === true) {
+          dispatch(userRegisterSuccess());
+          return;
+        } else {
+          dispatch(userRegisterFailure());
+          return;
+        }
       })
       .catch((error) => {
         console.log(error.message);
-        ///dispatch(userLoginFailure(error.message));
-      }); //commit 2
+        dispatch(userRegisterFailure());
+        ///dispatch(error register);
+      });
   };
 }
 

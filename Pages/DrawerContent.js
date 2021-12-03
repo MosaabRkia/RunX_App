@@ -38,10 +38,10 @@ export function DrawerContent(props) {
             />
             <View style={styles.title}>
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                Hello {props.data.firstName}
+                Hello {props.firstName}
               </Text>
               <Caption style={[styles.caption, { fontWeight: "bold" }]}>
-                {props.data.weight} KiloGram
+                {props.currentWeight} KiloGram
               </Caption>
             </View>
           </View>
@@ -80,7 +80,7 @@ export function DrawerContent(props) {
                 props.navigation.navigate("Sleep");
               }}
             />
-            {/* sleep */}
+            {/* sport */}
             <DrawerItem
               labelStyle={{ fontWeight: "bold" }}
               style={styles.iconSpace}
@@ -92,6 +92,19 @@ export function DrawerContent(props) {
                 props.navigation.navigate("Sport");
               }}
             />
+            {/* graph */}
+            <DrawerItem
+              labelStyle={{ fontWeight: "bold" }}
+              style={styles.iconSpace}
+              icon={({ color, size }) => (
+                <Icon name="history" color={color} size={size} />
+              )}
+              label="History Graph"
+              onPress={() => {
+                props.navigation.navigate("Graph");
+              }}
+            />
+            {/* medicine */}
             {props.meds.list.length > 0 ? (
               <DrawerItem
                 labelStyle={{ fontWeight: "bold" }}
@@ -117,10 +130,13 @@ export function DrawerContent(props) {
           )}
           label="Sign Out"
           onPress={() => {
-            AsyncStorage.removeItem("token").then(async () => {
-              await props.navigation.navigate("loginPage");
-              dispatch(sendLogOutUserAction());
-            });
+            AsyncStorage.removeItem("token")
+              .then(() => {
+                dispatch(sendLogOutUserAction());
+              })
+              .then(() => {
+                props.navigation.navigate("loginPage");
+              });
           }}
         />
       </Drawer.Section>

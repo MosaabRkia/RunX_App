@@ -4,6 +4,7 @@ const initialState = {
     error: "",
     goal: 0,
     id: "",
+    listDrinks: [],
   },
   login: {
     token: null,
@@ -12,23 +13,29 @@ const initialState = {
     firstName: "",
     weight: 0,
   },
+  weight: {
+    listWeights: [],
+  },
   sleeps: {
     done: 0,
     error: "",
     goal: 0,
     id: "",
+    listSleeps: [],
   },
   kCal: {
     done: 0,
     error: "",
     goal: 0,
     id: "",
+    listKcals: [],
   },
   Steps: {
     done: 0,
     error: "",
     goal: 0,
     id: "",
+    listSteps: [],
   },
   meals: {
     error: "",
@@ -40,6 +47,10 @@ const initialState = {
   meds: {
     error: "",
     list: [],
+  },
+  register: {
+    error: "",
+    success: false,
   },
 };
 

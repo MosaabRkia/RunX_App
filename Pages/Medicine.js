@@ -8,6 +8,7 @@ import {
   TextInput,
   Dimensions,
 } from "react-native";
+import AwesomeAlert from "react-native-awesome-alerts";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import TittleBarAndArrow from "../components/TittleBarAndArrow";
@@ -15,6 +16,7 @@ import AppButton from "../components/AppButton";
 import Icon from "react-native-vector-icons/AntDesign";
 import { useSelector, useDispatch } from "react-redux";
 import { medicineEdit } from "../redux/UpdateUserData/UpdateUserDataActions";
+import { getData } from "../redux/UserData/UserDataActions";
 
 export default function Medicine(props) {
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
@@ -35,8 +37,15 @@ export default function Medicine(props) {
   const [array, setArray] = useState([]);
   const [arrayFetch, setArrayFetch] = useState([]);
 
+  //alert
+  const [alert, setAlert] = useState({
+    text: "",
+    show: false,
+  });
+
   const sendToFetch = async () => {
     console.log(user.login.data.id);
+
     await dispatch(
       medicineEdit({
         type: "ADD",
@@ -48,14 +57,10 @@ export default function Medicine(props) {
         },
       })
     );
-    props.navigation.navigate("DashBoard");
-
-    // console.log({
-    //   UserId: user.login.data.id,
-    //   Name: medicineName,
-    //   Amount: medicineAmount,
-    //   Times: arrayFetch,
-    // });
+    setAlert({
+      show: true,
+      text: "Added",
+    });
   };
   return (
     <LinearGradient
@@ -186,6 +191,22 @@ export default function Medicine(props) {
           color={false}
         />
       </View>
+      <AwesomeAlert
+        show={alert.show}
+        showProgress={false}
+        showCancelButton={false}
+        title="Medicine"
+        titleStyle={{ fontWeight: "bold" }}
+        message={alert.text}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmButtonColor="#364057"
+        onConfirmPressed={() => {
+          setAlert({ ...alert, show: false });
+          props.navigation.navigate("DashBoard");
+        }}
+      />
     </LinearGradient>
   );
 }

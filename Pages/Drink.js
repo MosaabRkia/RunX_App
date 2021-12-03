@@ -1,6 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState, useEffect, useContext, useReducer } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import BarDashBoard from "../components/BarDashBoard";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import DrawCups from "../components/DrawCups";
@@ -9,38 +9,21 @@ import { UserData } from "../ContextData/MainContextData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from "react-redux";
 import { drinksUpdateUser } from "../redux/User/UserActions";
-
-// const reducer = (state, action) => {
-//   switch (action.type) {
-//     case "plus":
-//       fetch(
-//         `https://localhost:44324/api/UpdateData/updateCupsWater/${action.type}/${action.id}`
-//       )
-//         .then((r) => r.text())
-//         .then((data) => {
-//           console.log(data);
-//         });
-//       return { ...state, drank: state.drank + 1 };
-//       break;
-
-//     case "minus":
-//       fetch(
-//         `https://localhost:44324/api/updateData/updateCupsWater/${action.type}/${action.id}`
-//       )
-//         .then((r) => r.text())
-//         .then((data) => {
-//           console.log(data);
-//         });
-//       return { ...state, drank: state.drank - 1 };
-//       break;
-//     default:
-//       return state;
-//   }
-// };
+import AwesomeAlert from "react-native-awesome-alerts";
+import * as Animatable from "react-native-animatable";
 
 export default function Drink(props) {
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
   const dispatch = useDispatch();
+
+  //useState
+  const [loading, setLoading] = useState();
+
+  //alert
+  const [alert, setAlert] = useState({
+    text: "",
+    show: false,
+  });
 
   return (
     <LinearGradient
@@ -101,46 +84,91 @@ export default function Drink(props) {
             </View>
           ))}
         </View>
-        <View
-          style={{
-            justifyContent: "space-around",
-            flexDirection: "row",
-            marginTop: 10,
-          }}
-        >
-          <TouchableOpacity
-            style={{ alignSelf: "center" }}
-            onPress={() => {
-              if (user.drinks.goal > user.drinks.done) {
-                let data = {
-                  type: "plus",
-                  id: user.drinks.id,
-                };
-                dispatch(drinksUpdateUser(data));
-              }
+        {loading ? (
+          //loading
+          <Animatable.View
+            animation="pulse"
+            easing="ease-out"
+            iterationCount="infinite"
+            style={{ textAlign: "center" }}
+          >
+            <Image
+              source={require("../assets/logoOnlyR.png")}
+              style={{ width: 85, height: 85, alignSelf: "center" }}
+            />
+          </Animatable.View>
+        ) : (
+          <View
+            style={{
+              justifyContent: "space-around",
+              flexDirection: "row",
+              marginTop: 10,
             }}
           >
-            <Icon name={"pluscircleo"} size={100} color="#FC7203" />
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={{ alignSelf: "center" }}
+              onPress={async () => {
+                if (user.drinks.goal > user.drinks.done) {
+                  let data = {
+                    type: "plus",
+                    id: user.drinks.id,
+                  };
+                  setLoading(true);
+                  await dispatch(drinksUpdateUser(data));
+                  setTimeout(() => {
+                    setLoading(false);
+                    setAlert({
+                      show: true,
+                      text: "Added a Cup",
+                    });
+                  }, 2 * 1000);
+                }
+              }}
+            >
+              <Icon name={"pluscircleo"} size={100} color="#FC7203" />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{ alignSelf: "center" }}
-            onPress={() => {
-              if (0 < user.drinks.done) {
-                let data = {
-                  type: "minus",
-                  id: user.drinks.id,
-                };
-                dispatch(drinksUpdateUser(data));
-              }
-            }}
-          >
-            {/* minuscircleo */}
-            <Icon name={"minuscircleo"} size={100} color="#FC7203" />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={{ alignSelf: "center" }}
+              onPress={async () => {
+                if (0 < user.drinks.done) {
+                  let data = {
+                    type: "minus",
+                    id: user.drinks.id,
+                  };
+                  setLoading(true);
+                  await dispatch(drinksUpdateUser(data));
+                  setTimeout(() => {
+                    setLoading(false);
+                    setAlert({
+                      show: true,
+                      text: "Removed a Cup",
+                    });
+                  }, 2 * 1000);
+                }
+              }}
+            >
+              {/* minuscircleo */}
+              <Icon name={"minuscircleo"} size={100} color="#FC7203" />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
-      {/*addddddddddddddddddd keyyyyyyys  */}
+      <AwesomeAlert
+        show={alert.show}
+        showProgress={false}
+        showCancelButton={false}
+        title="Drink Form"
+        titleStyle={{ fontWeight: "bold" }}
+        message={alert.text}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmButtonColor="#364057"
+        onConfirmPressed={() => {
+          setAlert({ ...alert, show: false });
+        }}
+      />
     </LinearGradient>
   );
 }

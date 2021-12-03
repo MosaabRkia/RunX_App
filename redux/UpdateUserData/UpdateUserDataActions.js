@@ -10,6 +10,7 @@ import {
   USER_MEAL_PLUS,
   USER_MEAL_MINUS,
   USER_MEDICINE_ADD,
+  USER_MEDICINE_REMOVE,
 } from "../actionsTypes";
 
 //Drinks Actions
@@ -31,17 +32,14 @@ export const fetchDataFailure = (error) => ({
     error,
   },
 });
-export const updateDrinkData = () => ({
-  type: LOAD_DRINKS_DATA,
-  payload: {},
-});
+
 //drink water function
 export function drinkControl(content) {
   console.log(content);
   return (dispatch) => {
     axios
       .get(
-        `http://proj17.ruppin-tech.co.il/api/UpdateData/updateCupsWater/${content.type}/${content.id}`
+        `https://localhost:44324/api/UpdateData/updateCupsWater/${content.type}/${content.id}`
       )
       .then((res) => {
         console.log(res.data);
@@ -79,7 +77,7 @@ export function changeMealStatus(content) {
   return (dispatch) => {
     axios
       .get(
-        `http://proj17.ruppin-tech.co.il/api/updateData/updateEatenFood/${content.mealId}/${content.kCalId}`
+        `https://localhost:44324/api/updateData/updateEatenFood/${content.mealId}/${content.kCalId}`
       )
       .then((res) => {
         if (res.data !== -1)
@@ -105,9 +103,9 @@ export function changeMealStatus(content) {
 
 //Medicine actions
 export const medicineRemove = (content) => ({
-  type: USER_MEAL_PLUS,
+  type: USER_MEDICINE_REMOVE,
   payload: {
-    id: content,
+    idToRemove: content,
   },
 });
 export const medicineAdd = (MedicineObj) => ({
@@ -121,7 +119,7 @@ export const medicineAdd = (MedicineObj) => ({
 export const medicineEdit = (content) => {
   return (dispatch) => {
     if (content.type === "ADD") {
-      fetch("http://proj17.ruppin-tech.co.il/api/updateData/addMedicine", {
+      fetch("https://localhost:44324/api/updateData/addMedicine", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -140,7 +138,7 @@ export const medicineEdit = (content) => {
     } else {
       axios
         .get(
-          `http://proj17.ruppin-tech.co.il/api/updateData/removeMedicine/${content.id}`
+          `https://localhost:44324/api/updateData/removeMedicine/${content.id}`
         )
         .then((res) => {
           dispatch(medicineRemove(content.id));

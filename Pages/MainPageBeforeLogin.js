@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   StyleSheet,
@@ -11,20 +11,25 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Animatable from "react-native-animatable";
 import { useDispatch, useSelector } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userLogin } from "../redux/User/UserActions";
-import { getData } from "../redux/UserData/UserDataActions";
+import AwesomeAlert from "react-native-awesome-alerts";
+
 export default function MainPageBeforeLogin({ navigation }) {
   //redux
   const dispatch = useDispatch();
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
 
   //useState
+  const [alert, setAlert] = useState({
+    text: "",
+    show: false,
+  });
+
   const [loginData, setLoginData] = useState({
     loginPassword: null,
     loginEmail: null,
   });
-  const [messege, setMessege] = useState(null);
+
   const [loginLoading, setLoginLoading] = useState(false);
 
   // validation email
@@ -38,10 +43,10 @@ export default function MainPageBeforeLogin({ navigation }) {
       return false;
     }
   }
-
   useEffect(() => {
-    console.log(user);
-    console.log(user.login.error || "nothing here");
+    setLoginLoading(false);
+  }, [alert]);
+  useEffect(() => {
     if (
       user.login.token !== null &&
       user.login.token !== false &&
@@ -50,38 +55,31 @@ export default function MainPageBeforeLogin({ navigation }) {
     ) {
       setLoginLoading(false);
       navigation.navigate("HomeDrawer");
+      return;
     } else {
       setLoginLoading(false);
-      if (user.login.error === "not correct data")
-        alertError("Incorrect Email or Password");
-      // alertError("Incorrect Email or Password");
+      if (user.login.error === "not correct data") {
+        setAlert({ show: true, text: "Incorrect Email or Password" });
+        return;
+      }
     }
   }, [user]);
-
-  const alertError = (text) => {
-    setMessege(text);
-    setLoginLoading(false);
-    setTimeout(() => {
-      setMessege(null);
-    }, 5 * 1000);
-  };
 
   const checkLogin = () => {
     setLoginLoading(true);
     if (!validateEmail(loginData.loginEmail)) {
-      alertError("Email Format isn't correct");
+      setAlert({ show: true, text: "Email Format isn't correct" });
       return;
     }
     if (
       (loginData.loginPassword && loginData.loginPassword.length === 0) ||
       loginData.loginPassword === null
     ) {
-      alertError("Please Fill Password Input");
+      setAlert({ show: true, text: "Please Fill Password Input" });
       return;
     }
 
     dispatch(userLogin(loginData));
-    console.log(dispatch(userLogin(loginData)));
   };
 
   return (
@@ -103,13 +101,13 @@ export default function MainPageBeforeLogin({ navigation }) {
         <Text
           style={{
             color: "#CCCCCC",
-            fontSize: messege !== null ? 20 : 50,
+            fontSize: 50,
             marginBottom: 35,
             marginTop: 50,
             alignSelf: "center",
           }}
         >
-          {messege !== null ? messege : "Login"}
+          Login
         </Text>
         <KeyboardAwareScrollView>
           <TextInput
@@ -185,6 +183,23 @@ export default function MainPageBeforeLogin({ navigation }) {
           </TouchableOpacity>
         </KeyboardAwareScrollView>
       </Animatable.View>
+
+      {/* show alert with textAlert  */}
+      <AwesomeAlert
+        show={alert.show}
+        showProgress={false}
+        showCancelButton={false}
+        title="Login Form"
+        titleStyle={{ fontWeight: "bold" }}
+        message={alert.text}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmButtonColor="#364057"
+        onConfirmPressed={() => {
+          setAlert({ ...alert, show: false });
+        }}
+      />
     </LinearGradient>
   );
 }

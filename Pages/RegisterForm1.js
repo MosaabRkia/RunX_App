@@ -14,23 +14,7 @@ import TittleBarAndArrow from "../components/TittleBarAndArrow";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import CirclesRegister from "../components/CirclesRegister";
-
-/*
-             Goal:null,
-            FirstName:null,
-            Email:null,
-            Password:null,
-            birdthday:Date(null),
-            weight:Number(null),
-            height:Number(null),
-            goalWeight:Number(null),
-            fruits:[x,y,z],
-            vegetables:[x,y,z],
-            meats:[x,y,z],
-            snacks:[x,y,z],
-            drinks:[x,y,z],
-            bakery:[x,y,z]
-*/
+import AwesomeAlert from "react-native-awesome-alerts";
 
 export default function RegisterForm1({ route, navigation }) {
   //useState
@@ -40,6 +24,13 @@ export default function RegisterForm1({ route, navigation }) {
     Password: null,
     Gender: null,
   });
+
+  //alert
+  const [alert, setAlert] = useState({
+    text: "",
+    show: false,
+  });
+
   const [currentPassword, setCurrentPassword] = useState(null);
   const [showPasswords, setShowPasswords] = useState({
     showPassword: true,
@@ -47,10 +38,10 @@ export default function RegisterForm1({ route, navigation }) {
   });
   const [message, setMessage] = useState(null);
 
-  const { Goal } = route.params;
+  const firstData = route.params;
   //useEffect
   useEffect(() => {
-    console.log(Goal);
+    console.log(firstData);
   }, []);
 
   //goBack const
@@ -82,27 +73,36 @@ export default function RegisterForm1({ route, navigation }) {
         data.FirstName === null ||
         (data.FirstName.length < 3 && /^[a-zA-Z]+$/.test(data.FirstName))
       ) {
-        setMsg("first name problem");
+        setAlert({ show: true, text: "Enter 3 Letters At Least - First Name" });
         return;
       }
       if (!validateEmail(data.Email)) {
-        setMsg("Email problem");
+        setAlert({ show: true, text: "Email Format Is Not Valid" });
         return;
       }
       if (data.Password === null || data.Password.length < 6) {
-        setMsg("Password problem");
+        setAlert({
+          show: true,
+          text: "Password Empty or Shorter Than 6 Characters",
+        });
         return;
       }
       if (data.Password !== currentPassword) {
-        setMsg("cur Password problem");
+        setAlert({ show: true, text: "Passwords Do Not Match " });
         return;
       }
       if (data.Gender === null) {
-        setMsg("Gender problem");
+        setAlert({ show: true, text: "Please Select Gender" });
         return;
       }
       console.log(data);
-      navigation.navigate("register3", { data: { ...data, Goal: Goal } });
+      navigation.navigate("register3", {
+        data: {
+          ...data,
+          PushNotifications: firstData.PushNotifications,
+          Goal: firstData.Goal,
+        },
+      });
 
       // })
     } catch (e) {
@@ -214,7 +214,7 @@ export default function RegisterForm1({ route, navigation }) {
               placeholderTextColor="#364057"
               onChangeText={setCurrentPassword}
               value={undefined}
-              placeholder="Current Password"
+              placeholder="ReEnter Password"
               secureTextEntry={showPasswords.showCurPassword}
             />
 
@@ -328,6 +328,21 @@ export default function RegisterForm1({ route, navigation }) {
           </TouchableOpacity>
         </KeyboardAwareScrollView>
       </Animatable.View>
+      <AwesomeAlert
+        show={alert.show}
+        showProgress={false}
+        showCancelButton={false}
+        title="Register Form"
+        titleStyle={{ fontWeight: "bold" }}
+        message={alert.text}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmButtonColor="#364057"
+        onConfirmPressed={() => {
+          setAlert({ ...alert, show: false });
+        }}
+      />
     </LinearGradient>
   );
 }

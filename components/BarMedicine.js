@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FlatList,
   ScrollView,
@@ -6,16 +6,18 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { medicineEdit } from "../redux/UpdateUserData/UpdateUserDataActions";
+import { getData } from "../redux/UserData/UserDataActions";
 
 export default function BarMedicine(props) {
   //dimention
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
-
+  const [loading, setLoading] = useState(false);
   //redux
   const dispatch = useDispatch();
 
@@ -46,13 +48,30 @@ export default function BarMedicine(props) {
           right: "2%",
         }}
       >
-        <TouchableOpacity
-          onPress={() => {
-            dispatch(medicineEdit({ type: "REMOVE", id: props.item.id }));
-          }}
-        >
-          <Icon name="closecircleo" color={"black"} size={50} />
-        </TouchableOpacity>
+        {loading ? (
+          <Image
+            source={{
+              uri: "https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif",
+            }}
+            style={{ width: 50, height: 50 }}
+          />
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(medicineEdit({ type: "REMOVE", id: props.item.id }));
+              setLoading(true);
+              setTimeout(() => {
+                setLoading(false);
+                props.setAlert({
+                  show: true,
+                  text: "Removed",
+                });
+              }, 2 * 1000);
+            }}
+          >
+            <Icon name="closecircleo" color={"black"} size={50} />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

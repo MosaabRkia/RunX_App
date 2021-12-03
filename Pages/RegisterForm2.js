@@ -16,6 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import CirclesRegister from "../components/CirclesRegister";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 /*
              plan:null,
@@ -47,6 +48,12 @@ export default function RegisterForm2({ route, navigation }) {
     GoalWeight: null,
   });
 
+  //alert
+  const [alert, setAlert] = useState({
+    text: "",
+    show: false,
+  });
+
   const [healthyWeight, setHealthyWeight] = useState(null);
   const [showCalcWeight, setShowCalcWeight] = useState(false);
   const [showGoalInputText, setShowGoalInputText] = useState(true);
@@ -72,6 +79,9 @@ export default function RegisterForm2({ route, navigation }) {
   //route
   const { data } = route.params;
 
+  useEffect(() => {
+    console.log(data);
+  }, []);
   //function format date
   function formatDate(date) {
     var d = new Date(date),
@@ -189,7 +199,7 @@ export default function RegisterForm2({ route, navigation }) {
   const OnSelectSaveData = async () => {
     try {
       if (info.DateOfBirth === "yyyy-mm-dd") {
-        setMsg("ops wrong date");
+        setAlert({ show: true, text: "Date Is Not Valid" });
         return;
       }
 
@@ -198,8 +208,7 @@ export default function RegisterForm2({ route, navigation }) {
         info.Weights[0].CurrentWeight === null ||
         info.Weights[0].CurrentWeight === ""
       ) {
-        setMsg("Weight not a number or empty");
-
+        setAlert({ show: true, text: "Weight Is Not A Number Or Empty" });
         return;
       }
 
@@ -208,8 +217,7 @@ export default function RegisterForm2({ route, navigation }) {
         info.Heights[0].CurrentHeight === null ||
         info.Heights[0].CurrentHeight === ""
       ) {
-        setMsg("Height not a number");
-
+        setAlert({ show: true, text: "Height Is Not A Number Or Empty" });
         return;
       }
       if (
@@ -217,23 +225,27 @@ export default function RegisterForm2({ route, navigation }) {
         info.GoalWeight === null ||
         info.GoalWeight === ""
       ) {
-        setMsg("goal Weight not a number");
+        setAlert({ show: true, text: "Goal Weight Is Not A Number Or Empty" });
         return;
       }
       if (
         data.Goal === "Gain" &&
         Number(info.Weights[0].CurrentWeight) > Number(info.GoalWeight)
       ) {
-        setMsg("ops your goal is less than your weight you are on gain goal");
-
+        setAlert({
+          show: true,
+          text: "Your Goal Must Be Higher Than You Current Weight",
+        });
         return;
       }
       if (
         data.Goal === "lose" &&
         Number(info.Weights[0].CurrentWeight) < Number(info.GoalWeight)
       ) {
-        setMsg("ops your goal is higher than your weight you are on lose goal");
-
+        setAlert({
+          show: true,
+          text: "Your Goal Must Be Lower Than You Current Weight",
+        });
         return;
       }
 
@@ -242,7 +254,6 @@ export default function RegisterForm2({ route, navigation }) {
       navigation.navigate("register4", { data: allData });
     } catch (e) {
       console.log("Error in line 29 => ", e);
-      setMsg(e);
     }
   };
 
@@ -382,6 +393,22 @@ export default function RegisterForm2({ route, navigation }) {
           </TouchableOpacity>
         </KeyboardAwareScrollView>
       </Animatable.View>
+
+      <AwesomeAlert
+        show={alert.show}
+        showProgress={false}
+        showCancelButton={false}
+        title="Register Form"
+        titleStyle={{ fontWeight: "bold" }}
+        message={alert.text}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmButtonColor="#364057"
+        onConfirmPressed={() => {
+          setAlert({ ...alert, show: false });
+        }}
+      />
     </LinearGradient>
   );
 }

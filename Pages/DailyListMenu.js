@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, Dimensions, StyleSheet, Image } from "react-native";
 import { useSelector } from "react-redux";
 import BarDailyList from "../components/BarDailyList";
@@ -13,10 +13,6 @@ const meals = ["BreakFast", "Brunch", "Lunch", "Dinner"];
 
 export default function DailyListMenu({ navigation }) {
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
-
-  useEffect(() => {
-    // console.log(user);
-  }, []);
 
   return (
     <LinearGradient

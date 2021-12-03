@@ -28,12 +28,12 @@ export function getData(token) {
   console.log(token);
   return (dispatch) => {
     try {
-      fetch("http://proj17.ruppin-tech.co.il/api/token/decode", {
+      fetch("https://localhost:44324/api/token/decode", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ token: token }),
       })
@@ -57,34 +57,6 @@ export function getData(token) {
   };
   //commit 2
 }
-
-/**try {
-      fetch("http://proj17.ruppin-tech.co.il/api/token/Authenticate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          Email: loginData.loginEmail.toLowerCase(),
-          Password: loginData.loginPassword,
-        }),
-      })
-        .then((r) => r.text())
-        .then((token) => {
-          if (token === "false") {
-            alertError("Email Or Password Isn't Correct");
-            return;
-          } else {
-            AsyncStorage.setItem("token", token);
-            navigation.navigate("HomeDrawer");
-            setLoginLoading(false);
-            setLoginData({ ...loginData, loginPassword: null });
-          }
-        });
-    } catch (e) {
-      console.log("error => " + e);
-      navigation.navigate("loginPage");
-    } */
 
 export function sendSignUpUser(userData, votes, fundName, chanel) {
   return (dispatch) => {

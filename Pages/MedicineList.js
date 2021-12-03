@@ -1,29 +1,28 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
+import AwesomeAlert from "react-native-awesome-alerts";
+import { useDispatch, useSelector } from "react-redux";
 import BarMedicine from "../components/BarMedicine";
 import TittleBarAndArrow from "../components/TittleBarAndArrow";
+import { getData } from "../redux/UserData/UserDataActions";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function MedicineList(props) {
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
+  const dispatch = useDispatch();
 
-  /*const data = [
-    { name: "acamol", amount: 5, times: ["11:10", "11:02", "11:00", "11:00"] },
-    {
-      name: "optalgin",
-      amount: 5,
-      times: ["22:10", "22:02", "22:00", "22:00"],
-    },
-    {
-      name: "yh nothing",
-      amount: 5,
-      times: ["00:10", "00:02", "00:00", "00:00"],
-    },
-  ];*/
+  //alert
+  const [alert, setAlert] = useState({
+    text: "",
+    show: false,
+  });
+
+  useEffect(() => {
+    dispatch(getData(user.login.token));
+  }, []);
   return (
     <LinearGradient
       style={styles.container}
@@ -45,7 +44,14 @@ export default function MedicineList(props) {
       >
         {user.meds.list &&
           user.meds.list.map((e, index) => {
-            return <BarMedicine key={index} key={index} item={e} />;
+            return (
+              <BarMedicine
+                key={index}
+                key={index}
+                item={e}
+                setAlert={(e) => setAlert(e)}
+              />
+            );
           })}
       </ScrollView>
       {/* <Image
@@ -55,6 +61,21 @@ export default function MedicineList(props) {
           uri: "https://c.tenor.com/wjWgNzw3uw0AAAAi/nkf-nkfmy.gif",
         }}
       /> */}
+      <AwesomeAlert
+        show={alert.show}
+        showProgress={false}
+        showCancelButton={false}
+        title="Medicine Form"
+        titleStyle={{ fontWeight: "bold" }}
+        message={alert.text}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmButtonColor="#364057"
+        onConfirmPressed={() => {
+          setAlert({ ...alert, show: false });
+        }}
+      />
     </LinearGradient>
   );
 }

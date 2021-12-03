@@ -9,40 +9,20 @@ import {
   ScrollView,
   TextInput,
   Platform,
-  StatusBar,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import TittleBarAndArrow from "../components/TittleBarAndArrow";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import BarOfFoodChoose from "../components/BarOfFoodChoose";
-import Icon from "react-native-vector-icons/Ionicons";
 import CirclesRegister from "../components/CirclesRegister";
-import { useScrollToTop } from "@react-navigation/native";
-
-/*
-            //  plan:null,
-            // firstName:null,
-            // email:null,
-            // password:null,
-            // birdthday:Date(null),
-            // weight:Number(null),
-            // height:Number(null),
-            // GoalWeight:Number(null),
-            // fruits:[x,y,z],
-            // vegetables:[x,y,z],
-            // meat:[x,y,z],
-            snacks:[x,y,z],
-            // drinks:[x,y,z],
-            // bakery:[x,y,z],
-            // dairy:[x,y,z]
-            // fish:[x,y,z],
-            seeds:[x,y,z]
-            way to calc calories , proteins, water 
-*/
+import { useDispatch, useSelector } from "react-redux";
+import { sendRegisterUser, userLogin } from "../redux/User/UserActions";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 export default function RegisterForm3({ route, navigation }) {
   const { data } = route.params;
 
+  const dispatch = useDispatch();
+  let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
   //useRef
   const scroll_Ref = useRef(null);
 
@@ -64,6 +44,12 @@ export default function RegisterForm3({ route, navigation }) {
   const [loading, setLoading] = useState(true);
   const [foodData, setFoodData] = useState([]);
   const [text, setText] = useState("");
+
+  //alert
+  const [alert, setAlert] = useState({
+    text: "",
+    show: false,
+  });
   //useEffect
   useEffect(() => {
     fetch(
@@ -78,6 +64,24 @@ export default function RegisterForm3({ route, navigation }) {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    console.log(data);
+    if (user.register.success === true) {
+      dispatch(
+        userLogin({
+          loginEmail: data.Email,
+          loginPassword: data.Password,
+        })
+      );
+      navigation.navigate("HomeDrawer");
+    }
+    if (
+      user.register.success === false &&
+      user.register.error === "error in register"
+    )
+      navigation.navigate("loginPage");
+  }, [user]);
 
   useEffect(() => {
     search();
@@ -156,12 +160,12 @@ export default function RegisterForm3({ route, navigation }) {
   };
 
   const createMeals = () => {
-    let currentYear = new Date();
-    let ageCalc =
+    let currentYear = new Date(); // create date now
+    let ageCalc = // get age
       currentYear.getFullYear() - String(data.DateOfBirth).substr(0, 4);
-    var mealsArr = [];
-    var proteins = +data.Weights[0].CurrentWeight * 2.1 * 0.25;
-    let calories =
+    var mealsArr = []; //empty array that will return the meals array after created
+    var proteins = +data.Weights[0].CurrentWeight * 2.1 * 0.25; // protein calculator
+    let calories = // calories calculator
       data.Gender === "male"
         ? +66 +
           6.2 * +data.Weights[0].CurrentWeight +
@@ -171,21 +175,14 @@ export default function RegisterForm3({ route, navigation }) {
           4.35 * +data.Weights[0].CurrentWeight +
           4.7 * +data.Heights[0].CurrentHeight -
           4.7 * ageCalc;
-    /**
- * "meat",
-    "fruits",
-    "vegatables" ,,'snacks',
-    "drinks",
-    "sea food",
-    "bakery",
-    "seeds",
-    "dairy",
- */
+
+    // switch on the goal of client
     switch (data.Goal) {
       case "lose":
-        calories = calories * 0.71;
-        var fats = 0.7 * +data.Weights[0].CurrentWeight * 0.25;
+        calories = calories * 0.71; // create the appropriate calculation of calories
+        var fats = 0.7 * +data.Weights[0].CurrentWeight * 0.25; // create the appropriate calculation of fats
         mealsArr.push({
+          // send the data to the helper function function
           mealName: "breakfast",
           Date: formatDateToday(),
           ItemsList: createMealsList(0, 0.17 * calories, proteins, fats, {
@@ -196,8 +193,10 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 1,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
+          // send the data to the helper function function
           mealName: "brunch",
           Date: formatDateToday(),
           ItemsList: createMealsList(1, 0.14 * calories, proteins, fats, {
@@ -208,8 +207,10 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 2,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
+          // send the data to the helper function function
           mealName: "lunch",
           Date: formatDateToday(),
           ItemsList: createMealsList(2, 0.2 * calories, proteins, fats, {
@@ -219,8 +220,10 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 1,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
+          // send the data to the helper function function
           mealName: "dinner",
           Date: formatDateToday(),
           ItemsList: createMealsList(3, 0.2 * calories, proteins, fats, {
@@ -230,13 +233,8 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 1,
             seeds: 1,
           }),
+          eaten: false,
         });
-        /*
-         * breakfast 0.17 - 8:00 -- mealId - 0
-         * brunch 0.14 - 13:00 -- mealId - 1
-         * lunch 0.20 - 16:00 -- mealId - 2
-         * dinner 0.20 - 19:00 -- mealId - 3
-         */
         break;
 
       case "gain":
@@ -253,6 +251,7 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 1,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
           mealName: "brunch",
@@ -265,6 +264,7 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 2,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
           mealName: "lunch",
@@ -277,6 +277,7 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 2,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
           mealName: "dinner",
@@ -290,13 +291,8 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 1,
             seeds: 1,
           }),
+          eaten: false,
         });
-        /*
-         * breakfast 0.27 - 8:00
-         * brunch 0.20 - 13:00
-         * lunch 0.19 - 16:00
-         * dinner 0.30 - 19:00
-         */
         break;
 
       case "healthy":
@@ -313,6 +309,7 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 1,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
           mealName: "brunch",
@@ -325,6 +322,7 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 2,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
           mealName: "lunch",
@@ -337,6 +335,7 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 1,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
           mealName: "dinner",
@@ -350,13 +349,9 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 1,
             seeds: 1,
           }),
+          eaten: false,
         });
-        /*
-         * breakfast 0.28 - 8:00
-         * brunch 0.20 - 13:00
-         * lunch 0.29 - 16:00
-         * dinner 0.23 - 19:00
-         */
+
         break;
       default:
         calories = calories * 1;
@@ -372,6 +367,7 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 1,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
           mealName: "brunch",
@@ -384,6 +380,7 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 2,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
           mealName: "lunch",
@@ -396,6 +393,7 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 1,
             seeds: 1,
           }),
+          eaten: false,
         });
         mealsArr.push({
           mealName: "dinner",
@@ -409,6 +407,7 @@ export default function RegisterForm3({ route, navigation }) {
             bakery: 1,
             seeds: 1,
           }),
+          eaten: false,
         });
         break;
     }
@@ -416,9 +415,8 @@ export default function RegisterForm3({ route, navigation }) {
   };
 
   const createMealsList = (mealId, cal, proteins, fats, kindsAmount) => {
-    //[5,1,5,8,6]
-    //[{items}]
     let thisKindsAmounts = {
+      // counter for all kinds to know when stop
       meat: 0,
       fruits: 0,
       vegatables: 0,
@@ -428,22 +426,24 @@ export default function RegisterForm3({ route, navigation }) {
       seeds: 0,
       dairy: 0,
     };
-    var newMeal = [];
+    var newMeal = []; // the value returns the meal
     var done = false;
-    var flag = false;
     var flagLoop = false;
-    var numbersRnd = [];
-    var totalCal = 0;
-    var totalProtein = 0;
-    var totalFats = 0;
-    var selectedItemsArr = getAllSelected();
-    var rnd = Math.floor(Math.random() * selectedItemsArr.length);
-    numbersRnd.push(rnd);
-
+    var flag = false; // flag helper to stop the loop for item
+    // var flagLoop = false; // stop varible will stop the loop
+    var numbersRnd = []; // array  of numbers done in random to not reply on item 2 times in meal
+    var totalCal = 0; // calc of calories total in meal
+    var totalProtein = 0; // calc of protein total in meal
+    var totalFats = 0; // calc of fats total in meal
+    var selectedItemsArr = mainData; // selected items array what choosen in register
+    var rnd = Math.floor(Math.random() * selectedItemsArr.length); // create random number in the selected items to randomly item
+    numbersRnd.push(rnd); // push the randomed item to not duplicate the item in the meal
     do {
       mainData.forEach((mainItem) => {
         //stop the loop faster
         if (flagLoop) return;
+        // if (flagLoop) return;
+
         // stop all loop
         if (
           totalCal + 10 >= cal ||
@@ -458,40 +458,42 @@ export default function RegisterForm3({ route, navigation }) {
         //reset the flag
         flag = false;
 
-        //תנאי עצירה 1
+        //stop condition 1
         if (+mainItem.id === +selectedItemsArr[rnd]) {
+          // check if item added before in meal so stop
           mainItem.mealTimes.forEach((e) => {
             if (+e.mealId === +mealId) {
+              // check if item kind same of what in the map now
               flag = true;
               return;
             }
           });
         } else {
+          // stop at condition 2
           flag = false;
         }
 
-        /*if () {
-          thisKindsAmounts[mainItem.kind] += 1;
-        } else flag = false;*/
-
+        //stop condition 2
         if (flag === false) return;
-        //תנאי עצירה 2
+
         if (
+          // if we add all in the calories not up on the meal calories limit and protein and fats so add values
           totalCal + mainItem.kCal <= cal &&
           totalProtein + mainItem.protein <= proteins &&
           totalFats + mainItem.fats <= fats &&
           thisKindsAmounts[mainItem.kind] + 1 <= kindsAmount[mainItem.kind]
         ) {
-          totalCal += mainItem.kCal;
-          totalProtein += mainItem.protein;
-          totalFats += mainItem.fats;
-          newMeal.push({ foodId: mainItem.id });
-          flagLoop = true;
-          thisKindsAmounts[mainItem.kind] += 1;
+          totalCal += mainItem.kCal; // add calories
+          totalProtein += mainItem.protein; // add protein
+          totalFats += mainItem.fats; // add fats
+          newMeal.push({ foodId: mainItem.id }); // push meal
+          // flagLoop = true;
+          thisKindsAmounts[mainItem.kind] += 1; // count +1 in place of kind
         }
       });
 
       flagLoop = false;
+
       if (numbersRnd.length === selectedItemsArr.length) {
         done = true;
       }
@@ -500,14 +502,14 @@ export default function RegisterForm3({ route, navigation }) {
       // we didnt arrived to all numbers
       if (!done)
         while (
-          numbersRnd.includes(rnd) || // if the numbersRnd array includes the random number
+          numbersRnd.includes(rnd) || // if the numbersRnd array includes the random number (while already added before so rnd new number)
           newMeal.includes(selectedItemsArr[rnd].id) // new meal include the selecteditemsarr in place rnd
         )
-          rnd = Math.floor(Math.random() * selectedItemsArr.length);
+          rnd = Math.floor(Math.random() * selectedItemsArr.length); // random new number
 
-      numbersRnd.push(rnd);
-    } while (!done);
-    return { ...newMeal, eaten: false };
+      numbersRnd.push(rnd); // push the new number
+    } while (!done); //while not done means done not true so complete
+    return newMeal; // return new meal with , {eaten : false }
   };
 
   //save data
@@ -565,55 +567,12 @@ export default function RegisterForm3({ route, navigation }) {
         let lastData = { ...data, ...calcInfo };
         console.log(lastData);
         try {
-          fetch(
-            /*"http://proj17.ruppin-tech.co.il*/ "https://localhost:44324/api/user/create",
-            {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(lastData),
-            }
-          )
-            .then((r) => {
-              r.json();
-            })
-            .then((data) => {
-              console.log("538", data);
-
-              if (data === undefined) navigation.navigate("loginPage");
-              if (data === true) {
-                //go to dashboard and add auto login for user
-                //lastData
-                try {
-                  fetch(
-                    "http://proj17.ruppin-tech.co.il/api/token/Authenticate",
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        Email: lastData.Email.toLowerCase(),
-                        Password: lastData.Password,
-                      }),
-                    }
-                  )
-                    .then((r) => r.text())
-                    .then((token) => {
-                      if (token === "false") {
-                        navigation.navigate("loginPage");
-                      } else {
-                        AsyncStorage.setItem("token", token);
-                        navigation.navigate("HomeDrawer");
-                      }
-                    });
-                } catch (e) {
-                  console.log("error => " + e);
-                  navigation.navigate("loginPage");
-                }
-              }
+          if (getAllSelected().length >= 20)
+            dispatch(sendRegisterUser(lastData));
+          else
+            setAlert({
+              show: true,
+              text: "Please Select At Least 20 Item",
             });
         } catch (error) {
           console.log("error fetch : " + error);
@@ -622,7 +581,6 @@ export default function RegisterForm3({ route, navigation }) {
       } else {
         let upOne = placeKind + 1;
         if (upOne === kinds.length - 1) setButtonText("Confirm");
-        setText("");
         setPlaceKind(upOne);
       }
     } catch (e) {
@@ -703,7 +661,7 @@ export default function RegisterForm3({ route, navigation }) {
               <Text
                 style={{ color: "#D5DDDC", fontSize: 13, textAlign: "center" }}
               >
-                Next
+                {ButtonText}
               </Text>
             </TouchableOpacity>
           </View>
@@ -790,6 +748,21 @@ export default function RegisterForm3({ route, navigation }) {
           </ScrollView>
         </View>
       </Animatable.View>
+      <AwesomeAlert
+        show={alert.show}
+        showProgress={false}
+        showCancelButton={false}
+        title="Register Form"
+        titleStyle={{ fontWeight: "bold" }}
+        message={alert.text}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmButtonColor="#364057"
+        onConfirmPressed={() => {
+          setAlert({ ...alert, show: false });
+        }}
+      />
     </LinearGradient>
   );
 }

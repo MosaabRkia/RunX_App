@@ -8,12 +8,12 @@ import {
   FETCH_DATA_FAILURE,
   FETCH_DATA_SUCCESS,
   USER_UP_DRINKS,
-  LOAD_DRINKS_DATA,
   USER_DOWN_DRINKS,
   USER_ERROR_DRINKS,
   USER_MEAL_PLUS,
   USER_MEAL_MINUS,
   USER_MEDICINE_ADD,
+  USER_MEDICINE_REMOVE,
 } from "../actionsTypes";
 import initialState from "../initialState";
 
@@ -74,14 +74,47 @@ const UserReducer = (state = initialState, action) => {
           error: "",
           list: [],
         },
+        register: {
+          error: "",
+          success: false,
+        },
       };
     case FETCH_DATA_SUCCESS:
+      //sleep
+      let sleepArr = [];
+      action.payload.data[0].sleeps.forEach((e) => {
+        sleepArr = [...sleepArr, { done: e.done, date: e.date }];
+      });
+      // meal
       let arrMeals = { breakfast: {}, brunch: {}, lunch: {}, dinner: {} };
       action.payload.data[0].meals.forEach((e) => {
         arrMeals = { ...arrMeals, [e.mealName]: e };
       });
+      //weights
+      let weightArr = [];
+      action.payload.data[0].weights.forEach((e) => {
+        weightArr = [...weightArr, { weight: e.currentWeight, date: e.date }];
+      });
+      //steps
+      let stepArr = [];
+      action.payload.data[0].dailySteps.forEach((e) => {
+        stepArr = [...stepArr, { done: e.done, date: e.date }];
+      });
+      //drink
+      let drinksArr = [];
+      action.payload.data[0].dailyWaterCups.forEach((e) => {
+        drinksArr = [...drinksArr, { done: e.done, date: e.date }];
+      });
+
+      //kCal
+      let kcalArr = [];
+      action.payload.data[0].kCalDaily.forEach((e) => {
+        kcalArr = [...kcalArr, { done: e.done, date: e.date }];
+      });
+
       return {
         ...state,
+        weight: { ...state.weight, listWeights: weightArr },
         login: {
           ...state.login,
           weight: action.payload.data[0].weights[0].currentWeight,
@@ -99,6 +132,7 @@ const UserReducer = (state = initialState, action) => {
           id: action.payload.data[0].dailyWaterCups[
             action.payload.data[0].dailyWaterCups.length - 1
           ].id,
+          listDrinks: drinksArr,
         },
         sleeps: {
           done: action.payload.data[0].sleeps[
@@ -110,6 +144,7 @@ const UserReducer = (state = initialState, action) => {
           id: action.payload.data[0].sleeps[
             action.payload.data[0].sleeps.length - 1
           ].id,
+          listSleeps: sleepArr,
         },
         kCal: {
           done: action.payload.data[0].kCalDaily[
@@ -121,6 +156,7 @@ const UserReducer = (state = initialState, action) => {
           id: action.payload.data[0].kCalDaily[
             action.payload.data[0].kCalDaily.length - 1
           ].id,
+          listKcals: kcalArr,
         },
         Steps: {
           done: action.payload.data[0].dailySteps[
@@ -132,6 +168,7 @@ const UserReducer = (state = initialState, action) => {
           id: action.payload.data[0].dailySteps[
             action.payload.data[0].dailySteps.length - 1
           ].id,
+          listSteps: sleepArr,
         },
         meals: {
           breakfast: arrMeals.breakfast,
@@ -165,7 +202,16 @@ const UserReducer = (state = initialState, action) => {
           ],
         },
       };
-
+    case USER_MEDICINE_REMOVE:
+      console.log(state.meds.list);
+      var filter = state.meds.list.filter((e) => {
+        console.log(e.id);
+        return e.id !== action.payload.idToRemove;
+      });
+      return {
+        ...state,
+        meds: { ...state.meds, list: filter },
+      };
     //drinks
     case USER_UP_DRINKS:
       return {
@@ -208,33 +254,17 @@ const UserReducer = (state = initialState, action) => {
         kCal: { ...state.kCal, done: state.kCal.done + action.payload.kCal },
       };
 
-    // case USER_SIGNUP_REQUEST:
-    //   return {
-    //     ...state,
-    //     loading: true,
-    //   };
-    // case USER_SIGNUP_SUCCESS:
-    //   return {
-    //     userid: action.payload._id,
-    //     userFirstName: action.payload.firstName,
-    //     userlastName: action.payload.lastName,
-    //     userEmail: action.payload.email,
-    //     userPassword: action.payload.password,
-    //     userStatus: action.payload.status,
-    //     loading: false,
-    //     error: "",
-    //   };
-    // case USER_SIGNUP_FAILURE:
-    //   return {
-    //     userid: "",
-    //     userFirstName: "",
-    //     userlastName: "",
-    //     userEmail: "",
-    //     userPassword: "",
-    //     userStatus: "",
-    //     loading: false,
-    //     error: action.payload.error,
-    //   };
+    case USER_SIGNUP_SUCCESS:
+      return {
+        ...state,
+        register: { ...state.register, success: true },
+      };
+
+    case USER_SIGNUP_FAILURE:
+      return {
+        ...state,
+        register: { success: false, error: "error in register" },
+      };
     default:
       return state;
   }

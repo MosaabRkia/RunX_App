@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Image } from "react-native";
 import {
   View,
   Dimensions,
@@ -17,42 +18,62 @@ export default function BarDailyList(props) {
   //   const [check, setCheck] = useState(false);
   const dispatch = useDispatch();
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     console.log(user.meals[props.title.toLowerCase()]);
   });
   return (
     <View style={styles.text}>
-      <Text style={{ alignSelf: "center", fontSize: 20, fontWeight: "bold" }}>
+      <Text
+        style={{
+          alignSelf: "center",
+          fontSize: 20,
+          fontWeight: "bold",
+          width: 100,
+        }}
+      >
         {props.title}
       </Text>
-      <Icon
-        style={[
-          styles.icon,
-          {
-            backgroundColor: user.meals[props.title.toLowerCase()].eaten
-              ? "green"
-              : "red",
-          },
-        ]}
-        onPress={() =>
-          dispatch(
-            changeMealStatus({
-              mealName: props.title.toLowerCase(),
-              TOF: !user.meals[props.title.toLowerCase()].eaten,
-              mealId: user.meals[props.title.toLowerCase()].id,
-              kCalId: user.kCal.id,
-            })
-          )
-        }
-        name={
-          user.meals[props.title.toLowerCase()].eaten
-            ? "checkcircle"
-            : "minuscircle"
-        }
-        color={"white"}
-        size={35}
-      />
+      {loading ? (
+        <Image
+          source={{
+            uri: "https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif",
+          }}
+          style={{ width: 35, height: 35, alignSelf: "center" }}
+        />
+      ) : (
+        <Icon
+          style={[
+            styles.icon,
+            {
+              backgroundColor: user.meals[props.title.toLowerCase()].eaten
+                ? "green"
+                : "red",
+            },
+          ]}
+          onPress={() => {
+            setLoading(true);
+            dispatch(
+              changeMealStatus({
+                mealName: props.title.toLowerCase(),
+                TOF: !user.meals[props.title.toLowerCase()].eaten,
+                mealId: user.meals[props.title.toLowerCase()].id,
+                kCalId: user.kCal.id,
+              })
+            );
+            setTimeout(() => {
+              setLoading(false);
+            }, 3 * 1000);
+          }}
+          name={
+            user.meals[props.title.toLowerCase()].eaten
+              ? "checkcircle"
+              : "minuscircle"
+          }
+          color={"white"}
+          size={35}
+        />
+      )}
       {/* fix onpress send data and go to page */}
       <Icon
         onPress={() => props.navTo()}
