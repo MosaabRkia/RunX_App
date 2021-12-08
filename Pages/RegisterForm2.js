@@ -79,9 +79,6 @@ export default function RegisterForm2({ route, navigation }) {
   //route
   const { data } = route.params;
 
-  useEffect(() => {
-    console.log(data);
-  }, []);
   //function format date
   function formatDate(date) {
     var d = new Date(date),

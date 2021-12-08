@@ -19,9 +19,7 @@ export default function BarDailyList(props) {
   const dispatch = useDispatch();
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    console.log(user.meals[props.title.toLowerCase()]);
-  });
+
   return (
     <View style={styles.text}>
       <Text

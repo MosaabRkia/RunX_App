@@ -14,6 +14,7 @@ import Icon from "react-native-vector-icons/AntDesign";
 import AppButton from "../components/AppButton";
 import { UserData } from "../ContextData/MainContextData";
 import { useSelector } from "react-redux";
+import DailyListMenu from "./DailyListMenu";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -64,13 +65,14 @@ export default function Food(props) {
 
         <View style={{ justifyContent: "space-around", alignSelf: "center" }}>
           <View style={{ margin: 5 }}>
-            <AppButton
+            {/* <AppButton
               onPress={() => {
                 props.navigation.navigate("DailyListMenu");
               }}
               text={"Today"}
               color={true}
-            />
+            /> */}
+            <DailyListMenu navigation={props.navigation} />
           </View>
 
           {/* <View style={{ margin: 5 }}>
@@ -82,14 +84,6 @@ export default function Food(props) {
               color={false}
             />
           </View> */}
-
-          <Image
-            key={"imgGif"}
-            style={styles.photoCss}
-            source={{
-              uri: "https://c.tenor.com/93WSxm8D44gAAAAi/nkf-nkfmy.gif",
-            }}
-          />
         </View>
       </View>
     </LinearGradient>

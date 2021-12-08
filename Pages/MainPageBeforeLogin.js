@@ -13,6 +13,7 @@ import * as Animatable from "react-native-animatable";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../redux/User/UserActions";
 import AwesomeAlert from "react-native-awesome-alerts";
+import BackgroundFetch from "react-native-background-fetch";
 
 export default function MainPageBeforeLogin({ navigation }) {
   //redux
@@ -43,6 +44,7 @@ export default function MainPageBeforeLogin({ navigation }) {
       return false;
     }
   }
+
   useEffect(() => {
     setLoginLoading(false);
   }, [alert]);

@@ -15,14 +15,14 @@ import Icon from "react-native-vector-icons/AntDesign";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from "react-redux";
 import { updateDrinkData } from "../redux/UpdateUserData/UpdateUserDataActions";
+import BackGroundFetch24 from "./BackGroundFetch24";
+import BackGroundTask from "./BackGroundTask";
 
 export default function DashBoard(props) {
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
-
   useEffect(() => {
-    console.log(user);
-  }, [user]);
-
+    // console.log(user);
+  }, []);
   const arr = [
     {
       title: "Drink",
@@ -65,6 +65,8 @@ export default function DashBoard(props) {
       style={styles.container}
       colors={["#92C6BC", "#8D9A93", "#536976", "#273035", "#101011"]}
     >
+      {/* <BackGroundTask /> */}
+      {/* <BackGroundFetch24 /> */}
       <BarDashBoard
         icon={"text"}
         funcCall={() => {

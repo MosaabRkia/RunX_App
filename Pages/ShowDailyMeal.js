@@ -13,17 +13,14 @@ export default function ShowDailyMeal(props) {
 
   const [data, setData] = useState();
   useEffect(() => {
-    console.log(arrayItems);
     let arr = [];
     arrayItems.map((e) => {
       axios
         .get("http://proj17.ruppin-tech.co.il/api/items/" + e.foodId)
         .then((res) => {
-          console.log(res.data);
           arr = [...arr, res.data];
         })
         .then(() => {
-          console.log(arr);
           setData(arr);
         });
     });
@@ -35,7 +32,7 @@ export default function ShowDailyMeal(props) {
     >
       <TittleBarAndArrow
         goBk={() => {
-          props.navigation.navigate("DailyListMenu");
+          props.navigation.navigate("Food");
         }}
         iconName="arrow-left"
         iconSize={40}

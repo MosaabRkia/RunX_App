@@ -35,9 +35,7 @@ import Graph from "../Pages/Graph";
 export default function Drawer({ navigation }) {
   const Drawer = createDrawerNavigator();
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
-  useEffect(() => {
-    console.log(user.login);
-  }, []);
+
   return (
     <Drawer.Navigator
       screenOptions={{ headerShown: false }}

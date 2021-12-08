@@ -1653,7 +1653,6 @@ const JustForAddIdPhoto = () => {
     data.map((e, index) => {
       x.push({ ...e, photoId: index + 2 });
     });
-    console.log(x);
   };
   func();
   return <View></View>;

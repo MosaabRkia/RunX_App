@@ -12,9 +12,18 @@ const initialState = {
     data: null,
     firstName: "",
     weight: 0,
+    userId: 0,
+    dateOfBirth: null,
+    gender: null,
+    goal: null,
   },
-  weight: {
+  weights: {
+    currentWeight: 0,
     listWeights: [],
+  },
+  heights: {
+    currentHeight: 0,
+    listHeights: [],
   },
   sleeps: {
     done: 0,
@@ -52,6 +61,7 @@ const initialState = {
     error: "",
     success: false,
   },
+  notifications: null,
 };
 
 export default initialState;

@@ -184,7 +184,6 @@ const Graph = (props) => {
           width={Dimensions.get("window").width * 0.98} // from react-native
           height={220}
           yAxisSuffix=" KG"
-          yAxisInterval={1} // optional, defaults to 1
           chartConfig={{
             backgroundColor: "#e26a00",
             backgroundGradientFrom: "#92C6BC",
@@ -271,43 +270,45 @@ const Graph = (props) => {
           steps Graph
         </Text>
         {/* Steps */}
-        <LineChart
-          data={{
-            labels: data.steps.listDates,
-            datasets: [
-              {
-                data: data.steps.listSteps,
+        <View>
+          <LineChart
+            data={{
+              labels: data.steps.listDates,
+              datasets: [
+                {
+                  data: data.steps.listSteps,
+                },
+              ],
+            }}
+            width={Dimensions.get("window").width * 0.98} // from react-native
+            height={220}
+            yAxisLabel="Step "
+            //yAxisSuffix=" "
+            yAxisInterval={1} // optional, defaults to 1
+            chartConfig={{
+              backgroundColor: "#e26a00",
+              backgroundGradientFrom: "#92C6BC",
+              backgroundGradientTo: "#101011",
+              decimalPlaces: 0, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                alignSelf: "center",
+                borderRadius: 16,
               },
-            ],
-          }}
-          width={Dimensions.get("window").width * 0.98} // from react-native
-          height={220}
-          yAxisLabel="Step "
-          //yAxisSuffix=" "
-          yAxisInterval={1} // optional, defaults to 1
-          chartConfig={{
-            backgroundColor: "#e26a00",
-            backgroundGradientFrom: "#92C6BC",
-            backgroundGradientTo: "#101011",
-            decimalPlaces: 0, // optional, defaults to 2dp
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              alignSelf: "center",
+              propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                stroke: "#B4D1C4",
+              },
+            }}
+            bezier
+            style={{
+              marginVertical: 8,
               borderRadius: 16,
-            },
-            propsForDots: {
-              r: "5",
-              strokeWidth: "2",
-              stroke: "#B4D1C4",
-            },
-          }}
-          bezier
-          style={{
-            marginVertical: 8,
-            borderRadius: 16,
-          }}
-        />
+            }}
+          />
+        </View>
         <Text
           style={{
             alignSelf: "center",

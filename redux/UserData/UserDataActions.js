@@ -25,29 +25,31 @@ export const getDataFailure = (error) => ({
 //dispatch(updateDrinkData());
 
 export function getData(token) {
-  console.log(token);
   return (dispatch) => {
     try {
-      fetch("https://localhost:44324/api/token/decode", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ token: token }),
-      })
-        .then((r) => r.json())
-        .then((data) => {
-          if (data === false) dispatch(getDataFailure("error"));
+      axios
+        .post("http://proj17.ruppin-tech.co.il/api/token/decode", {
+          token,
+        })
+        // fetch("http://proj17.ruppin-tech.co.il/api/token/decode", {
+        //   method: "POST",
+        //   headers: {
+        //     Accept: "application/json",
+        //     "Content-Type": "application/json",
+        //     // Authorization: `Bearer ${token}`,
+        //   },
+        //   body: JSON.stringify({ token }),
+        // })
+        // .then((r) => r.json())
+        .then((res) => {
+          if (res.data === false) dispatch(getDataFailure("error"));
           else {
-            console.log(data);
-            dispatch(getDataSuccess(data));
+            dispatch(getDataSuccess(res.data));
             return true;
           }
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log("here error ", error.message);
           dispatch(getDataFailure(error.message));
         });
     } catch (e) {
@@ -76,7 +78,6 @@ export function sendSignUpUser(userData, votes, fundName, chanel) {
         // newArticle: Article[0],
       })
       .then((res) => {
-        console.log(res.data);
         //dispatch(userSignupSuccess(res.data)); //the server team is
       })
       .catch((error) => {
@@ -91,7 +92,6 @@ export function sendLogOutUser() {
     axios
       .post("/user/Logout", {})
       .then((res) => {
-        console.log(res.data);
         dispatch(sendLogOutUserAction()); //the server team is
       })
       .catch((error) => {

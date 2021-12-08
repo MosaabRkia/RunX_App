@@ -62,6 +62,15 @@ export default function Drink(props) {
           >
             Drink
           </Text>
+          {user.drinks.done === user.drinks.goal ? (
+            <Text
+              style={{ alignSelf: "center", fontSize: 20, fontWeight: "bold" }}
+            >
+              You Have Reached Your Goal!
+            </Text>
+          ) : (
+            <></>
+          )}
         </View>
         <View
           style={{
@@ -122,6 +131,11 @@ export default function Drink(props) {
                       text: "Added a Cup",
                     });
                   }, 2 * 1000);
+                } else {
+                  setAlert({
+                    show: true,
+                    text: "You Reached Your Goal Already!",
+                  });
                 }
               }}
             >
@@ -145,6 +159,11 @@ export default function Drink(props) {
                       text: "Removed a Cup",
                     });
                   }, 2 * 1000);
+                } else {
+                  setAlert({
+                    show: true,
+                    text: "Nothing To Remove!",
+                  });
                 }
               }}
             >

@@ -14,6 +14,8 @@ import {
   USER_MEAL_MINUS,
   USER_MEDICINE_ADD,
   USER_MEDICINE_REMOVE,
+  STEPS_ACTION_UPDATE,
+  SLEEPS_ACTION_UPDATE,
 } from "../actionsTypes";
 import initialState from "../initialState";
 
@@ -37,6 +39,7 @@ const UserReducer = (state = initialState, action) => {
           error: "",
           goal: 0,
           id: "",
+          listDrinks: [],
         },
         login: {
           token: null,
@@ -45,23 +48,29 @@ const UserReducer = (state = initialState, action) => {
           firstName: "",
           weight: 0,
         },
+        weight: {
+          listWeights: [],
+        },
         sleeps: {
           done: 0,
           error: "",
           goal: 0,
           id: "",
+          listSleeps: [],
         },
         kCal: {
           done: 0,
           error: "",
           goal: 0,
           id: "",
+          listKcals: [],
         },
         Steps: {
           done: 0,
           error: "",
           goal: 0,
           id: "",
+          listSteps: [],
         },
         meals: {
           error: "",
@@ -78,107 +87,179 @@ const UserReducer = (state = initialState, action) => {
           error: "",
           success: false,
         },
+        notifications: null,
       };
+    case STEPS_ACTION_UPDATE:
+      return {
+        ...state,
+        Steps: { ...state.Steps, done: action.payload.newSteps },
+      };
+
+    case SLEEPS_ACTION_UPDATE:
+      let hours = action.payload.newSleepRecord / 60 / 60;
+      return {
+        ...state,
+        sleeps: { ...state.sleeps, done: hours },
+      };
+
     case FETCH_DATA_SUCCESS:
+      let todayData = {
+        meals: {
+          breakfast: null,
+          brunch: null,
+          dinner: null,
+          lunch: null,
+        },
+        drinks: {},
+        kCals: {},
+        sleeps: {},
+        steps: {},
+        weights: {},
+      };
+      let date = new Date();
+      let dateString = `${date.getFullYear()}-${
+        date.getMonth() === 12 ? "01" : date.getMonth() + 1
+      }-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+
       //sleep
       let sleepArr = [];
       action.payload.data[0].sleeps.forEach((e) => {
+        if (e.date.substr(0, 10) === dateString)
+          todayData = {
+            ...todayData,
+            sleeps: { done: e.done, date: e.date, goal: e.goal, id: e.id },
+          };
         sleepArr = [...sleepArr, { done: e.done, date: e.date }];
       });
+
       // meal
       let arrMeals = { breakfast: {}, brunch: {}, lunch: {}, dinner: {} };
       action.payload.data[0].meals.forEach((e) => {
+        if (e.date.substr(0, 10) === dateString) {
+          todayData = {
+            ...todayData,
+            meals: {
+              ...todayData.meals,
+              [e.mealName]: {
+                eaten: e.eaten,
+                date: e.date,
+                itemsList: e.itemsList,
+                id: e.id,
+              },
+            },
+          };
+        }
+
         arrMeals = { ...arrMeals, [e.mealName]: e };
       });
+
       //weights
-      let weightArr = [];
+      let year = 0,
+        month = 0,
+        day = 0,
+        weightArr = [];
+
       action.payload.data[0].weights.forEach((e) => {
         weightArr = [...weightArr, { weight: e.currentWeight, date: e.date }];
+        //add func get last date
+
+        if (
+          +e.date.substr(0, 4) >= year &&
+          +e.date.substr(5, 2) >= month &&
+          +e.date.substr(8, 2) >= day
+        )
+          todayData = { ...todayData, weights: e };
       });
+
       //steps
       let stepArr = [];
       action.payload.data[0].dailySteps.forEach((e) => {
+        if (e.date.substr(0, 10) === dateString) {
+          todayData = {
+            ...todayData,
+            steps: { done: e.done, date: e.date, goal: e.goal, id: e.id },
+          };
+        }
+
         stepArr = [...stepArr, { done: e.done, date: e.date }];
       });
+
       //drink
       let drinksArr = [];
       action.payload.data[0].dailyWaterCups.forEach((e) => {
+        if (e.date.substr(0, 10) === dateString) {
+          todayData = {
+            ...todayData,
+            drinks: { done: e.done, date: e.date, goal: e.goal, id: e.id },
+          };
+        }
+
         drinksArr = [...drinksArr, { done: e.done, date: e.date }];
       });
 
       //kCal
       let kcalArr = [];
       action.payload.data[0].kCalDaily.forEach((e) => {
+        if (e.date.substr(0, 10) === dateString) {
+          todayData = {
+            ...todayData,
+            kCals: { done: e.done, date: e.date, goal: e.goal, id: e.id },
+          };
+        }
+
         kcalArr = [...kcalArr, { done: e.done, date: e.date }];
       });
-
+      console.log(todayData);
       return {
         ...state,
-        weight: { ...state.weight, listWeights: weightArr },
+        weights: { ...state.weight, listWeights: weightArr },
         login: {
           ...state.login,
-          weight: action.payload.data[0].weights[0].currentWeight,
+          weight: todayData.weights.currentWeight,
+          height: action.payload.data[0].heights[0].currentHeight,
           firstName: action.payload.data[0].firstName,
           data: action.payload.data[0],
           error: "",
+          userId: action.payload.data[0].id,
+          dateOfBirth: action.payload.data[0].dateOfBirth,
+          gender: action.payload.data[0].gender,
+          goal: action.payload.data[0].goal,
         },
+
         drinks: {
-          done: action.payload.data[0].dailyWaterCups[
-            action.payload.data[0].dailyWaterCups.length - 1
-          ].done,
-          goal: action.payload.data[0].dailyWaterCups[
-            action.payload.data[0].dailyWaterCups.length - 1
-          ].goal,
-          id: action.payload.data[0].dailyWaterCups[
-            action.payload.data[0].dailyWaterCups.length - 1
-          ].id,
+          done: todayData.drinks.done,
+          goal: todayData.drinks.goal,
+          id: todayData.drinks.id,
           listDrinks: drinksArr,
         },
         sleeps: {
-          done: action.payload.data[0].sleeps[
-            action.payload.data[0].sleeps.length - 1
-          ].done,
-          goal: action.payload.data[0].sleeps[
-            action.payload.data[0].sleeps.length - 1
-          ].goal,
-          id: action.payload.data[0].sleeps[
-            action.payload.data[0].sleeps.length - 1
-          ].id,
+          done: todayData.sleeps.done,
+          goal: todayData.sleeps.goal,
+          id: todayData.sleeps.id,
           listSleeps: sleepArr,
         },
         kCal: {
-          done: action.payload.data[0].kCalDaily[
-            action.payload.data[0].kCalDaily.length - 1
-          ].done,
-          goal: action.payload.data[0].kCalDaily[
-            action.payload.data[0].kCalDaily.length - 1
-          ].goal,
-          id: action.payload.data[0].kCalDaily[
-            action.payload.data[0].kCalDaily.length - 1
-          ].id,
+          done: todayData.kCals.done,
+          goal: todayData.kCals.goal,
+          id: todayData.kCals.id,
           listKcals: kcalArr,
         },
         Steps: {
-          done: action.payload.data[0].dailySteps[
-            action.payload.data[0].dailySteps.length - 1
-          ].done,
-          goal: action.payload.data[0].dailySteps[
-            action.payload.data[0].dailySteps.length - 1
-          ].goal,
-          id: action.payload.data[0].dailySteps[
-            action.payload.data[0].dailySteps.length - 1
-          ].id,
+          done: todayData.steps.done,
+          goal: todayData.steps.goal,
+          id: todayData.steps.id,
           listSteps: sleepArr,
         },
         meals: {
-          breakfast: arrMeals.breakfast,
-          brunch: arrMeals.brunch,
-          lunch: arrMeals.lunch,
-          dinner: arrMeals.dinner,
+          breakfast: todayData.meals.breakfast,
+          brunch: todayData.meals.brunch,
+          lunch: todayData.meals.lunch,
+          dinner: todayData.meals.dinner,
         },
         meds: {
           list: action.payload.data[0].meds,
         },
+        notifications: action.payload.data[0].notifications,
       };
     case FETCH_DATA_FAILURE:
       return {
@@ -187,7 +268,6 @@ const UserReducer = (state = initialState, action) => {
       };
     //medicine
     case USER_MEDICINE_ADD:
-      console.log(action.payload.MedicineObj);
       return {
         ...state,
         meds: {
@@ -203,9 +283,7 @@ const UserReducer = (state = initialState, action) => {
         },
       };
     case USER_MEDICINE_REMOVE:
-      console.log(state.meds.list);
       var filter = state.meds.list.filter((e) => {
-        console.log(e.id);
         return e.id !== action.payload.idToRemove;
       });
       return {

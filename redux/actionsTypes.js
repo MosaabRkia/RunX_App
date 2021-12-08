@@ -27,3 +27,9 @@ export const USER_MEAL_MINUS = "USER_MEAL_MINUS";
 //Medicine
 export const USER_MEDICINE_ADD = "USER_MEDICINE_ADD";
 export const USER_MEDICINE_REMOVE = "USER_MEDICINE_REMOVE";
+
+//steps
+export const STEPS_ACTION_UPDATE = "STEPS_ACTION_UPDATE";
+
+//sleeps
+export const SLEEPS_ACTION_UPDATE = "SLEEPS_ACTION_UPDATE";

@@ -17,6 +17,7 @@ import CirclesRegister from "../components/CirclesRegister";
 import { useDispatch, useSelector } from "react-redux";
 import { sendRegisterUser, userLogin } from "../redux/User/UserActions";
 import AwesomeAlert from "react-native-awesome-alerts";
+import axios from "axios";
 
 export default function RegisterForm3({ route, navigation }) {
   const { data } = route.params;
@@ -29,7 +30,7 @@ export default function RegisterForm3({ route, navigation }) {
   const kinds = [
     "meat",
     "fruits",
-    "vegatables" /*,,'snacks'*/,
+    "vegatables",
     "drinks",
     "sea food",
     "bakery",
@@ -44,7 +45,7 @@ export default function RegisterForm3({ route, navigation }) {
   const [loading, setLoading] = useState(true);
   const [foodData, setFoodData] = useState([]);
   const [text, setText] = useState("");
-
+  const [fetched, setFetched] = useState(false);
   //alert
   const [alert, setAlert] = useState({
     text: "",
@@ -52,12 +53,10 @@ export default function RegisterForm3({ route, navigation }) {
   });
   //useEffect
   useEffect(() => {
-    fetch(
-      "http://proj17.ruppin-tech.co.il/api/Items" /*"http://proj17.ruppin-tech.co.il/api/Items"*/
-    )
-      .then((r) => r.json())
-      .then((data) => {
-        var d = data.map((e) => (e = { ...e, selected: false }));
+    axios
+      .get("http://proj17.ruppin-tech.co.il/api/items")
+      .then((res) => {
+        var d = res.data.map((e) => (e = { ...e, selected: false }));
         setMainData(d);
       })
       .then(() => {
@@ -66,8 +65,8 @@ export default function RegisterForm3({ route, navigation }) {
   }, []);
 
   useEffect(() => {
-    console.log(data);
-    if (user.register.success === true) {
+    if (user.register.success === true && fetched === false) {
+      setFetched(true);
       dispatch(
         userLogin({
           loginEmail: data.Email,
@@ -133,6 +132,7 @@ export default function RegisterForm3({ route, navigation }) {
     getAllSelected().forEach((e) => {
       arrIds.push({ foodId: e });
     });
+    console.log(arrIds);
     return arrIds;
   };
   //get data
@@ -413,7 +413,6 @@ export default function RegisterForm3({ route, navigation }) {
     }
     return mealsArr;
   };
-
   const createMealsList = (mealId, cal, proteins, fats, kindsAmount) => {
     let thisKindsAmounts = {
       // counter for all kinds to know when stop
@@ -435,7 +434,7 @@ export default function RegisterForm3({ route, navigation }) {
     var totalCal = 0; // calc of calories total in meal
     var totalProtein = 0; // calc of protein total in meal
     var totalFats = 0; // calc of fats total in meal
-    var selectedItemsArr = mainData; // selected items array what choosen in register
+    var selectedItemsArr = getAllSelectedIds(); // selected items array what choosen in register
     var rnd = Math.floor(Math.random() * selectedItemsArr.length); // create random number in the selected items to randomly item
     numbersRnd.push(rnd); // push the randomed item to not duplicate the item in the meal
     do {
@@ -459,7 +458,7 @@ export default function RegisterForm3({ route, navigation }) {
         flag = false;
 
         //stop condition 1
-        if (+mainItem.id === +selectedItemsArr[rnd]) {
+        if (+mainItem.id === +selectedItemsArr[rnd].foodId) {
           // check if item added before in meal so stop
           mainItem.mealTimes.forEach((e) => {
             if (+e.mealId === +mealId) {
@@ -503,7 +502,7 @@ export default function RegisterForm3({ route, navigation }) {
       if (!done)
         while (
           numbersRnd.includes(rnd) || // if the numbersRnd array includes the random number (while already added before so rnd new number)
-          newMeal.includes(selectedItemsArr[rnd].id) // new meal include the selecteditemsarr in place rnd
+          newMeal.includes(selectedItemsArr[rnd].foodId) // new meal include the selecteditemsarr in place rnd
         )
           rnd = Math.floor(Math.random() * selectedItemsArr.length); // random new number
 
@@ -565,11 +564,14 @@ export default function RegisterForm3({ route, navigation }) {
           Meals: createMeals(),
         };
         let lastData = { ...data, ...calcInfo };
-        console.log(lastData);
+
         try {
-          if (getAllSelected().length >= 20)
+          if (getAllSelected().length >= 20) {
+            console.log("___________________________________________");
+            console.log(lastData);
+            console.log("___________________________________________");
             dispatch(sendRegisterUser(lastData));
-          else
+          } else
             setAlert({
               show: true,
               text: "Please Select At Least 20 Item",
@@ -809,7 +811,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 5,
     justifyContent: "center",
-    width: "13%",
+    width: "20%",
     backgroundColor: "#344148",
     alignSelf: "center",
     borderRadius: 10,

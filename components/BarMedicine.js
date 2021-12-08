@@ -62,10 +62,7 @@ export default function BarMedicine(props) {
               setLoading(true);
               setTimeout(() => {
                 setLoading(false);
-                props.setAlert({
-                  show: true,
-                  text: "Removed",
-                });
+                props.showAlert;
               }, 2 * 1000);
             }}
           >

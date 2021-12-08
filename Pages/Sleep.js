@@ -13,25 +13,71 @@ import { AnimatedCircularProgress } from "react-native-circular-progress";
 import Icon from "react-native-vector-icons/AntDesign";
 import AppButton from "../components/AppButton";
 import { UserData } from "../ContextData/MainContextData";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { sleepUpdate } from "../redux/UpdateUserData/UpdateUserDataActions";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Sleep(props) {
-  const [started, setStarted] = useState(false);
-  const [seconds, setSeconds] = useState(0);
+  // const [started, setStarted] = useState(false);
+  // const [seconds, setSeconds] = useState(0);
+  // const [hour, setHour] = useState(0);
 
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
+  const dispatch = useDispatch();
+  // const StartTimer = () => func();
+  // const StopTimer = () => clearInterval(func);
+  const [seconds, setSeconds] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
 
-  const onStart = () =>
-    setInterval(() => {
-      setSeconds(seconds + 1);
-    }, 1000);
+  const [isActive, setIsActive] = useState(false);
+
+  const toggle = () => {
+    if (isActive === true) {
+      dispatch(
+        sleepUpdate({
+          sleepId: user.sleeps.id,
+          sleepTime: seconds + minutes * 60 + hours * 60 * 60,
+        })
+      );
+      setHours(0);
+      setMinutes(0);
+      setSeconds(0);
+    }
+
+    setIsActive(!isActive);
+  };
+
+  const reset = () => {
+    setHours(0);
+    setMinutes(0);
+    setSeconds(0);
+    setIsActive(false);
+  };
 
   useEffect(() => {
-    onStart();
-  }, []);
+    if (seconds == 60) {
+      setMinutes((minutes) => minutes + 1);
+      setSeconds(0);
+    }
+
+    if (minutes == 60) {
+      setHours((hours) => hours + 1);
+      setMinutes(0);
+    }
+
+    let interval = null;
+    if (isActive) {
+      interval = setInterval(() => {
+        setSeconds((seconds) => seconds + 1);
+      }, 1000);
+    } else if (!isActive && seconds !== 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isActive, seconds]);
 
   return (
     <LinearGradient
@@ -47,7 +93,7 @@ export default function Sleep(props) {
         <AnimatedCircularProgress
           size={250}
           width={25}
-          fill={user.sleeps.done * (100 / user.sleeps.goal)}
+          fill={user.sleeps.done.toFixed(1) * (100 / user.sleeps.goal)}
           tintColor="#FC7203"
           lineCap="round"
           style={{ margin: 25, alignSelf: "center" }}
@@ -90,19 +136,21 @@ export default function Sleep(props) {
           }}
         >
           <AppButton
-            onPress={() => setStarted(!started)}
-            text={started ? "Stop Sleep Timer" : "Start Sleep Timer"}
+            onPress={() => {
+              toggle();
+            }}
+            text={isActive ? "Stop Sleep Timer" : "Start Sleep Timer"}
             color={1}
           />
         </View>
+        <View style={{ alignSelf: "center" }}>
+          <Text style={{ fontSize: 50, color: "white", marginTop: 10 }}>
+            {hours <= 9 ? "0" + hours : hours}:
+            {minutes <= 9 ? "0" + minutes : minutes}:
+            {seconds <= 9 ? "0" + seconds : seconds}
+          </Text>
+        </View>
       </View>
-      <Image
-        key={"imgGif"}
-        style={styles.photoCss}
-        source={{
-          uri: "https://c.tenor.com/ppJgYaFs_ysAAAAi/nkf-nkfmy.gif",
-        }}
-      />
     </LinearGradient>
   );
 }

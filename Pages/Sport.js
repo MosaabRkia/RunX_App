@@ -6,14 +6,55 @@ import { AnimatedCircularProgress } from "react-native-circular-progress";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import AppButton from "../components/AppButton";
 import { UserData } from "../ContextData/MainContextData";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { stepsUpdate } from "../redux/UpdateUserData/UpdateUserDataActions";
+import { Pedometer } from "expo-sensors";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Sport(props) {
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
+  const dispatch = useDispatch();
 
+  const [isPedometerAvailable, setIsPedometerAvailable] = useState("checking");
+  const [pastStepCount, setPastStepCount] = useState(0);
+  const [currentStepCount, setCurrentStepCount] = useState(0);
+
+  useEffect(() => {
+    console.log(user);
+    _subscribe();
+  }, []);
+
+  useEffect(() => {
+    // if(currentStepCount !== 0)
+    setTimeout(() => {
+      dispatch(
+        stepsUpdate({
+          steps: user.Steps.done + currentStepCount,
+          stepsId: user.Steps.id,
+        })
+      );
+      console.log("patched");
+      setCurrentStepCount(0);
+    }, 20 * 1000);
+  }, [currentStepCount]);
+
+  const _subscribe = () => {
+    Pedometer.watchStepCount((result) => {
+      setCurrentStepCount(result.steps);
+      console.log(result.steps);
+    });
+
+    Pedometer.isAvailableAsync().then(
+      (result) => {
+        setIsPedometerAvailable(String(result));
+      },
+      (error) => {
+        setIsPedometerAvailable("Could not get isPedometerAvailable: " + error);
+      }
+    );
+  };
   // 1 km = 3280.84 ft
   return (
     <LinearGradient
@@ -97,13 +138,6 @@ export default function Sport(props) {
           <Text style={{ color: "#FC7203" }}>{user.Steps.goal}</Text>
         </View>
       </View>
-      <Image
-        key={"imgGif"}
-        style={styles.photoCss}
-        source={{
-          uri: "https://c.tenor.com/xyjrFBYQyjcAAAAi/nkf-nkfmy.gif",
-        }}
-      />
     </LinearGradient>
   );
 }

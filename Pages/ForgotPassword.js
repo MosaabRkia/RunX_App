@@ -47,7 +47,7 @@ export default function ForgotPassword({ navigation }) {
   const OnSelectSaveData = async () => {
     try {
       axios
-        .post("https://localhost:44324/api/token/forgotPassword", {
+        .post("http://proj17.ruppin-tech.co.il/api/token/forgotPassword", {
           token: email,
         })
         .then((res) => {
@@ -87,7 +87,7 @@ export default function ForgotPassword({ navigation }) {
             placeholderTextColor="#364057"
             value={undefined}
             onChangeText={setEmail}
-            keyboardType={"email-address"}
+            keyboardType="email-address"
             placeholder="Email Address"
           />
 

@@ -42,9 +42,7 @@ export default function RegisterForm({ navigation }) {
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+      Notifications.addNotificationResponseReceivedListener((response) => {});
 
     return () => {
       Notifications.removeNotificationSubscription(
@@ -88,7 +86,6 @@ export default function RegisterForm({ navigation }) {
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log(token);
     } else {
       alert("Must use physical device for Push Notifications");
     }
@@ -132,7 +129,7 @@ export default function RegisterForm({ navigation }) {
 
       navigation.navigate("register2", {
         Goal: selectedGoal,
-        PushNotifications: {
+        notifications: {
           Token: expoPushToken === undefined ? null : expoPushToken,
           Accepted: accepted,
         },

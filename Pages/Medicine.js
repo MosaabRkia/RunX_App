@@ -44,8 +44,6 @@ export default function Medicine(props) {
   });
 
   const sendToFetch = async () => {
-    console.log(user.login.data.id);
-
     await dispatch(
       medicineEdit({
         type: "ADD",
@@ -104,7 +102,7 @@ export default function Medicine(props) {
             onPress={() => {
               if (time !== "hh:mm" && !array.find((x) => x === time))
                 setArray([...array, time]);
-              console.log(time);
+
               setArrayFetch([
                 ...arrayFetch,
                 { time: `2021-11-21T${time}:06.750` },
@@ -122,7 +120,7 @@ export default function Medicine(props) {
         mode="time"
         onConfirm={(e) => {
           let time = new Date(e);
-          console.log(time.getHours(), time.getMinutes());
+
           if (time.getHours() < 10 && time.getMinutes() < 10)
             setTime("0" + time.getHours() + ":0" + time.getMinutes());
           else if (time.getHours() < 10)
@@ -204,6 +202,7 @@ export default function Medicine(props) {
         confirmButtonColor="#364057"
         onConfirmPressed={() => {
           setAlert({ ...alert, show: false });
+          dispatch(getData(user.login.token));
           props.navigation.navigate("DashBoard");
         }}
       />

@@ -143,7 +143,7 @@ export default function userMeals(props) {
       ],
     },
   ];
-  console.log(title);
+
   return (
     <LinearGradient
       style={styles.container}

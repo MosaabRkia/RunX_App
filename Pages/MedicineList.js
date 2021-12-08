@@ -12,17 +12,15 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function MedicineList(props) {
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
-  const dispatch = useDispatch();
 
   //alert
   const [alert, setAlert] = useState({
     text: "",
     show: false,
   });
-
-  useEffect(() => {
-    dispatch(getData(user.login.token));
-  }, []);
+  const showAlert = () => {
+    setAlert({ show: true, text: "Removed" });
+  };
   return (
     <LinearGradient
       style={styles.container}
@@ -45,12 +43,7 @@ export default function MedicineList(props) {
         {user.meds.list &&
           user.meds.list.map((e, index) => {
             return (
-              <BarMedicine
-                key={index}
-                key={index}
-                item={e}
-                setAlert={(e) => setAlert(e)}
-              />
+              <BarMedicine key={index} item={e} setAlert={() => showAlert()} />
             );
           })}
       </ScrollView>

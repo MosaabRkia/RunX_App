@@ -99,7 +99,7 @@ export default function RegisterForm1({ route, navigation }) {
       navigation.navigate("register3", {
         data: {
           ...data,
-          PushNotifications: firstData.PushNotifications,
+          notifications: firstData.notifications,
           Goal: firstData.Goal,
         },
       });
@@ -177,6 +177,7 @@ export default function RegisterForm1({ route, navigation }) {
             placeholderTextColor="#364057"
             onChangeText={(e) => setData({ ...data, Email: e.toLowerCase() })}
             value={undefined}
+            keyboardType={"email-address"}
             placeholder="Email"
           />
 

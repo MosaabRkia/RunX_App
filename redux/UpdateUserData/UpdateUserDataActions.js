@@ -11,7 +11,25 @@ import {
   USER_MEAL_MINUS,
   USER_MEDICINE_ADD,
   USER_MEDICINE_REMOVE,
+  STEPS_ACTION_UPDATE,
+  SLEEPS_ACTION_UPDATE,
 } from "../actionsTypes";
+
+//steps action updates
+export const sleepUpdateAction = (content) => ({
+  type: SLEEPS_ACTION_UPDATE,
+  payload: {
+    newSleepRecord: content,
+  },
+});
+
+//steps action updates
+export const stepsUpdateAction = (content) => ({
+  type: STEPS_ACTION_UPDATE,
+  payload: {
+    newSteps: content,
+  },
+});
 
 //Drinks Actions
 export const userUpDrinks = (content) => ({
@@ -35,14 +53,12 @@ export const fetchDataFailure = (error) => ({
 
 //drink water function
 export function drinkControl(content) {
-  console.log(content);
   return (dispatch) => {
     axios
       .get(
-        `https://localhost:44324/api/UpdateData/updateCupsWater/${content.type}/${content.id}`
+        `http://proj17.ruppin-tech.co.il/api/UpdateData/updateCupsWater/${content.type}/${content.id}`
       )
       .then((res) => {
-        console.log(res.data);
         res.data === true
           ? content.type === "plus"
             ? dispatch(userUpDrinks())
@@ -73,11 +89,10 @@ export const userMealUpdateMinus = (content) => ({
 });
 //meal function
 export function changeMealStatus(content) {
-  console.log(content);
   return (dispatch) => {
     axios
       .get(
-        `https://localhost:44324/api/updateData/updateEatenFood/${content.mealId}/${content.kCalId}`
+        `http://proj17.ruppin-tech.co.il/api/updateData/updateEatenFood/${content.mealId}/${content.kCalId}`
       )
       .then((res) => {
         if (res.data !== -1)
@@ -115,11 +130,42 @@ export const medicineAdd = (MedicineObj) => ({
   },
 });
 
+//sleeps function
+export const sleepUpdate = (content) => {
+  //{sleepId:user.sleeps.id,sleepTime:(seconds + (minutes * 60) + (hours * 60 * 60))}
+  return (dispatch) => {
+    axios
+      .get(
+        `http://proj17.ruppin-tech.co.il/api/updateData/updateSleeps/${
+          content.sleepTime / 60 / 60
+        }/${content.sleepId}`
+      )
+      .then((res) => {
+        if (res.data === true) dispatch(sleepUpdateAction(content.sleepTime));
+        else console.log("error");
+      });
+  };
+};
+
+//steps function
+export const stepsUpdate = (content) => {
+  return (dispatch) => {
+    axios
+      .get(
+        `http://proj17.ruppin-tech.co.il/api/updateData/updateSteps/${content.steps}/${content.stepsId}`
+      )
+      .then((res) => {
+        if (res.data === true) dispatch(stepsUpdateAction(content.steps));
+        else console.log("error");
+      });
+  };
+};
+
 //Medicine function
 export const medicineEdit = (content) => {
   return (dispatch) => {
     if (content.type === "ADD") {
-      fetch("https://localhost:44324/api/updateData/addMedicine", {
+      fetch("http://proj17.ruppin-tech.co.il/api/updateData/addMedicine", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -138,7 +184,7 @@ export const medicineEdit = (content) => {
     } else {
       axios
         .get(
-          `https://localhost:44324/api/updateData/removeMedicine/${content.id}`
+          `http://proj17.ruppin-tech.co.il/api/updateData/removeMedicine/${content.id}`
         )
         .then((res) => {
           dispatch(medicineRemove(content.id));
@@ -166,7 +212,6 @@ export function sendSignUpUser(userData, votes, fundName, chanel) {
         password: userData.password,
       })
       .then((res) => {
-        console.log(res.data);
         //dispatch(userSignupSuccess(res.data));
       })
       .catch((error) => {

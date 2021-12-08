@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { View, StyleSheet, Image } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -18,12 +18,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserData } from "../ContextData/MainContextData";
 import { useDispatch, useSelector } from "react-redux";
 import { sendLogOutUserAction } from "../redux/User/UserActions";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 export function DrawerContent(props) {
   const dispatch = useDispatch();
-  useEffect(() => {
-    console.log(props.data);
-  }, []);
+  //alert
+  const [alert, setAlert] = useState({
+    text: "",
+    show: false,
+  });
+  const text = () => <Text>hello!</Text>;
   return (
     <LinearGradient
       style={{ flex: 1 }}
@@ -43,6 +47,30 @@ export function DrawerContent(props) {
               <Caption style={[styles.caption, { fontWeight: "bold" }]}>
                 {props.currentWeight} KiloGram
               </Caption>
+              <TouchableOpacity
+                style={[styles.ButtonStyle_Next, { right: -35, top: 50 }]}
+                onPress={() => {
+                  //save data go next page
+                  console.log(alert);
+                  setAlert({
+                    text: text,
+                    show: true,
+                  });
+                }}
+              >
+                <Text
+                  style={{
+                    color: "rgba(28, 28, 30, 0.68)",
+                    fontSize: 13,
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    textDecorationLine: "underline",
+                    minWidth: 100,
+                  }}
+                >
+                  Update Weight
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
           <Drawer.Section style={styles.drawersection}>
@@ -54,7 +82,9 @@ export function DrawerContent(props) {
                 <Icon name="food-fork-drink" color={color} size={size} />
               )}
               label="Food"
-              onPress={() => {}}
+              onPress={() => {
+                props.navigation.navigate("Food");
+              }}
             />
             {/* water */}
             <DrawerItem
@@ -140,11 +170,34 @@ export function DrawerContent(props) {
           }}
         />
       </Drawer.Section>
+      <AwesomeAlert
+        show={alert.show}
+        showProgress={false}
+        showCancelButton={false}
+        title="Register Form"
+        titleStyle={{ fontWeight: "bold" }}
+        message={alert.text}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmButtonColor="#364057"
+        onConfirmPressed={() => {
+          setAlert({ ...alert, show: false });
+        }}
+      />
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  ButtonStyle_Next: {
+    alignItems: "center",
+    padding: 5,
+    justifyContent: "center",
+    width: "80%",
+    alignSelf: "center",
+    position: "absolute",
+  },
   drawerContent: {
     flex: 1,
   },

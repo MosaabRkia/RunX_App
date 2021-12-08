@@ -61,6 +61,7 @@ export const userRegisterFailure = () => ({
 });
 
 export const autoLogin = (token) => {
+  console.log(token);
   return (dispatch) => {
     dispatch(userLoginSuccess(token));
     dispatch(getData(token));
@@ -70,7 +71,7 @@ export const autoLogin = (token) => {
 export const userLogin = (content) => {
   return (dispatch) => {
     axios
-      .post("https://localhost:44324/api/token/Authenticate", {
+      .post("http://proj17.ruppin-tech.co.il/api/token/Authenticate", {
         Email: content.loginEmail.toLowerCase(),
         Password: content.loginPassword,
       })
@@ -84,19 +85,6 @@ export const userLogin = (content) => {
         }
         dispatch(getData(res.data));
       })
-      // .then((token) => {
-      //   console.log("2");
-      //   console.log(token);
-      //   console.log("3");
-      //   if (token === false) {
-      //     dispatch(userLoginFailure());
-      //     return;
-      //   } else {
-      //     AsyncStorage.setItem("token", token);
-      //     dispatch(userLoginSuccess(token));
-      //   }
-      //   dispatch(getData(token));
-      // })
       .catch((error) => {
         console.log(error.message);
         dispatch(userLoginFailure());
@@ -108,7 +96,7 @@ export const drinksUpdateUser = (content) => {
   return (dispatch) => {
     axios
       .get(
-        `https://localhost:44324/api/UpdateData/updateCupsWater/${content.type}/${content.id}`
+        `http://proj17.ruppin-tech.co.il/api/UpdateData/updateCupsWater/${content.type}/${content.id}`
       )
       .then((res) => {
         if (res.data === true)
@@ -121,12 +109,10 @@ export const drinksUpdateUser = (content) => {
 };
 
 export function sendRegisterUser(content) {
-  console.log(content);
   return (dispatch) => {
     axios
-      .post("https://localhost:44324/api/user/create", content)
+      .post("http://proj17.ruppin-tech.co.il/api/user/create", content)
       .then((res) => {
-        console.log(res.data);
         if (res.data === true) {
           dispatch(userRegisterSuccess());
           return;
@@ -148,7 +134,6 @@ export function sendLogOutUser() {
     axios
       .post("/user/Logout", {})
       .then((res) => {
-        console.log(res.data);
         dispatch(sendLogOutUserAction()); //the server team is
       })
       .catch((error) => {
