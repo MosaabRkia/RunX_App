@@ -71,7 +71,7 @@ export default function Sleep(props) {
     let interval = null;
     if (isActive) {
       interval = setInterval(() => {
-        setSeconds((seconds) => seconds + 1);
+        setMinutes((seconds) => seconds + 1);
       }, 1000);
     } else if (!isActive && seconds !== 0) {
       clearInterval(interval);

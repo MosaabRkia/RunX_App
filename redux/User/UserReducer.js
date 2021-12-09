@@ -16,6 +16,7 @@ import {
   USER_MEDICINE_REMOVE,
   STEPS_ACTION_UPDATE,
   SLEEPS_ACTION_UPDATE,
+  USER_UPDATE_WEIGHT,
 } from "../actionsTypes";
 import initialState from "../initialState";
 
@@ -101,6 +102,20 @@ const UserReducer = (state = initialState, action) => {
         ...state,
         sleeps: { ...state.sleeps, done: hours },
       };
+    case USER_UPDATE_WEIGHT:
+      console.log(action.payload.content);
+      return {
+        ...state,
+        weights: {
+          ...state.weights,
+          currentWeight: action.payload.content.CurrentWeight,
+          listWeights: [...state.weights.listWeights, action.payload.content],
+        },
+        login: {
+          ...state.login,
+          weight: action.payload.content.CurrentWeight,
+        },
+      };
 
     case FETCH_DATA_SUCCESS:
       let todayData = {
@@ -120,10 +135,11 @@ const UserReducer = (state = initialState, action) => {
       let dateString = `${date.getFullYear()}-${
         date.getMonth() === 12 ? "01" : date.getMonth() + 1
       }-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
-
+      console.log(dateString);
       //sleep
       let sleepArr = [];
       action.payload.data[0].sleeps.forEach((e) => {
+        console.log(e.date.substr(0, 10));
         if (e.date.substr(0, 10) === dateString)
           todayData = {
             ...todayData,
@@ -131,7 +147,7 @@ const UserReducer = (state = initialState, action) => {
           };
         sleepArr = [...sleepArr, { done: e.done, date: e.date }];
       });
-
+      console.log(todayData);
       // meal
       let arrMeals = { breakfast: {}, brunch: {}, lunch: {}, dinner: {} };
       action.payload.data[0].meals.forEach((e) => {
@@ -152,7 +168,7 @@ const UserReducer = (state = initialState, action) => {
 
         arrMeals = { ...arrMeals, [e.mealName]: e };
       });
-
+      console.log(todayData);
       //weights
       let year = 0,
         month = 0,
@@ -170,7 +186,7 @@ const UserReducer = (state = initialState, action) => {
         )
           todayData = { ...todayData, weights: e };
       });
-
+      console.log(todayData);
       //steps
       let stepArr = [];
       action.payload.data[0].dailySteps.forEach((e) => {
@@ -183,7 +199,7 @@ const UserReducer = (state = initialState, action) => {
 
         stepArr = [...stepArr, { done: e.done, date: e.date }];
       });
-
+      console.log(todayData);
       //drink
       let drinksArr = [];
       action.payload.data[0].dailyWaterCups.forEach((e) => {
@@ -196,7 +212,7 @@ const UserReducer = (state = initialState, action) => {
 
         drinksArr = [...drinksArr, { done: e.done, date: e.date }];
       });
-
+      console.log(todayData);
       //kCal
       let kcalArr = [];
       action.payload.data[0].kCalDaily.forEach((e) => {

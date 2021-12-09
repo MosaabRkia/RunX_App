@@ -15,13 +15,28 @@ import TittleBarAndArrow from "../components/TittleBarAndArrow";
 import BarOfFoodChoose from "../components/BarOfFoodChoose";
 import CirclesRegister from "../components/CirclesRegister";
 import { useDispatch, useSelector } from "react-redux";
-import { sendRegisterUser, userLogin } from "../redux/User/UserActions";
+import {
+  sendLogOutUserAction,
+  sendRegisterUser,
+  userLogin,
+} from "../redux/User/UserActions";
 import AwesomeAlert from "react-native-awesome-alerts";
 import axios from "axios";
 
 export default function RegisterForm3({ route, navigation }) {
   const { data } = route.params;
-
+  const [age, setAge] = useState(0);
+  useEffect(() => {
+    let currentYear = new Date(); // create date now
+    // get age
+    setAge(
+      Number(currentYear.getFullYear()) -
+        Number(String(data.DateOfBirth).substring(11, 15))
+    );
+  }, []);
+  useEffect(() => {
+    console.log("ageee =>", age);
+  }, [age]);
   const dispatch = useDispatch();
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
   //useRef
@@ -78,8 +93,10 @@ export default function RegisterForm3({ route, navigation }) {
     if (
       user.register.success === false &&
       user.register.error === "error in register"
-    )
+    ) {
+      dispatch(sendLogOutUserAction());
       navigation.navigate("loginPage");
+    }
   }, [user]);
 
   useEffect(() => {
@@ -132,7 +149,6 @@ export default function RegisterForm3({ route, navigation }) {
     getAllSelected().forEach((e) => {
       arrIds.push({ foodId: e });
     });
-    console.log(arrIds);
     return arrIds;
   };
   //get data
@@ -170,11 +186,11 @@ export default function RegisterForm3({ route, navigation }) {
         ? +66 +
           6.2 * +data.Weights[0].CurrentWeight +
           12.7 * +data.Heights[0].CurrentHeight -
-          6.76 * ageCalc
+          6.76 * age
         : +655.1 +
           4.35 * +data.Weights[0].CurrentWeight +
           4.7 * +data.Heights[0].CurrentHeight -
-          4.7 * ageCalc;
+          4.7 * age;
 
     // switch on the goal of client
     switch (data.Goal) {
@@ -186,10 +202,10 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "breakfast",
           Date: formatDateToday(),
           ItemsList: createMealsList(0, 0.17 * calories, proteins, fats, {
-            dairy: 2,
+            dairy: 3,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            fruits: 2,
+            vegatables: 3,
             bakery: 1,
             seeds: 1,
           }),
@@ -202,8 +218,8 @@ export default function RegisterForm3({ route, navigation }) {
           ItemsList: createMealsList(1, 0.14 * calories, proteins, fats, {
             dairy: 1,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            fruits: 2,
+            vegatables: 3,
             bakery: 2,
             seeds: 1,
           }),
@@ -214,10 +230,10 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "lunch",
           Date: formatDateToday(),
           ItemsList: createMealsList(2, 0.2 * calories, proteins, fats, {
-            meat: 2,
-            drinks: 1,
+            meat: 3,
+            drinks: 2,
             vegatables: 2,
-            bakery: 1,
+            bakery: 2,
             seeds: 1,
           }),
           eaten: false,
@@ -227,9 +243,9 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "dinner",
           Date: formatDateToday(),
           ItemsList: createMealsList(3, 0.2 * calories, proteins, fats, {
-            meat: 2,
-            drinks: 1,
-            vegatables: 1,
+            meat: 3,
+            drinks: 2,
+            vegatables: 2,
             bakery: 1,
             seeds: 1,
           }),
@@ -244,10 +260,10 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "breakfast",
           Date: formatDateToday(),
           ItemsList: createMealsList(0, 0.27 * calories, proteins, fats, {
-            dairy: 2,
+            dairy: 3,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            fruits: 2,
+            vegatables: 3,
             bakery: 1,
             seeds: 1,
           }),
@@ -257,10 +273,10 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "brunch",
           Date: formatDateToday(),
           ItemsList: createMealsList(1, 0.2 * calories, proteins, fats, {
-            dairy: 1,
+            dairy: 3,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            fruits: 2,
+            vegatables: 3,
             bakery: 2,
             seeds: 1,
           }),
@@ -270,9 +286,9 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "lunch",
           Date: formatDateToday(),
           ItemsList: createMealsList(2, 0.19 * calories, proteins, fats, {
-            meat: 2,
+            meat: 3,
             drinks: 1,
-            vegatables: 2,
+            vegatables: 3,
             "sea food": 1,
             bakery: 2,
             seeds: 1,
@@ -283,12 +299,12 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "dinner",
           Date: formatDateToday(),
           ItemsList: createMealsList(3, 0.3 * calories, proteins, fats, {
-            meat: 1,
+            meat: 2,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            fruits: 2,
+            vegatables: 3,
             "sea food": 1,
-            bakery: 1,
+            bakery: 2,
             seeds: 1,
           }),
           eaten: false,
@@ -302,10 +318,10 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "breakfast",
           Date: formatDateToday(),
           ItemsList: createMealsList(0, 0.28 * calories, proteins, fats, {
-            dairy: 2,
+            dairy: 3,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            fruits: 2,
+            vegatables: 3,
             bakery: 1,
             seeds: 1,
           }),
@@ -315,9 +331,9 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "brunch",
           Date: formatDateToday(),
           ItemsList: createMealsList(1, 0.2 * calories, proteins, fats, {
-            dairy: 1,
+            dairy: 3,
             drinks: 1,
-            fruits: 1,
+            fruits: 3,
             vegatables: 2,
             bakery: 2,
             seeds: 1,
@@ -328,9 +344,9 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "lunch",
           Date: formatDateToday(),
           ItemsList: createMealsList(2, 0.29 * calories, proteins, fats, {
-            meat: 1,
-            drinks: 1,
-            vegatables: 2,
+            meat: 2,
+            drinks: 2,
+            vegatables: 3,
             "sea food": 1,
             bakery: 1,
             seeds: 1,
@@ -341,10 +357,10 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "dinner",
           Date: formatDateToday(),
           ItemsList: createMealsList(3, 0.23 * calories, proteins, fats, {
-            meat: 1,
+            meat: 3,
             drinks: 1,
             fruits: 1,
-            vegatables: 2,
+            vegatables: 3,
             "sea food": 1,
             bakery: 1,
             seeds: 1,
@@ -360,10 +376,10 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "breakfast",
           Date: formatDateToday(),
           ItemsList: createMealsList(0, 0.28 * calories, proteins, fats, {
-            dairy: 2,
+            dairy: 3,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            fruits: 2,
+            vegatables: 3,
             bakery: 1,
             seeds: 1,
           }),
@@ -373,9 +389,9 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "brunch",
           Date: formatDateToday(),
           ItemsList: createMealsList(1, 0.2 * calories, proteins, fats, {
-            dairy: 1,
+            dairy: 3,
             drinks: 1,
-            fruits: 1,
+            fruits: 3,
             vegatables: 2,
             bakery: 2,
             seeds: 1,
@@ -387,8 +403,8 @@ export default function RegisterForm3({ route, navigation }) {
           Date: formatDateToday(),
           ItemsList: createMealsList(2, 0.29 * calories, proteins, fats, {
             meat: 2,
-            drinks: 1,
-            vegatables: 2,
+            drinks: 2,
+            vegatables: 3,
             "sea food": 1,
             bakery: 1,
             seeds: 1,
@@ -399,11 +415,11 @@ export default function RegisterForm3({ route, navigation }) {
           mealName: "dinner",
           Date: formatDateToday(),
           ItemsList: createMealsList(3, 0.23 * calories, proteins, fats, {
-            meat: 2,
+            meat: 3,
             drinks: 1,
             fruits: 1,
+            vegatables: 3,
             "sea food": 1,
-            vegatables: 2,
             bakery: 1,
             seeds: 1,
           }),
@@ -508,6 +524,7 @@ export default function RegisterForm3({ route, navigation }) {
 
       numbersRnd.push(rnd); // push the new number
     } while (!done); //while not done means done not true so complete
+    console.log(newMeal);
     return newMeal; // return new meal with , {eaten : false }
   };
 
@@ -525,7 +542,9 @@ export default function RegisterForm3({ route, navigation }) {
       if (kinds.length - 1 === placeKind) {
         let currentYear = new Date();
         let ageCalc =
-          currentYear.getFullYear() - String(data.DateOfBirth).substr(0, 4);
+          currentYear.getFullYear() -
+          +String(data.DateOfBirth).substring(11, 15);
+
         let calcInfo = {
           ChoosenFood: getAllSelectedIds(),
           Meds: [],
@@ -550,11 +569,13 @@ export default function RegisterForm3({ route, navigation }) {
                   ? +66 +
                     6.2 * +data.Weights[0].CurrentWeight +
                     12.7 * +data.Heights[0].CurrentHeight -
-                    6.76 * ageCalc
-                  : +655.1 +
-                    4.35 * +data.Weights[0].CurrentWeight +
-                    4.7 * +data.Heights[0].CurrentHeight -
-                    4.7 * ageCalc,
+                    6.76 * age
+                  : Number(
+                      +655.1 +
+                        4.35 * +data.Weights[0].CurrentWeight +
+                        4.7 * +data.Heights[0].CurrentHeight -
+                        4.7 * age
+                    ),
               Done: 0,
               Date: formatDateToday(),
             },
@@ -567,9 +588,7 @@ export default function RegisterForm3({ route, navigation }) {
 
         try {
           if (getAllSelected().length >= 20) {
-            console.log("___________________________________________");
-            console.log(lastData);
-            console.log("___________________________________________");
+            console.log("lastttttttttttttdata ", lastData);
             dispatch(sendRegisterUser(lastData));
           } else
             setAlert({

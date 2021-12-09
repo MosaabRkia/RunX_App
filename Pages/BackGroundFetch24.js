@@ -25,7 +25,10 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 // Note: This needs to be called in the global scope (e.g outside of your React components)
 
 export default function BackGroundFetch24() {
-  const BACKGROUND_FETCH_TASK = "background-fetch-24";
+  const BACKGROUND_FETCH_TASK_24_DRINK = "background-fetch-24-drink";
+  const BACKGROUND_FETCH_TASK_24_FETCH = "background-fetch-24-fetch";
+  const BACKGROUND_FETCH_TASK_24_MEDICINE = "background-fetch-24-medicine";
+
   const [isRegistered, setIsRegistered] = useState(false);
   const [userId, setUserId] = useState(null);
   const [meals, setMeals] = useState(null);
@@ -40,9 +43,10 @@ export default function BackGroundFetch24() {
   useEffect(() => {
     console.log("started");
     setUserId(user.login.userId);
-    registerBackgroundFetchAsync();
     createMealsUpdate24();
-    // checkStatusAsync();
+    registerBackgroundFetchAsync24Drink();
+    registerBackgroundFetchAsync24FetchData();
+    registerBackgroundFetchAsync24Medicine();
   }, []);
 
   const createMealsUpdate24 = () => {
@@ -73,10 +77,10 @@ export default function BackGroundFetch24() {
           proteins,
           fats,
           {
-            dairy: 2,
+            dairy: 3,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            fruits: 2,
+            vegatables: 3,
             bakery: 1,
             seeds: 1,
           },
@@ -101,8 +105,8 @@ export default function BackGroundFetch24() {
               {
                 dairy: 1,
                 drinks: 1,
-                fruits: 1,
-                vegatables: 2,
+                fruits: 2,
+                vegatables: 3,
                 bakery: 2,
                 seeds: 1,
               },
@@ -125,10 +129,10 @@ export default function BackGroundFetch24() {
               proteins,
               fats,
               {
-                meat: 2,
-                drinks: 1,
+                meat: 3,
+                drinks: 2,
                 vegatables: 2,
-                bakery: 1,
+                bakery: 2,
                 seeds: 1,
               },
               user
@@ -150,9 +154,9 @@ export default function BackGroundFetch24() {
               proteins,
               fats,
               {
-                meat: 2,
-                drinks: 1,
-                vegatables: 1,
+                meat: 3,
+                drinks: 2,
+                vegatables: 2,
                 bakery: 1,
                 seeds: 1,
               },
@@ -186,10 +190,10 @@ export default function BackGroundFetch24() {
           proteins,
           fats,
           {
-            dairy: 2,
+            dairy: 3,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            fruits: 2,
+            vegatables: 3,
             bakery: 1,
             seeds: 1,
           },
@@ -211,10 +215,10 @@ export default function BackGroundFetch24() {
               proteins,
               fats,
               {
-                dairy: 1,
+                dairy: 3,
                 drinks: 1,
-                fruits: 1,
-                vegatables: 2,
+                fruits: 2,
+                vegatables: 3,
                 bakery: 2,
                 seeds: 1,
               },
@@ -236,9 +240,9 @@ export default function BackGroundFetch24() {
               proteins,
               fats,
               {
-                meat: 2,
+                meat: 3,
                 drinks: 1,
-                vegatables: 2,
+                vegatables: 3,
                 "sea food": 1,
                 bakery: 2,
                 seeds: 1,
@@ -261,12 +265,12 @@ export default function BackGroundFetch24() {
               proteins,
               fats,
               {
-                meat: 1,
+                meat: 2,
                 drinks: 1,
-                fruits: 1,
-                vegatables: 2,
+                fruits: 2,
+                vegatables: 3,
                 "sea food": 1,
-                bakery: 1,
+                bakery: 2,
                 seeds: 1,
               },
               user
@@ -298,10 +302,10 @@ export default function BackGroundFetch24() {
           proteins,
           fats,
           {
-            dairy: 2,
+            dairy: 3,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            fruits: 2,
+            vegatables: 3,
             bakery: 1,
             seeds: 1,
           },
@@ -323,9 +327,9 @@ export default function BackGroundFetch24() {
               proteins,
               fats,
               {
-                dairy: 1,
+                dairy: 3,
                 drinks: 1,
-                fruits: 1,
+                fruits: 3,
                 vegatables: 2,
                 bakery: 2,
                 seeds: 1,
@@ -348,9 +352,9 @@ export default function BackGroundFetch24() {
               proteins,
               fats,
               {
-                meat: 1,
-                drinks: 1,
-                vegatables: 2,
+                meat: 2,
+                drinks: 2,
+                vegatables: 3,
                 "sea food": 1,
                 bakery: 1,
                 seeds: 1,
@@ -373,10 +377,10 @@ export default function BackGroundFetch24() {
               proteins,
               fats,
               {
-                meat: 1,
+                meat: 3,
                 drinks: 1,
                 fruits: 1,
-                vegatables: 2,
+                vegatables: 3,
                 "sea food": 1,
                 bakery: 1,
                 seeds: 1,
@@ -409,10 +413,10 @@ export default function BackGroundFetch24() {
           proteins,
           fats,
           {
-            dairy: 2,
+            dairy: 3,
             drinks: 1,
-            fruits: 1,
-            vegatables: 2,
+            fruits: 2,
+            vegatables: 3,
             bakery: 1,
             seeds: 1,
           },
@@ -434,9 +438,9 @@ export default function BackGroundFetch24() {
               proteins,
               fats,
               {
-                dairy: 1,
+                dairy: 3,
                 drinks: 1,
-                fruits: 1,
+                fruits: 3,
                 vegatables: 2,
                 bakery: 2,
                 seeds: 1,
@@ -459,9 +463,9 @@ export default function BackGroundFetch24() {
               proteins,
               fats,
               {
-                meat: 1,
-                drinks: 1,
-                vegatables: 2,
+                meat: 2,
+                drinks: 2,
+                vegatables: 3,
                 "sea food": 1,
                 bakery: 1,
                 seeds: 1,
@@ -485,10 +489,10 @@ export default function BackGroundFetch24() {
               proteins,
               fats,
               {
-                meat: 1,
+                meat: 3,
                 drinks: 1,
                 fruits: 1,
-                vegatables: 2,
+                vegatables: 3,
                 "sea food": 1,
                 bakery: 1,
                 seeds: 1,
@@ -516,10 +520,29 @@ export default function BackGroundFetch24() {
 
   // 2. Register the task at some point in your app by providing the same name, and some configuration options for how the background fetch should behave
   // Note: This does NOT need to be in the global scope and CAN be used in your React components!
-  const registerBackgroundFetchAsync = async () => {
-    checkStatusAsync();
-    return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-      minimumInterval: 1 * 1, // 15 sec
+  const registerBackgroundFetchAsync24Medicine = async () => {
+    // checkStatusAsync();
+    return BackgroundFetch.registerTaskAsync(
+      BACKGROUND_FETCH_TASK_24_MEDICINE,
+      {
+        minimumInterval: 60, // 1 min
+        stopOnTerminate: false, // android only,
+        startOnBoot: true, // android only
+      }
+    );
+  };
+  const registerBackgroundFetchAsync24Drink = async () => {
+    // checkStatusAsync();
+    return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK_24_DRINK, {
+      minimumInterval: 60 * 60 * 2, // 2 hours
+      stopOnTerminate: false, // android only,
+      startOnBoot: true, // android only
+    });
+  };
+  const registerBackgroundFetchAsync24FetchData = async () => {
+    // checkStatusAsync();
+    return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK_24_FETCH, {
+      minimumInterval: 60 * 60, // 1 hours
       stopOnTerminate: false, // android only,
       startOnBoot: true, // android only
     });
@@ -532,27 +555,17 @@ export default function BackGroundFetch24() {
     return BackgroundFetch.unregisterTaskAsync(BACKGROUND_FETCH_TASK);
   };
 
-  const checkStatusAsync = async () => {
-    // const status = await BackgroundFetch.getStatusAsync();
-    console.log(await TaskManager.isTaskRegisteredAsync(BACKGROUND_FETCH_TASK));
-  };
-
-  // const toggleFetchTask = async () => {
-  //   if (!isRegistered) {
-  //     await registerBackgroundFetchAsync();
-  //     // await unregisterBackgroundFetchAsync();
-  //   } else {
-
-  //   }
-  //   checkStatusAsync();
+  // const checkStatusAsync = async () => {
+  //   // const status = await BackgroundFetch.getStatusAsync();
+  //   console.log(await TaskManager.isTaskRegisteredAsync(BACKGROUND_FETCH_TASK));
   // };
 
-  const sendPushNotification = async (expoPushToken) => {
+  const sendPushNotification = async (expoPushToken, body) => {
     const message = {
       to: expoPushToken,
       sound: "default",
-      title: "RunX - Water Reminder",
-      body: "you only drank " + user.drinks.done + " Keep Going !",
+      title: "RunX",
+      body: body,
       data: { someData: null },
     };
 
@@ -566,18 +579,56 @@ export default function BackGroundFetch24() {
       body: JSON.stringify(message),
     });
   };
+  TaskManager.defineTask(BACKGROUND_FETCH_TASK_24_MEDICINE, async () => {
+    console.log("medicine bg worked");
+    user.meds.list.map((e) => {
+      e.times.map((p) => {
+        let time = new Date();
+        console.log(time);
+        // console.log(
+        //   p.time.substring(11, 13),
+        //   String(time.getHours() < 9 ? time.getHours() + "0" : time.getHours()),
+        //   p.time.substring(14, 16),
+        //   String(
+        //     time.getMinutes() < 9 ? time.getMinutes() + "0" : time.getMinutes()
+        //   )
+        // );
+        if (
+          p.time.substring(11, 13) ===
+            String(
+              time.getHours() < 9 ? time.getHours() + "0" : time.getHours()
+            ) &&
+          p.time.substring(14, 16) ===
+            String(
+              time.getMinutes() < 9
+                ? time.getMinutes() + "0"
+                : time.getMinutes()
+            )
+        ) {
+          sendPushNotification(
+            user.notifications.token,
+            `its time to take your medicine ${e.name} , Amount : ${e.amount}`
+          );
+        }
+      });
+    });
+  });
 
-  TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
-    console.log("worked");
+  TaskManager.defineTask(BACKGROUND_FETCH_TASK_24_DRINK, async () => {
+    console.log("drink bg worked");
     if (
       user.drinks.done < user.drinks.goal &&
       user.notifications.accepted === true
     ) {
-      console.log("pushed notf");
-      sendPushNotification(user.notifications.token);
+      sendPushNotification(
+        user.notifications.token,
+        "you only drank " + user.drinks.done + " Cups Keep Going !"
+      );
     }
+  });
 
-    // console.log(date.getHours() === 0);
+  TaskManager.defineTask(BACKGROUND_FETCH_TASK_24_FETCH, async () => {
+    console.log("fetch 24 bg worked");
     if (date.getHours() === 0) {
       console.log("new data");
 
@@ -645,9 +696,7 @@ export default function BackGroundFetch24() {
     return "done task";
   });
   return (
-    <TouchableOpacity
-      onPress={() => sendPushNotification(user.notifications.token)}
-    >
+    <TouchableOpacity onPress={() => checkStatusAsync()}>
       <Text>test me</Text>
     </TouchableOpacity>
   );

@@ -44,6 +44,7 @@ export default function Drawer({ navigation }) {
           {...props}
           firstName={user.login.firstName}
           currentWeight={user.login.weight}
+          UserId={user.login.userId}
           meds={user.meds}
         />
       )}

@@ -1,9 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Button,
+  TextInput,
+} from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from "expo-linear-gradient";
-
+import Dialog from "react-native-dialog";
 import {
   Avatar,
   Title,
@@ -19,15 +26,37 @@ import { UserData } from "../ContextData/MainContextData";
 import { useDispatch, useSelector } from "react-redux";
 import { sendLogOutUserAction } from "../redux/User/UserActions";
 import AwesomeAlert from "react-native-awesome-alerts";
+import { weightUpdate } from "../redux/UpdateUserData/UpdateUserDataActions";
 
 export function DrawerContent(props) {
   const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
+  const [newWeight, setNewWeight] = useState(0);
+
+  const showDialog = () => {
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const handleUpdate = () => {
+    var date = new Date();
+    if (newWeight > 0 && props.currentWeight !== newWeight)
+      dispatch(
+        weightUpdate({
+          UserId: props.UserId,
+          date: date,
+          CurrentWeight: Number(newWeight),
+        })
+      );
+
+    setVisible(false);
+  };
+
   //alert
-  const [alert, setAlert] = useState({
-    text: "",
-    show: false,
-  });
-  const text = () => <Text>hello!</Text>;
+
   return (
     <LinearGradient
       style={{ flex: 1 }}
@@ -48,15 +77,8 @@ export function DrawerContent(props) {
                 {props.currentWeight} KiloGram
               </Caption>
               <TouchableOpacity
-                style={[styles.ButtonStyle_Next, { right: -35, top: 50 }]}
-                onPress={() => {
-                  //save data go next page
-                  console.log(alert);
-                  setAlert({
-                    text: text,
-                    show: true,
-                  });
-                }}
+                style={styles.ButtonStyle_Next}
+                onPress={() => showDialog()}
               >
                 <Text
                   style={{
@@ -71,6 +93,47 @@ export function DrawerContent(props) {
                   Update Weight
                 </Text>
               </TouchableOpacity>
+              {/* <Button
+                color="transparent"
+                title="Update Weight"
+                onPress={showDialog}
+              /> */}
+              <Dialog.Container
+                contentStyle={{
+                  borderRadius: 25,
+                  backgroundColor: "#8D9A93",
+                  borderWidth: 1,
+                }}
+                visible={visible}
+              >
+                <Dialog.Title style={{ fontWeight: "bold" }}>
+                  Weight Update
+                </Dialog.Title>
+                {/* <Dialog.input></Dialog.input> */}
+                <TextInput
+                  style={styles.inputStyle}
+                  placeholderTextColor="#364057"
+                  value={undefined}
+                  maxlength={3}
+                  onChangeText={setNewWeight}
+                  keyboardType="numeric"
+                  placeholder="Weight"
+                />
+
+                <Dialog.Description style={{ fontWeight: "bold" }}>
+                  Enter Your New Weight :
+                </Dialog.Description>
+                <Dialog.Button
+                  label="Cancel"
+                  style={{ color: "black", fontWeight: "bold" }}
+                  onPress={handleCancel}
+                />
+                <Dialog.Button
+                  label="Update"
+                  style={{ color: "black", fontWeight: "bold" }}
+                  onPress={handleUpdate}
+                />
+              </Dialog.Container>
             </View>
           </View>
           <Drawer.Section style={styles.drawersection}>
@@ -170,7 +233,7 @@ export function DrawerContent(props) {
           }}
         />
       </Drawer.Section>
-      <AwesomeAlert
+      {/* <AwesomeAlert
         show={alert.show}
         showProgress={false}
         showCancelButton={false}
@@ -184,26 +247,31 @@ export function DrawerContent(props) {
         onConfirmPressed={() => {
           setAlert({ ...alert, show: false });
         }}
-      />
+      /> */}
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  ButtonStyle_Next: {
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
     alignItems: "center",
-    padding: 5,
     justifyContent: "center",
+  },
+  ButtonStyle_Next: {
+    padding: 5,
     width: "80%",
-    alignSelf: "center",
-    position: "absolute",
+    // alignSelf: "flex-end",
+    position: "relative",
+    right: -55,
+    bottom: -18,
   },
   drawerContent: {
     flex: 1,
   },
   userInfoSection: {
     paddingLeft: 20,
-    marginBottom: 25,
     marginTop: 10,
     flexDirection: "row",
   },
@@ -246,5 +314,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 12,
     paddingHorizontal: 16,
+  },
+  inputStyle: {
+    width: "90%",
+    height: 45,
+    marginBottom: 0,
+
+    backgroundColor: "#D5DDDC",
+    alignSelf: "center",
+    borderRadius: 15,
+    textAlign: "center",
+    borderColor: "#364057",
+    borderWidth: 1,
   },
 });

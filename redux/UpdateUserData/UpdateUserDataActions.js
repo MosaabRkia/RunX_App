@@ -13,6 +13,7 @@ import {
   USER_MEDICINE_REMOVE,
   STEPS_ACTION_UPDATE,
   SLEEPS_ACTION_UPDATE,
+  USER_UPDATE_WEIGHT,
 } from "../actionsTypes";
 
 //steps action updates
@@ -123,12 +124,37 @@ export const medicineRemove = (content) => ({
     idToRemove: content,
   },
 });
+
+//update weight actions
+export const updateWeight = (content) => ({
+  type: USER_UPDATE_WEIGHT,
+  payload: {
+    content,
+  },
+});
+
 export const medicineAdd = (MedicineObj) => ({
   type: USER_MEDICINE_ADD,
   payload: {
     MedicineObj,
   },
 });
+
+//weight function
+export const weightUpdate = (content) => {
+  return (dispatch) => {
+    axios
+      .post(
+        "http://proj17.ruppin-tech.co.il/api/updateData/updateWeight",
+        content
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (res.data === true) dispatch(updateWeight(content));
+      })
+      .catch((err) => console.log(err.message, "153"));
+  };
+};
 
 //sleeps function
 export const sleepUpdate = (content) => {
@@ -163,6 +189,7 @@ export const stepsUpdate = (content) => {
 
 //Medicine function
 export const medicineEdit = (content) => {
+  console.log(content);
   return (dispatch) => {
     if (content.type === "ADD") {
       fetch("http://proj17.ruppin-tech.co.il/api/updateData/addMedicine", {

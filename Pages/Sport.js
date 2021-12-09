@@ -20,30 +20,39 @@ export default function Sport(props) {
   const [isPedometerAvailable, setIsPedometerAvailable] = useState("checking");
   const [pastStepCount, setPastStepCount] = useState(0);
   const [currentStepCount, setCurrentStepCount] = useState(0);
-
+  const [oldSteps, setOldSteps] = useState(0);
   useEffect(() => {
-    console.log(user);
+    // console.log(user);
     _subscribe();
+    setOldSteps(user.Steps.done);
   }, []);
 
   useEffect(() => {
-    // if(currentStepCount !== 0)
-    setTimeout(() => {
-      dispatch(
+    updateSteps();
+  }, [currentStepCount]);
+
+  const updateSteps = async () => {
+    console.log(
+      // "old steps with bonus : " + (oldSteps + 20),
+      "\ncurrent Steps: " + currentStepCount
+      // "\ncurrentstep and oldSteps : " + (currentStepCount + oldSteps)
+    );
+    //console.log(user.Steps.done + currentStepCount);
+    if (user.Steps.done + 20 <= currentStepCount + oldSteps) {
+      console.log("fetch");
+      await dispatch(
         stepsUpdate({
-          steps: user.Steps.done + currentStepCount,
+          steps: oldSteps + currentStepCount,
           stepsId: user.Steps.id,
         })
       );
-      console.log("patched");
-      setCurrentStepCount(0);
-    }, 20 * 1000);
-  }, [currentStepCount]);
+    }
+  };
 
   const _subscribe = () => {
     Pedometer.watchStepCount((result) => {
       setCurrentStepCount(result.steps);
-      console.log(result.steps);
+      // console.log(result.steps);
     });
 
     Pedometer.isAvailableAsync().then(

@@ -106,6 +106,7 @@ export default function RegisterForm2({ route, navigation }) {
 
   const handleConfirm = (date) => {
     setInfo({ ...info, DateOfBirth: date });
+    console.log(date);
     hideDatePicker();
   };
 
@@ -247,7 +248,6 @@ export default function RegisterForm2({ route, navigation }) {
       }
 
       let allData = { ...data, ...info };
-
       navigation.navigate("register4", { data: allData });
     } catch (e) {
       console.log("Error in line 29 => ", e);

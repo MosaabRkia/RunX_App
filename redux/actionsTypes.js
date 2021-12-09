@@ -33,3 +33,6 @@ export const STEPS_ACTION_UPDATE = "STEPS_ACTION_UPDATE";
 
 //sleeps
 export const SLEEPS_ACTION_UPDATE = "SLEEPS_ACTION_UPDATE";
+
+//weight
+export const USER_UPDATE_WEIGHT = "USER_UPDATE_WEIGHT";

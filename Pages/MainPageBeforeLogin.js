@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome5";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Animatable from "react-native-animatable";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +33,7 @@ export default function MainPageBeforeLogin({ navigation }) {
   });
 
   const [loginLoading, setLoginLoading] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(true);
   // validation email
   function validateEmail(emailAddress) {
     if (emailAddress === null) return false;
@@ -120,17 +121,32 @@ export default function MainPageBeforeLogin({ navigation }) {
             placeholder="Email Address"
             keyboardType="email-address"
           />
-
-          <TextInput
-            style={styles.inputStyle}
-            placeholderTextColor="#364057"
-            onChangeText={(e) =>
-              setLoginData({ ...loginData, loginPassword: e })
-            }
-            value={(loginData.loginPassword && loginData.loginPassword) || ""}
-            placeholder="Password"
-            secureTextEntry={true}
-          />
+          <View>
+            <TextInput
+              style={styles.inputStyle}
+              placeholderTextColor="#364057"
+              onChangeText={(e) =>
+                setLoginData({ ...loginData, loginPassword: e })
+              }
+              value={(loginData.loginPassword && loginData.loginPassword) || ""}
+              placeholder="Password"
+              secureTextEntry={showPassword}
+            />
+            <View style={{ position: "absolute", right: "12%", bottom: "24%" }}>
+              <TouchableOpacity
+                style={{ width: 24, height: 24 }}
+                onPress={() => {
+                  setShowPassword(!showPassword);
+                }}
+              >
+                <Icon
+                  name={showPassword ? "eye-slash" : "eye"}
+                  size={15}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("forgotPassword");

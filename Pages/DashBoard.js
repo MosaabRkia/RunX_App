@@ -21,7 +21,7 @@ import BackGroundTask from "./BackGroundTask";
 export default function DashBoard(props) {
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
   useEffect(() => {
-    // console.log(user);
+    console.log(user);
   }, []);
   const arr = [
     {
