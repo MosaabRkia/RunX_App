@@ -11,7 +11,6 @@ import {
 import BarDashBoard from "../components/BarDashBoard";
 import ProgressBar from "../components/ProgressBar";
 import Icon from "react-native-vector-icons/AntDesign";
-// import { UserData } from "../ContextData/MainContextData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from "react-redux";
 import { updateDrinkData } from "../redux/UpdateUserData/UpdateUserDataActions";
@@ -67,7 +66,7 @@ export default function DashBoard(props) {
       colors={["#92C6BC", "#8D9A93", "#536976", "#273035", "#101011"]}
     >
       {/* <BackGroundTask /> */}
-      {/* <BackGroundFetch24 /> */}
+      <BackGroundFetch24 />
       <BarDashBoard
         icon={"text"}
         funcCall={() => {

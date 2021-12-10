@@ -1,12 +1,10 @@
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { getData } from "../UserData/UserDataActions";
 import {
   //USER
   FETCH_DATA_FAILURE,
   USER_UP_DRINKS,
   USER_DOWN_DRINKS,
-  LOAD_DRINKS_DATA,
+  FETCH_DATA_SUCCESS,
   USER_MEAL_PLUS,
   USER_MEAL_MINUS,
   USER_MEDICINE_ADD,
@@ -88,6 +86,21 @@ export const userMealUpdateMinus = (content) => ({
     mealName: content.mealName,
   },
 });
+
+export const getDataSuccess = (content) => ({
+  type: FETCH_DATA_SUCCESS,
+  payload: {
+    data: content,
+  },
+});
+
+export const getDataFailure = (error) => ({
+  type: FETCH_DATA_FAILURE,
+  payload: {
+    error,
+  },
+});
+
 //meal function
 export function changeMealStatus(content) {
   return (dispatch) => {
@@ -220,27 +233,28 @@ export const medicineEdit = (content) => {
     }
   };
 };
-
-//later
-export function sendSignUpUser(userData, votes, fundName, chanel) {
+//getdata
+export function getData(token) {
   return (dispatch) => {
-    axios
-      .post("/new-user/add-user", {
-        votes,
-        fundName,
-        chanel,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        phone: userData.phone,
-        password: userData.password,
-      })
-      .then((res) => {
-        //dispatch(userSignupSuccess(res.data));
-      })
-      .catch((error) => {
-        console.log(error.message);
-        ///dispatch(userLoginFailure(error.message));
-      });
+    try {
+      axios
+        .post("http://proj17.ruppin-tech.co.il/api/token/decode", {
+          token,
+        })
+        .then((res) => {
+          if (res.data === false) dispatch(getDataFailure("error"));
+          else {
+            dispatch(getDataSuccess(res.data));
+            return true;
+          }
+        })
+        .catch((error) => {
+          console.log("here error ", error.message);
+          dispatch(getDataFailure(error.message));
+        });
+    } catch (e) {
+      console.log("error => " + e);
+      navigation.navigate("loginPage");
+    }
   };
 }

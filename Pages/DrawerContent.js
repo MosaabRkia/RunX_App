@@ -22,7 +22,6 @@ import {
   Switch,
 } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { UserData } from "../ContextData/MainContextData";
 import { useDispatch, useSelector } from "react-redux";
 import { sendLogOutUserAction } from "../redux/User/UserActions";
 import AwesomeAlert from "react-native-awesome-alerts";
@@ -33,6 +32,20 @@ export function DrawerContent(props) {
   const [visible, setVisible] = useState(false);
   const [newWeight, setNewWeight] = useState(0);
 
+  let date = new Date();
+  const [welcomeWord, setWelcomeWord] = useState("Hello");
+
+  useEffect(() => {
+    // 4 10 good morning - 11 16 good afternoon - 17 20 good evening - 21 3 good night
+    if (date.getHours() >= 4 && date.getHours() <= 10)
+      setWelcomeWord("Good Morning");
+    else if (date.getHours() >= 11 && date.getHours() <= 16)
+      setWelcomeWord("Good AfterNoon");
+    else if (date.getHours() >= 17 && date.getHours() <= 20)
+      setWelcomeWord("Good Evening");
+    else if (date.getHours() >= 21 || date.getHours() <= 3)
+      setWelcomeWord("Good Night");
+  }, []);
   const showDialog = () => {
     setVisible(true);
   };
@@ -71,7 +84,7 @@ export function DrawerContent(props) {
             />
             <View style={styles.title}>
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                Hello {props.firstName}
+                {welcomeWord} {props.firstName}
               </Text>
               <Caption style={[styles.caption, { fontWeight: "bold" }]}>
                 {props.currentWeight} KiloGram
@@ -185,7 +198,7 @@ export function DrawerContent(props) {
                 props.navigation.navigate("Sport");
               }}
             />
-            {/* graph */}
+            {/* graph
             <DrawerItem
               labelStyle={{ fontWeight: "bold" }}
               style={styles.iconSpace}
@@ -196,7 +209,7 @@ export function DrawerContent(props) {
               onPress={() => {
                 props.navigation.navigate("Graph");
               }}
-            />
+            /> */}
             {/* medicine */}
             {props.meds.list.length > 0 ? (
               <DrawerItem
@@ -265,7 +278,6 @@ const styles = StyleSheet.create({
     // alignSelf: "flex-end",
     position: "relative",
     right: -55,
-    bottom: -18,
   },
   drawerContent: {
     flex: 1,

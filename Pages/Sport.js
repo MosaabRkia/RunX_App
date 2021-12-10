@@ -4,8 +4,6 @@ import { StyleSheet, Text, Dimensions, View, Image } from "react-native";
 import BarDashBoard from "../components/BarDashBoard";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import AppButton from "../components/AppButton";
-import { UserData } from "../ContextData/MainContextData";
 import { useDispatch, useSelector } from "react-redux";
 import { stepsUpdate } from "../redux/UpdateUserData/UpdateUserDataActions";
 import { Pedometer } from "expo-sensors";

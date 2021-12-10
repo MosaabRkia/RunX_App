@@ -1,12 +1,10 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState, useEffect, useContext, useReducer } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import BarDashBoard from "../components/BarDashBoard";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import DrawCups from "../components/DrawCups";
 import Icon from "react-native-vector-icons/AntDesign";
-import { UserData } from "../ContextData/MainContextData";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from "react-redux";
 import { drinksUpdateUser } from "../redux/User/UserActions";
 import AwesomeAlert from "react-native-awesome-alerts";

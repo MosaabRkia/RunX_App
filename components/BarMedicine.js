@@ -11,7 +11,7 @@ import {
 import Icon from "react-native-vector-icons/AntDesign";
 import { useDispatch, useSelector } from "react-redux";
 import { medicineEdit } from "../redux/UpdateUserData/UpdateUserDataActions";
-import { getData } from "../redux/UserData/UserDataActions";
+import { getData } from "../redux/UpdateUserData/UpdateUserDataActions";
 
 export default function BarMedicine(props) {
   //dimention

@@ -696,9 +696,5 @@ export default function BackGroundFetch24() {
     }
     return "done task";
   });
-  return (
-    <TouchableOpacity onPress={() => checkStatusAsync()}>
-      <Text>test me</Text>
-    </TouchableOpacity>
-  );
+  return <View></View>;
 }

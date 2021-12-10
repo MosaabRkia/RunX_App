@@ -1,5 +1,4 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import SplashScreen from "../Pages/SplashScreen";
 import MainPageBeforeLogin from "../Pages/MainPageBeforeLogin";
@@ -9,19 +8,12 @@ import RegisterForm2 from "../Pages/RegisterForm2";
 import RegisterForm3 from "../Pages/RegisterForm3";
 import ForgotPassword from "../Pages/ForgotPassword";
 import Drawer from "../Drawer/Drawer";
-import DashBoard from "../Pages/DashBoard";
-import testBG from "../Pages/testBG";
-import { Provider } from "react-redux";
-// import Graph from "../Pages/Graph";
-import Test from "../Pages/Test";
-import BgTest from "../Pages/BgTest";
 
 const Stack = createStackNavigator();
 
 const StackBeforeLogin = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {/* <Stack.Screen name="splashScreen1" component={testBG} /> */}
       <Stack.Screen name="splashScreen" component={SplashScreen} />
       <Stack.Screen name="loginPage" component={MainPageBeforeLogin} />
       <Stack.Screen name="register1" component={RegisterForm} />

@@ -12,7 +12,6 @@ import BarDashBoard from "../components/BarDashBoard";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import Icon from "react-native-vector-icons/AntDesign";
 import AppButton from "../components/AppButton";
-import { UserData } from "../ContextData/MainContextData";
 import { useDispatch, useSelector } from "react-redux";
 import { sleepUpdate } from "../redux/UpdateUserData/UpdateUserDataActions";
 

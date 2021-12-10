@@ -5,7 +5,7 @@ import AwesomeAlert from "react-native-awesome-alerts";
 import { useDispatch, useSelector } from "react-redux";
 import BarMedicine from "../components/BarMedicine";
 import TittleBarAndArrow from "../components/TittleBarAndArrow";
-import { getData } from "../redux/UserData/UserDataActions";
+import { getData } from "../redux/UpdateUserData/UpdateUserDataActions";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;

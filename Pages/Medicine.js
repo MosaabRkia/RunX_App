@@ -16,7 +16,7 @@ import AppButton from "../components/AppButton";
 import Icon from "react-native-vector-icons/AntDesign";
 import { useSelector, useDispatch } from "react-redux";
 import { medicineEdit } from "../redux/UpdateUserData/UpdateUserDataActions";
-import { getData } from "../redux/UserData/UserDataActions";
+import { getData } from "../redux/UpdateUserData/UpdateUserDataActions";
 
 export default function Medicine(props) {
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
@@ -44,21 +44,38 @@ export default function Medicine(props) {
   });
 
   const sendToFetch = async () => {
-    await dispatch(
-      medicineEdit({
-        type: "ADD",
-        MedicineObj: {
-          UserId: user.login.userId,
-          Name: medicineName,
-          Amount: medicineAmount,
-          Times: arrayFetch,
-        },
-      })
-    );
-    setAlert({
-      show: true,
-      text: "Added",
-    });
+    if (medicineName === null || medicineName === "") {
+      setAlert({
+        show: true,
+        text: "Please Enter Medicine Name!",
+      });
+    } else if (medicineAmount === null || medicineAmount === "") {
+      setAlert({
+        show: true,
+        text: "Please Enter Medicine Amount!",
+      });
+    } else if (arrayFetch.length <= 0) {
+      setAlert({
+        show: true,
+        text: "Please Enter At Least One Time For The Reminder!",
+      });
+    } else {
+      await dispatch(
+        medicineEdit({
+          type: "ADD",
+          MedicineObj: {
+            UserId: user.login.userId,
+            Name: medicineName,
+            Amount: medicineAmount,
+            Times: arrayFetch,
+          },
+        })
+      );
+      setAlert({
+        show: true,
+        text: "Added",
+      });
+    }
   };
   return (
     <LinearGradient
@@ -110,7 +127,7 @@ export default function Medicine(props) {
               } else
                 setAlert({
                   show: true,
-                  text: "Select A Time!",
+                  text: "Select A Time Or The Time Is Already Selected!",
                 });
 
               setTime("hh:mm");
@@ -179,7 +196,11 @@ export default function Medicine(props) {
                   style={[styles.addButton, { right: "13%", marginTop: "1%" }]}
                   onPress={() => {
                     let newArr = array.filter((n) => n !== e);
+                    let newArrFetch = arrayFetch.filter(
+                      (n) => n.time !== `2021-12-09T${e}:00.103Z`
+                    );
                     setArray(newArr);
+                    setArrayFetch(newArrFetch);
                   }}
                 >
                   <Icon name="minuscircleo" color={"black"} size={30} />

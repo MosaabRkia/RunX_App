@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getData } from "../UserData/UserDataActions";
+import { getData } from "../UpdateUserData/UpdateUserDataActions";
 import {
   //USER
   USER_LOGIN_SUCCESS,
