@@ -189,19 +189,16 @@ export const stepsUpdate = (content) => {
 
 //Medicine function
 export const medicineEdit = (content) => {
-  console.log(content);
+  console.log(content.MedicineObj);
   return (dispatch) => {
     if (content.type === "ADD") {
-      fetch("http://proj17.ruppin-tech.co.il/api/updateData/addMedicine", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(content.MedicineObj),
-      })
-        .then((r) => r.json())
-        .then((data) => {
+      axios
+        .post(
+          "http://proj17.ruppin-tech.co.il/api/updateData/addMedicine",
+          content.MedicineObj
+        )
+        .then((res) => {
+          console.log("medicine add : " + res.data);
           dispatch(medicineAdd(content.MedicineObj));
         })
         .catch((error) => {

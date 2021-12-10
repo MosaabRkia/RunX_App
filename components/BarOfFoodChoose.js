@@ -9,7 +9,7 @@ export default function BarOfFoodChoose(props) {
 
   //useEffect
   useEffect(() => {
-    setSelection(false);
+    return () => setSelection(false);
   }, [props.kindPlace]);
 
   const addToList = async () => {

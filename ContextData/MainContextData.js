@@ -7,7 +7,7 @@ export const UserData = React.createContext();
 const MainContextData = ({ navigation }) => {
   const [dataFetch, setDataFetch] = useState({});
   // let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
-  useEffect(() => {}, [dataFetch]);
+  // useEffect(() => {}, [dataFetch]);
 
   return (
     <UserData.Provider value={{ dataFetch, updateData: () => getData() }}>

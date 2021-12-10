@@ -32,7 +32,7 @@ export default function Medicine(props) {
   //useState
   const [medicineName, setMedicineName] = useState(null);
   const [medicineAmount, setMedicineAmount] = useState(null);
-  const [time, setTime] = useState("11:11");
+  const [time, setTime] = useState("hh:mm");
   const [clicked, setClicked] = useState(false); //hide time selector
   const [array, setArray] = useState([]);
   const [arrayFetch, setArrayFetch] = useState([]);
@@ -48,7 +48,7 @@ export default function Medicine(props) {
       medicineEdit({
         type: "ADD",
         MedicineObj: {
-          UserId: user.login.data.id,
+          UserId: user.login.userId,
           Name: medicineName,
           Amount: medicineAmount,
           Times: arrayFetch,
@@ -100,13 +100,19 @@ export default function Medicine(props) {
           <TouchableOpacity
             style={styles.addButton}
             onPress={() => {
-              if (time !== "hh:mm" && !array.find((x) => x === time))
+              if (time !== "hh:mm" && !array.find((x) => x === time)) {
                 setArray([...array, time]);
 
-              setArrayFetch([
-                ...arrayFetch,
-                { time: `2021-11-21T${time}:06.750` },
-              ]);
+                setArrayFetch([
+                  ...arrayFetch,
+                  { time: `2021-12-09T${time}:00.103Z` },
+                ]);
+              } else
+                setAlert({
+                  show: true,
+                  text: "Select A Time!",
+                });
+
               setTime("hh:mm");
             }}
           >
@@ -202,8 +208,16 @@ export default function Medicine(props) {
         confirmButtonColor="#364057"
         onConfirmPressed={() => {
           setAlert({ ...alert, show: false });
-          dispatch(getData(user.login.token));
-          props.navigation.navigate("DashBoard");
+
+          if (alert.text === "Added") {
+            setMedicineName("");
+            setMedicineAmount("");
+            setArrayFetch([]);
+            setArray([]);
+            setTime("hh:mm");
+            dispatch(getData(user.login.token));
+            props.navigation.navigate("DashBoard");
+          }
         }}
       />
     </LinearGradient>

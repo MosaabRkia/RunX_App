@@ -28,9 +28,6 @@ export default function ForgotPassword({ navigation }) {
   //goBack const
   const goBk = () => navigation.goBack();
 
-  useEffect(() => {
-    console.log(email);
-  }, [email]);
   // functions
   //valid email check
   function validateEmail(emailAddress) {

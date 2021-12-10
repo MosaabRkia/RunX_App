@@ -27,6 +27,7 @@ export default function SplashScreen({ navigation }) {
         data === null ? 3500 : 0
       );
     });
+    return () => null;
   }, []);
 
   return (

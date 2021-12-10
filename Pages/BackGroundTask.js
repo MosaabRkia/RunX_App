@@ -27,6 +27,8 @@ export default function BackGroundTask() {
   useEffect(() => {
     console.log("started steps bg task");
     registerBackgroundFetchAsync();
+
+    return () => null;
   }, []);
 
   // 2. Register the task at some point in your app by providing the same name, and some configuration options for how the background fetch should behave

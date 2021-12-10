@@ -11,6 +11,8 @@ const LoadingPageBetween = ({ navigation }) => {
     setTimeout(() => {
       navigation.navigate("DashBoard");
     }, 5000);
+
+    return () => null;
   }, []);
 
   return (

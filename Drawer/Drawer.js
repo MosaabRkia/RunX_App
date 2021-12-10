@@ -30,7 +30,7 @@ import MainContextData from "../ContextData/MainContextData";
 import { Provider, useSelector } from "react-redux";
 import testBG from "../Pages/testBG";
 import MainPageBeforeLogin from "../Pages/MainPageBeforeLogin";
-import Graph from "../Pages/Graph";
+// import Graph from "../Pages/Graph";
 
 export default function Drawer({ navigation }) {
   const Drawer = createDrawerNavigator();
@@ -55,7 +55,7 @@ export default function Drawer({ navigation }) {
 
       {/* <Drawer.Screen name="testBg" component={testBG} /> */}
       <Drawer.Screen name="DashBoard" component={DashBoard} />
-      <Drawer.Screen name="Graph" component={Graph} />
+      {/* <Drawer.Screen name="Graph" component={Graph} /> */}
       <Drawer.Screen name="Drink" component={Drink} />
       <Drawer.Screen name="Sport" component={Sport} />
       <Drawer.Screen name="Food" component={Food} />

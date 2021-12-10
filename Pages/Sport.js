@@ -24,11 +24,12 @@ export default function Sport(props) {
   useEffect(() => {
     // console.log(user);
     _subscribe();
-    setOldSteps(user.Steps.done);
+    return () => setOldSteps(user.Steps.done);
   }, []);
 
   useEffect(() => {
     updateSteps();
+    return () => null;
   }, [currentStepCount]);
 
   const updateSteps = async () => {

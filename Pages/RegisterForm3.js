@@ -34,9 +34,7 @@ export default function RegisterForm3({ route, navigation }) {
         Number(String(data.DateOfBirth).substring(11, 15))
     );
   }, []);
-  useEffect(() => {
-    console.log("ageee =>", age);
-  }, [age]);
+
   const dispatch = useDispatch();
   let user = useSelector((state) => !!state.UserReducer && state.UserReducer);
   //useRef

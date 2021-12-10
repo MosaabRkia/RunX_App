@@ -12,7 +12,7 @@ import Drawer from "../Drawer/Drawer";
 import DashBoard from "../Pages/DashBoard";
 import testBG from "../Pages/testBG";
 import { Provider } from "react-redux";
-import Graph from "../Pages/Graph";
+// import Graph from "../Pages/Graph";
 import Test from "../Pages/Test";
 import BgTest from "../Pages/BgTest";
 

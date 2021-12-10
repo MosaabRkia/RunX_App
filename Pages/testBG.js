@@ -22,6 +22,8 @@ const testBG = () => {
   useEffect(() => {
     console.log("started steps bg task");
     registerBackgroundFetchAsync();
+
+    return () => null;
   }, []);
 
   useEffect(() => {
@@ -29,6 +31,7 @@ const testBG = () => {
     Pedometer.isAvailableAsync().then((result) => {
       console.log(String(result));
     });
+    return () => null;
   }, [currentStepCount]);
 
   const registerBackgroundFetchAsync = async () => {
@@ -42,6 +45,7 @@ const testBG = () => {
   useEffect(() => {
     console.log(user);
     _subscribe();
+    return () => null;
   }, []);
 
   const _subscribe = () => {

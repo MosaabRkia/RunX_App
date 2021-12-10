@@ -24,6 +24,7 @@ export default function ShowDailyMeal(props) {
           setData(arr);
         });
     });
+    return () => null;
   }, [props.route.params]);
   return (
     <LinearGradient

@@ -139,8 +139,9 @@ export default function RegisterForm2({ route, navigation }) {
   //useEffect
   useEffect(() => {
     if (data.Goal === "healthy") {
-      setShowGoalInputText(false);
+      return () => setShowGoalInputText(false);
     }
+    return () => null;
   }, []);
 
   //loop on calc healthy weight

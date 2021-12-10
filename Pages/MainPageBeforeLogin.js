@@ -47,8 +47,9 @@ export default function MainPageBeforeLogin({ navigation }) {
   }
 
   useEffect(() => {
-    setLoginLoading(false);
+    return () => setLoginLoading(false);
   }, [alert]);
+
   useEffect(() => {
     if (
       user.login.token !== null &&
@@ -66,6 +67,7 @@ export default function MainPageBeforeLogin({ navigation }) {
         return;
       }
     }
+    return () => null;
   }, [user]);
 
   const checkLogin = () => {

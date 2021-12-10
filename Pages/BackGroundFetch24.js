@@ -42,11 +42,12 @@ export default function BackGroundFetch24() {
   // }, [user]);
   useEffect(() => {
     console.log("started");
-    setUserId(user.login.userId);
     createMealsUpdate24();
     registerBackgroundFetchAsync24Drink();
     registerBackgroundFetchAsync24FetchData();
     registerBackgroundFetchAsync24Medicine();
+
+    return () => setUserId(user.login.userId);
   }, []);
 
   const createMealsUpdate24 = () => {

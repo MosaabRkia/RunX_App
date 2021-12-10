@@ -47,13 +47,7 @@ export default function MedicineList(props) {
             );
           })}
       </ScrollView>
-      {/* <Image
-        key={"imgGif"}
-        style={styles.photoCss}
-        source={{
-          uri: "https://c.tenor.com/wjWgNzw3uw0AAAAi/nkf-nkfmy.gif",
-        }}
-      /> */}
+
       <AwesomeAlert
         show={alert.show}
         showProgress={false}

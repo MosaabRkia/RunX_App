@@ -39,10 +39,6 @@ export default function RegisterForm1({ route, navigation }) {
   const [message, setMessage] = useState(null);
 
   const firstData = route.params;
-  //useEffect
-  useEffect(() => {
-    console.log(firstData);
-  }, []);
 
   //goBack const
   const goBk = () => navigation.goBack();

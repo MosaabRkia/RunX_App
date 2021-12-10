@@ -71,7 +71,7 @@ export default function Sleep(props) {
     let interval = null;
     if (isActive) {
       interval = setInterval(() => {
-        setMinutes((seconds) => seconds + 1);
+        setSeconds((seconds) => seconds + 1);
       }, 1000);
     } else if (!isActive && seconds !== 0) {
       clearInterval(interval);
@@ -93,7 +93,7 @@ export default function Sleep(props) {
         <AnimatedCircularProgress
           size={250}
           width={25}
-          fill={user.sleeps.done.toFixed(1) * (100 / user.sleeps.goal)}
+          fill={user.sleeps.done.toFixed(2) * (100 / user.sleeps.goal)}
           tintColor="#FC7203"
           lineCap="round"
           style={{ margin: 25, alignSelf: "center" }}
@@ -103,7 +103,7 @@ export default function Sleep(props) {
             <Text
               style={{ fontWeight: "bold", fontSize: 30, textAlign: "center" }}
             >
-              {user.sleeps.done}/{user.sleeps.goal} {"\n"} Hrs
+              {user.sleeps.done.toFixed(2)}/{user.sleeps.goal} {"\n"} Hrs
             </Text>
           )}
         </AnimatedCircularProgress>
